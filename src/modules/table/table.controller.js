@@ -23,7 +23,7 @@ export class TableController {
       });
 
       return res.status(201).json({
-        success: true,
+        status: "success",
         message: "Table created successfully",
         data: table,
       });
@@ -39,11 +39,11 @@ export class TableController {
 
       const tables = await this.service.getUserTablesByProject(
         projectId,
-        userId
+        userId,
       );
 
       return res.status(200).json({
-        success: true,
+        status: "success",
         message: "Tables retrieved successfully",
         data: tables,
       });
@@ -60,7 +60,7 @@ export class TableController {
       const table = await this.service.getTableById(tableId, userId);
 
       return res.status(200).json({
-        success: true,
+        status: "success",
         message: "Table retrieved successfully",
         data: table,
       });
@@ -78,7 +78,7 @@ export class TableController {
       const table = await this.service.updateTable(tableId, userId, { name });
 
       return res.status(200).json({
-        success: true,
+        status: "success",
         message: "Table updated successfully",
         data: table,
       });
@@ -95,7 +95,7 @@ export class TableController {
       await this.service.deleteTable(tableId, userId);
 
       return res.status(200).json({
-        success: true,
+        status: "success",
         message: "Table deleted successfully",
       });
     } catch (error) {
@@ -111,7 +111,7 @@ export class TableController {
       const table = await this.service.getTableSimplified(tableId, userId);
 
       return res.status(200).json({
-        success: true,
+        status: "success",
         message: "Table retrieved successfully",
         data: table,
       });

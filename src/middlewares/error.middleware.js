@@ -1,20 +1,51 @@
-import { HTTP_STATUS } from "../constants/http.js";
+import { HTTP_STATUS, ERROR_MESSAGES } from "../constants/http.js";
+import * as ErrorClasses from "../utils/errors.js";
 
 export const errorMiddleware = (err, req, res, next) => {
+  // Prevent sending response if already sent
+  if (res.headersSent) {
+    return next(err);
+  }
+
+  // Log error details for debugging
   console.error("Error:", {
     name: err.name,
     message: err.message,
     statusCode: err.statusCode,
+    stack: process.env.NODE_ENV === "development" ? err.stack : undefined,
   });
 
-  const statusCode = err.statusCode || HTTP_STATUS.INTERNAL_SERVER_ERROR;
-  const message = err.message || "Internal Server Error";
+  // Handle custom error classes
+  let statusCode = HTTP_STATUS.INTERNAL_SERVER_ERROR;
+  let message = ERROR_MESSAGES.INTERNAL_SERVER_ERROR;
 
-  res.status(statusCode).json({
+  if (err instanceof ErrorClasses.AppError) {
+    statusCode = err.statusCode;
+    message = err.message;
+  } else if (err.name === "JsonWebTokenError") {
+    statusCode = HTTP_STATUS.UNAUTHORIZED;
+    message = ERROR_MESSAGES.INVALID_TOKEN;
+  } else if (err.name === "TokenExpiredError") {
+    statusCode = HTTP_STATUS.UNAUTHORIZED;
+    message = ERROR_MESSAGES.INVALID_TOKEN;
+  } else if (err.name === "ValidationError") {
+    statusCode = HTTP_STATUS.BAD_REQUEST;
+    message = err.message;
+  } else if (err.message) {
+    message = err.message;
+  }
+
+  const response = {
     success: false,
     message,
-    ...(process.env.NODE_ENV === "development" && { error: err.stack }),
-  });
+  };
+
+  // Only include stack trace in development mode, but in a cleaner format
+  if (process.env.NODE_ENV === "development" && err.details) {
+    response.details = err.details;
+  }
+
+  return res.status(statusCode).json(response);
 };
 
 export default errorMiddleware;

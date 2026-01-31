@@ -1,13 +1,14 @@
 import JwtUtil from "../utils/jwt.js";
+import { HTTP_STATUS, ERROR_MESSAGES } from "../constants/http.js";
 
 export const authMiddleware = (req, res, next) => {
   try {
     const authHeader = req.headers.authorization;
 
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      return res.status(401).json({
+      return res.status(HTTP_STATUS.UNAUTHORIZED).json({
         success: false,
-        message: "No token provided",
+        message: ERROR_MESSAGES.NO_TOKEN_PROVIDED,
       });
     }
 
@@ -15,9 +16,9 @@ export const authMiddleware = (req, res, next) => {
     const decoded = JwtUtil.verifyToken(token);
 
     if (!decoded || decoded.type !== "access") {
-      return res.status(401).json({
+      return res.status(HTTP_STATUS.UNAUTHORIZED).json({
         success: false,
-        message: "Invalid or expired token",
+        message: ERROR_MESSAGES.INVALID_TOKEN,
       });
     }
 
@@ -28,9 +29,9 @@ export const authMiddleware = (req, res, next) => {
 
     next();
   } catch (error) {
-    return res.status(401).json({
+    return res.status(HTTP_STATUS.UNAUTHORIZED).json({
       success: false,
-      message: "Authentication failed",
+      message: ERROR_MESSAGES.UNAUTHORIZED,
     });
   }
 };

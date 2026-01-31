@@ -2,12 +2,12 @@ import { v4 as uuidv4 } from "uuid";
 import AuthRepository from "./auth.repository.js";
 import HashUtil from "../../utils/hash.js";
 import JwtUtil from "../../utils/jwt.js";
-import Validator from "../../utils/validator.js";
 import {
   ConflictError,
   AuthenticationError,
   NotFoundError,
 } from "../../utils/errors.js";
+import { ERROR_MESSAGES } from "../../constants/http.js";
 
 export class AuthService {
   constructor() {
@@ -15,15 +15,10 @@ export class AuthService {
   }
 
   async register(email, password, name) {
-    // Validate input
-    Validator.validateEmail(email);
-    Validator.validatePassword(password);
-    Validator.validateName(name);
-
     // Check if user already exists
     const existingUser = await this.repository.findUserByEmail(email);
     if (existingUser) {
-      throw new ConflictError("User already exists");
+      throw new ConflictError(ERROR_MESSAGES.USER_ALREADY_EXISTS);
     }
 
     // Hash password
@@ -54,23 +49,19 @@ export class AuthService {
   }
 
   async login(email, password) {
-    // Validate input
-    Validator.validateEmail(email);
-    Validator.validatePassword(password);
-
     // Find user by email
     const user = await this.repository.findUserByEmail(email);
     if (!user) {
-      throw new AuthenticationError("Invalid email or password");
+      throw new AuthenticationError(ERROR_MESSAGES.INVALID_CREDENTIALS);
     }
 
     // Verify password
     const isPasswordValid = await HashUtil.comparePassword(
       password,
-      user.password
+      user.password,
     );
     if (!isPasswordValid) {
-      throw new AuthenticationError("Invalid email or password");
+      throw new AuthenticationError(ERROR_MESSAGES.INVALID_CREDENTIALS);
     }
 
     // Generate tokens
@@ -91,17 +82,17 @@ export class AuthService {
 
   async refreshToken(refreshToken) {
     if (!refreshToken) {
-      throw new AuthenticationError("Refresh token is required");
+      throw new AuthenticationError(ERROR_MESSAGES.INVALID_REFRESH_TOKEN);
     }
 
     const decoded = JwtUtil.verifyToken(refreshToken);
     if (!decoded || decoded.type !== "refresh") {
-      throw new AuthenticationError("Invalid refresh token");
+      throw new AuthenticationError(ERROR_MESSAGES.INVALID_REFRESH_TOKEN);
     }
 
     const user = await this.repository.findUserById(decoded.id);
     if (!user) {
-      throw new NotFoundError("User not found");
+      throw new NotFoundError(ERROR_MESSAGES.USER_NOT_FOUND);
     }
 
     const accessToken = JwtUtil.generateAccessToken(user.id, user.email);
@@ -116,7 +107,7 @@ export class AuthService {
   async getProfile(userId) {
     const user = await this.repository.findUserById(userId);
     if (!user) {
-      throw new NotFoundError("User not found");
+      throw new NotFoundError(ERROR_MESSAGES.USER_NOT_FOUND);
     }
 
     return {

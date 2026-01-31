@@ -12,7 +12,7 @@ export class ColumnController {
 
       if (!tableId) {
         return res.status(400).json({
-          success: false,
+          status: "fail",
           message: "Table ID is required",
         });
       }
@@ -20,11 +20,11 @@ export class ColumnController {
       const createdColumns = await this.service.createColumns(
         tableId,
         userId,
-        columns
+        columns,
       );
 
       return res.status(201).json({
-        success: true,
+        status: "success",
         message: "Columns created successfully",
         data: createdColumns,
       });
@@ -41,7 +41,7 @@ export class ColumnController {
       const columns = await this.service.getColumnsByTable(tableId, userId);
 
       return res.status(200).json({
-        success: true,
+        status: "success",
         message: "Columns retrieved successfully",
         data: columns,
       });
@@ -58,7 +58,7 @@ export class ColumnController {
       const column = await this.service.getColumnById(columnId, userId);
 
       return res.status(200).json({
-        success: true,
+        status: "success",
         message: "Column retrieved successfully",
         data: column,
       });
@@ -75,7 +75,7 @@ export class ColumnController {
 
       if (!name) {
         return res.status(400).json({
-          success: false,
+          status: "fail",
           message: "Column name is required",
         });
       }
@@ -85,7 +85,7 @@ export class ColumnController {
       });
 
       return res.status(200).json({
-        success: true,
+        status: "success",
         message: "Column updated successfully",
         data: updatedColumn,
       });
@@ -102,7 +102,7 @@ export class ColumnController {
       const deletedColumn = await this.service.deleteColumn(columnId, userId);
 
       return res.status(200).json({
-        success: true,
+        status: "success",
         message: "Column deleted successfully",
         data: deletedColumn,
       });

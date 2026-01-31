@@ -1,4 +1,5 @@
 import ApiKeyService from "./apikey.service.js";
+import { HTTP_STATUS, SUCCESS_MESSAGES } from "../../constants/http.js";
 
 export class ApiKeyController {
   constructor() {
@@ -11,7 +12,7 @@ export class ApiKeyController {
 
       const result = await this.service.generateApiKey(userId);
 
-      return res.status(201).json({
+      return res.status(HTTP_STATUS.CREATED).json({
         success: true,
         message: result.message,
         data: {
@@ -31,9 +32,9 @@ export class ApiKeyController {
 
       const result = await this.service.getApiKeys(userId);
 
-      return res.status(200).json({
+      return res.status(HTTP_STATUS.OK).json({
         success: true,
-        message: "API keys retrieved successfully",
+        message: SUCCESS_MESSAGES.API_KEYS_RETRIEVED,
         data: result,
       });
     } catch (error) {
@@ -48,12 +49,9 @@ export class ApiKeyController {
 
       const result = await this.service.deleteApiKey(userId, apiKeyId);
 
-      return res.status(200).json({
+      return res.status(HTTP_STATUS.OK).json({
         success: true,
         message: result.message,
-        data: {
-          deletedId: result.deletedId,
-        },
       });
     } catch (error) {
       next(error);

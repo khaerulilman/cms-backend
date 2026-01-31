@@ -1,4 +1,4 @@
-import ProjectService from './project.service.js';
+import ProjectService from "./project.service.js";
 
 export class ProjectController {
   constructor() {
@@ -16,8 +16,8 @@ export class ProjectController {
       });
 
       return res.status(201).json({
-        success: true,
-        message: 'Project created successfully',
+        status: "success",
+        message: "Project created successfully",
         data: project,
       });
     } catch (error) {
@@ -33,8 +33,8 @@ export class ProjectController {
       const project = await this.service.getProjectById(projectId, userId);
 
       return res.status(200).json({
-        success: true,
-        message: 'Project retrieved successfully',
+        status: "success",
+        message: "Project retrieved successfully",
         data: project,
       });
     } catch (error) {
@@ -49,8 +49,8 @@ export class ProjectController {
       const projects = await this.service.getUserProjects(userId);
 
       return res.status(200).json({
-        success: true,
-        message: 'Projects retrieved successfully',
+        status: "success",
+        message: "Projects retrieved successfully",
         data: projects,
       });
     } catch (error) {
@@ -70,8 +70,8 @@ export class ProjectController {
       });
 
       return res.status(200).json({
-        success: true,
-        message: 'Project updated successfully',
+        status: "success",
+        message: "Project updated successfully",
         data: project,
       });
     } catch (error) {
@@ -87,8 +87,8 @@ export class ProjectController {
       await this.service.deleteProject(projectId, userId);
 
       return res.status(200).json({
-        success: true,
-        message: 'Project deleted successfully',
+        status: "success",
+        message: "Project deleted successfully",
       });
     } catch (error) {
       next(error);

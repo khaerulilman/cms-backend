@@ -2,6 +2,7 @@ import { v4 as uuidv4 } from "uuid";
 import ApiKeyRepository from "./apikey.repository.js";
 import AuthRepository from "../auth/auth.repository.js";
 import { NotFoundError } from "../../utils/errors.js";
+import { ERROR_MESSAGES, SUCCESS_MESSAGES } from "../../constants/http.js";
 
 export class ApiKeyService {
   constructor() {
@@ -23,7 +24,7 @@ export class ApiKeyService {
     // Verify user exists
     const user = await this.authRepository.findUserById(userId);
     if (!user) {
-      throw new NotFoundError("User not found");
+      throw new NotFoundError(ERROR_MESSAGES.USER_NOT_FOUND);
     }
 
     // Generate a random API key
@@ -40,7 +41,7 @@ export class ApiKeyService {
       id: newApiKey.id,
       apiKey: newApiKey.apiKey,
       createdAt: newApiKey.createdAt,
-      message: "API key generated successfully",
+      message: SUCCESS_MESSAGES.API_KEY_GENERATED,
     };
   }
 
@@ -48,7 +49,7 @@ export class ApiKeyService {
     // Verify user exists
     const user = await this.authRepository.findUserById(userId);
     if (!user) {
-      throw new NotFoundError("User not found");
+      throw new NotFoundError(ERROR_MESSAGES.USER_NOT_FOUND);
     }
 
     const apiKeys = await this.repository.findApiKeysByUserId(userId);
@@ -69,25 +70,25 @@ export class ApiKeyService {
     // Verify user exists
     const user = await this.authRepository.findUserById(userId);
     if (!user) {
-      throw new NotFoundError("User not found");
+      throw new NotFoundError(ERROR_MESSAGES.USER_NOT_FOUND);
     }
 
     // Find API key by ID
     const apiKey = await this.repository.findApiKeyById(apiKeyId);
     if (!apiKey) {
-      throw new NotFoundError("API key not found");
+      throw new NotFoundError(ERROR_MESSAGES.API_KEY_NOT_FOUND);
     }
 
     // Verify API key belongs to user
     if (apiKey.userId !== userId) {
-      throw new NotFoundError("API key not found");
+      throw new NotFoundError(ERROR_MESSAGES.API_KEY_NOT_FOUND);
     }
 
     // Delete API key
     await this.repository.deleteApiKey(apiKeyId);
 
     return {
-      message: "API key deleted successfully",
+      message: SUCCESS_MESSAGES.API_KEY_DELETED,
     };
   }
 

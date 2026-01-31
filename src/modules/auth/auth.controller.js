@@ -1,5 +1,10 @@
 import AuthService from "./auth.service.js";
 import JwtUtil from "../../utils/jwt.js";
+import {
+  SUCCESS_MESSAGES,
+  HTTP_STATUS,
+  ERROR_MESSAGES,
+} from "../../constants/http.js";
 
 export class AuthController {
   constructor() {
@@ -12,9 +17,9 @@ export class AuthController {
 
       const result = await this.service.register(email, password, name);
 
-      return res.status(201).json({
+      return res.status(HTTP_STATUS.CREATED).json({
         success: true,
-        message: "User registered successfully",
+        message: SUCCESS_MESSAGES.USER_REGISTERED,
         data: result,
       });
     } catch (error) {
@@ -28,9 +33,9 @@ export class AuthController {
 
       const result = await this.service.login(email, password);
 
-      return res.status(200).json({
+      return res.status(HTTP_STATUS.OK).json({
         success: true,
-        message: "Login successful",
+        message: SUCCESS_MESSAGES.LOGIN_SUCCESS,
         data: result,
       });
     } catch (error) {
@@ -43,9 +48,9 @@ export class AuthController {
       const user = req.user;
 
       if (!user) {
-        return res.status(401).json({
+        return res.status(HTTP_STATUS.UNAUTHORIZED).json({
           success: false,
-          message: "Authentication failed",
+          message: ERROR_MESSAGES.UNAUTHORIZED,
         });
       }
 
@@ -60,7 +65,7 @@ export class AuthController {
           email: user.email,
           name: user.name,
           createdAt: user.createdAt,
-        })
+        }),
       ).toString("base64");
 
       // Redirect dengan user data
@@ -79,18 +84,11 @@ export class AuthController {
     try {
       const { refreshToken } = req.body;
 
-      if (!refreshToken) {
-        return res.status(400).json({
-          success: false,
-          message: "Refresh token is required",
-        });
-      }
-
       const result = await this.service.refreshToken(refreshToken);
 
-      return res.status(200).json({
+      return res.status(HTTP_STATUS.OK).json({
         success: true,
-        message: "Token refreshed successfully",
+        message: SUCCESS_MESSAGES.TOKEN_REFRESHED,
         data: result,
       });
     } catch (error) {
@@ -104,9 +102,9 @@ export class AuthController {
 
       const profile = await this.service.getProfile(userId);
 
-      return res.status(200).json({
+      return res.status(HTTP_STATUS.OK).json({
         success: true,
-        message: "Profile retrieved successfully",
+        message: SUCCESS_MESSAGES.PROFILE_RETRIEVED,
         data: profile,
       });
     } catch (error) {
