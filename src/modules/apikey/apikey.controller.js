@@ -52,6 +52,9 @@ export class ApiKeyController {
       return res.status(HTTP_STATUS.OK).json({
         success: true,
         message: result.message,
+        data: {
+          deletedId: result.deletedId,
+        },
       });
     } catch (error) {
       next(error);

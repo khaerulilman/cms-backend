@@ -7,9 +7,13 @@
   "scripts": {
     "start": "node src/server.js",
     "dev": "nodemon",
-    "test": "vitest",
-    "test:ui": "vitest --ui",
-    "test:coverage": "vitest --coverage"
+    "test": "cross-env NODE_ENV=test dotenv -e .env.test -- vitest",
+    "test:ui": "cross-env NODE_ENV=test dotenv -e .env.test -- vitest --ui",
+    "test:coverage": "cross-env NODE_ENV=test dotenv -e .env.test -- vitest --coverage",
+    "db:migrate": "prisma migrate dev",
+    "db:migrate:test": "dotenv -e .env.test -- prisma migrate deploy",
+    "db:reset:test": "dotenv -e .env.test -- prisma migrate reset --force --skip-seed",
+    "db:push:test": "dotenv -e .env.test -- prisma db push"
   },
   "dependencies": {
     "@prisma/client": "^5.22.0",
@@ -30,6 +34,8 @@
   "devDependencies": {
     "@vitest/coverage-v8": "^4.0.18",
     "@vitest/ui": "^4.0.18",
+    "cross-env": "^7.0.3",
+    "dotenv-cli": "^7.4.2",
     "nodemon": "^3.1.11",
     "prisma": "^5.22.0",
     "vitest": "^4.0.18",
