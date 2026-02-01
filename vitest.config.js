@@ -4,9 +4,12 @@ export default defineConfig({
   test: {
     globals: true,
     environment: "node",
+    setupFiles: ["./src/tests/globalSetup.js"],
     coverage: {
       provider: "v8",
       reporter: ["text", "json", "html"],
     },
+    testTimeout: 30000, // 30 seconds for database operations
+    hookTimeout: 30000, // 30 seconds for setup/teardown
   },
 });

@@ -85,10 +85,11 @@ export class ApiKeyService {
     }
 
     // Delete API key
-    await this.repository.deleteApiKey(apiKeyId);
+    const deletedKey = await this.repository.deleteApiKey(apiKeyId);
 
     return {
       message: SUCCESS_MESSAGES.API_KEY_DELETED,
+      deletedId: deletedKey.id,
     };
   }
 
