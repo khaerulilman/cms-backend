@@ -15,7 +15,8 @@ export const ERROR_MESSAGES = {
   // Auth errors
   USER_NOT_FOUND: "User not found",
   INVALID_CREDENTIALS: "Invalid email or password",
-  USER_ALREADY_EXISTS: "Email already exists. Please use a different email or login instead",
+  USER_ALREADY_EXISTS:
+    "Email already exists. Please use a different email or login instead",
   INVALID_TOKEN: "Invalid or expired token",
   NO_TOKEN_PROVIDED: "No token provided",
   INVALID_REFRESH_TOKEN: "Invalid refresh token",
@@ -32,6 +33,17 @@ export const ERROR_MESSAGES = {
 
   // API Key errors
   API_KEY_NOT_FOUND: "API key not found",
+
+  // Column errors
+  TABLE_ID_REQUIRED: "Table ID is required",
+  INVALID_TABLE_ID: "Table ID must be a valid UUID",
+  COLUMNS_REQUIRED: "Columns array is required",
+  COLUMNS_EMPTY: "At least one column is required",
+  COLUMN_NAME_REQUIRED: "Column name is required",
+  COLUMN_NAME_EMPTY: "Column name cannot be empty",
+  COLUMN_NAME_TOO_LONG: "Column name cannot exceed 255 characters",
+  COLUMN_NOT_FOUND: "Column not found",
+  TABLE_NOT_FOUND: "Table not found",
 
   // Server errors
   DATABASE_ERROR: "Database error",
@@ -52,6 +64,20 @@ export const SUCCESS_MESSAGES = {
   API_KEY_GENERATED: "API key generated successfully",
   API_KEYS_RETRIEVED: "API keys retrieved successfully",
   API_KEY_DELETED: "API key deleted successfully",
+
+  // Project messages
+  PROJECT_CREATED: "Project created successfully",
+  PROJECT_RETRIEVED: "Project retrieved successfully",
+  PROJECTS_RETRIEVED: "Projects retrieved successfully",
+  PROJECT_UPDATED: "Project updated successfully",
+  PROJECT_DELETED: "Project deleted successfully",
+
+  // Column messages
+  COLUMNS_CREATED: "Columns created successfully",
+  COLUMNS_RETRIEVED: "Columns retrieved successfully",
+  COLUMN_RETRIEVED: "Column retrieved successfully",
+  COLUMN_UPDATED: "Column updated successfully",
+  COLUMN_DELETED: "Column deleted successfully",
 };
 
 export default {

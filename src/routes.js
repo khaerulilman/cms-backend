@@ -16,13 +16,13 @@ const tableController = new TableController();
 router.use("/api/v1/auth", authRoutes);
 
 // API Key routes
-router.use("/api/v1/api-keys", apiKeyRoutes);
+router.use("/api/v1/apikey", apiKeyRoutes);
 
 // Project routes
 router.use("/api/v1/projects", projectRoutes);
 
 // table routes
-router.use("/api/v1/cms-tables", tableRoutes);
+router.use("/api/v1/tables", tableRoutes);
 
 // column routes
 router.use("/api/v1/cms-columns", columnRoutes);
@@ -38,14 +38,14 @@ router.use("/api/v1/cms-cells", cellRoutes);
 router.get(
   "/api/v1/project/:projectId/table/:tableId",
   apiKeyMiddleware,
-  (req, res, next) => tableController.getTableById(req, res, next)
+  (req, res, next) => tableController.getTableById(req, res, next),
 );
 
 // Get simplified table by ID with API Key
 router.get(
   "/api/v1/project/:projectId/table/:tableId/simplify",
   apiKeyMiddleware,
-  (req, res, next) => tableController.getTableSimplified(req, res, next)
+  (req, res, next) => tableController.getTableSimplified(req, res, next),
 );
 
 export default router;

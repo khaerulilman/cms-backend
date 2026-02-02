@@ -16,7 +16,7 @@ const storage = multer.diskStorage({
     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
     cb(
       null,
-      file.fieldname + "-" + uniqueSuffix + path.extname(file.originalname)
+      file.fieldname + "-" + uniqueSuffix + path.extname(file.originalname),
     );
   },
 });
@@ -42,22 +42,22 @@ router.use(authMiddleware);
 
 // Get all cells for a specific row
 router.get("/row/:rowId", (req, res, next) =>
-  controller.getCellsByRow(req, res, next)
+  controller.getCellsByRow(req, res, next),
 );
 
 // Get specific cell by ID
 router.get("/:cellId", (req, res, next) =>
-  controller.getCellById(req, res, next)
+  controller.getCellById(req, res, next),
 );
 
 // Upsert cell (update if exists, create if not) - with optional image upload
 router.post("/row/:rowId", upload.single("image"), (req, res, next) =>
-  controller.upsertCell(req, res, next)
+  controller.upsertCell(req, res, next),
 );
 
 // Delete cell
 router.delete("/:cellId", (req, res, next) =>
-  controller.deleteCell(req, res, next)
+  controller.deleteCell(req, res, next),
 );
 
 export default router;

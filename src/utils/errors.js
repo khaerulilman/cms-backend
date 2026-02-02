@@ -44,6 +44,13 @@ export class ConflictError extends AppError {
   }
 }
 
+export class TableNotFoundError extends AppError {
+  constructor(message = ERROR_MESSAGES.NOT_FOUND) {
+    super(message, 500);
+    this.name = "TableNotFoundError";
+  }
+}
+
 export default {
   AppError,
   ValidationError,
@@ -51,4 +58,5 @@ export default {
   AuthorizationError,
   NotFoundError,
   ConflictError,
+  TableNotFoundError,
 };

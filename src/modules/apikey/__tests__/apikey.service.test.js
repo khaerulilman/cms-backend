@@ -37,26 +37,39 @@ describe("ApiKeyService", () => {
   describe("generateApiKey", () => {
     it("should generate a new API key for valid user", async () => {
       const userId = "user-123";
-      mockAuthRepository.findUserById.mockResolvedValue({
+
+      const mockUser = {
         id: userId,
         email: "test@example.com",
-      });
+      };
 
-      mockRepository.createApiKey.mockResolvedValue({
+      const mockCreatedApiKey = {
         id: "mocked-uuid-123",
         userId,
         apiKey: "sk_XXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
-        createdAt: new Date(),
-      });
+        createdAt: new Date("2025-01-15"),
+      };
+
+      mockAuthRepository.findUserById.mockResolvedValue(mockUser);
+      mockRepository.createApiKey.mockResolvedValue(mockCreatedApiKey);
 
       const result = await service.generateApiKey(userId);
 
-      expect(result).toHaveProperty("id");
-      expect(result).toHaveProperty("apiKey");
-      expect(result).toHaveProperty("createdAt");
-      expect(result.message).toBe("API key generated successfully");
       expect(mockAuthRepository.findUserById).toHaveBeenCalledWith(userId);
-      expect(mockRepository.createApiKey).toHaveBeenCalled();
+      expect(mockRepository.createApiKey).toHaveBeenCalledWith(
+        expect.objectContaining({
+          id: expect.any(String),
+          userId: userId,
+          apiKey: expect.stringMatching(/^sk_[A-Za-z0-9]{32}$/),
+        }),
+      );
+      expect(result).toEqual({
+        id: "mocked-uuid-123",
+
+        apiKey: "sk_XXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+        createdAt: new Date("2025-01-15"),
+        message: "API key generated successfully",
+      });
     });
 
     it("should throw NotFoundError if user does not exist", async () => {
@@ -66,6 +79,9 @@ describe("ApiKeyService", () => {
       await expect(service.generateApiKey(userId)).rejects.toThrow(
         NotFoundError,
       );
+
+      expect(mockAuthRepository.findUserById).toHaveBeenCalledWith(userId);
+      expect(mockRepository.createApiKey).not.toHaveBeenCalled();
     });
 
     it("should generate API key with sk_ prefix", () => {
@@ -79,9 +95,10 @@ describe("ApiKeyService", () => {
   describe("getApiKeys", () => {
     it("should return masked API keys for user", async () => {
       const userId = "user-123";
-      mockAuthRepository.findUserById.mockResolvedValue({ id: userId });
 
-      mockRepository.findApiKeysByUserId.mockResolvedValue([
+      const mockUser = { id: userId };
+
+      const mockApiKeys = [
         {
           id: "key-1",
           userId,
@@ -96,14 +113,33 @@ describe("ApiKeyService", () => {
           createdAt: new Date("2025-01-10"),
           updatedAt: new Date("2025-01-10"),
         },
-      ]);
+      ];
+
+      mockAuthRepository.findUserById.mockResolvedValue(mockUser);
+      mockRepository.findApiKeysByUserId.mockResolvedValue(mockApiKeys);
 
       const result = await service.getApiKeys(userId);
 
-      expect(result.userId).toBe(userId);
-      expect(result.total).toBe(2);
-      expect(result.apiKeys[0].apiKey).toMatch(/^sk_t\*+9012$/);
       expect(mockAuthRepository.findUserById).toHaveBeenCalledWith(userId);
+      expect(mockRepository.findApiKeysByUserId).toHaveBeenCalledWith(userId);
+      expect(result).toEqual({
+        userId: userId,
+        total: 2,
+        apiKeys: [
+          {
+            id: "key-1",
+            apiKey: expect.stringMatching(/^sk_t\*+9012$/),
+            createdAt: new Date("2025-01-15"),
+            updatedAt: new Date("2025-01-15"),
+          },
+          {
+            id: "key-2",
+            apiKey: expect.stringMatching(/^sk_a\*+12ab$/),
+            createdAt: new Date("2025-01-10"),
+            updatedAt: new Date("2025-01-10"),
+          },
+        ],
+      });
     });
 
     it("should throw NotFoundError if user does not exist", async () => {
@@ -111,17 +147,28 @@ describe("ApiKeyService", () => {
       mockAuthRepository.findUserById.mockResolvedValue(null);
 
       await expect(service.getApiKeys(userId)).rejects.toThrow(NotFoundError);
+
+      expect(mockAuthRepository.findUserById).toHaveBeenCalledWith(userId);
+      expect(mockRepository.findApiKeysByUserId).not.toHaveBeenCalled();
     });
 
     it("should return empty array if user has no API keys", async () => {
       const userId = "user-123";
-      mockAuthRepository.findUserById.mockResolvedValue({ id: userId });
-      mockRepository.findApiKeysByUserId.mockResolvedValue([]);
+      const mockUser = { id: userId };
+      const mockApiKeys = [];
+
+      mockAuthRepository.findUserById.mockResolvedValue(mockUser);
+      mockRepository.findApiKeysByUserId.mockResolvedValue(mockApiKeys);
 
       const result = await service.getApiKeys(userId);
 
-      expect(result.total).toBe(0);
-      expect(result.apiKeys).toEqual([]);
+      expect(mockAuthRepository.findUserById).toHaveBeenCalledWith(userId);
+      expect(mockRepository.findApiKeysByUserId).toHaveBeenCalledWith(userId);
+      expect(result).toEqual({
+        userId: userId,
+        total: 0,
+        apiKeys: [],
+      });
     });
   });
 
@@ -130,22 +177,31 @@ describe("ApiKeyService", () => {
       const userId = "user-123";
       const apiKeyId = "key-1";
 
-      mockAuthRepository.findUserById.mockResolvedValue({ id: userId });
-      mockRepository.findApiKeyById.mockResolvedValue({
+      const mockUser = { id: userId };
+      const mockApiKey = {
         id: apiKeyId,
         userId,
         apiKey: "sk_test123",
-        createdAt: new Date(),
-      });
-      mockRepository.deleteApiKey.mockResolvedValue({
+        createdAt: new Date("2025-01-15"),
+      };
+      const mockDeletedApiKey = {
         id: apiKeyId,
         userId,
-      });
+      };
+
+      mockAuthRepository.findUserById.mockResolvedValue(mockUser);
+      mockRepository.findApiKeyById.mockResolvedValue(mockApiKey);
+      mockRepository.deleteApiKey.mockResolvedValue(mockDeletedApiKey);
 
       const result = await service.deleteApiKey(userId, apiKeyId);
 
-      expect(result.message).toBe("API key deleted successfully");
+      expect(mockAuthRepository.findUserById).toHaveBeenCalledWith(userId);
+      expect(mockRepository.findApiKeyById).toHaveBeenCalledWith(apiKeyId);
       expect(mockRepository.deleteApiKey).toHaveBeenCalledWith(apiKeyId);
+      expect(result).toEqual({
+        message: "API key deleted successfully",
+        deletedId: "key-1",
+      });
     });
 
     it("should throw NotFoundError if user does not exist", async () => {
@@ -155,59 +211,82 @@ describe("ApiKeyService", () => {
       await expect(service.deleteApiKey(userId, "key-1")).rejects.toThrow(
         NotFoundError,
       );
+
+      expect(mockAuthRepository.findUserById).toHaveBeenCalledWith(userId);
+      expect(mockRepository.findApiKeyById).not.toHaveBeenCalled();
+      expect(mockRepository.deleteApiKey).not.toHaveBeenCalled();
     });
 
     it("should throw NotFoundError if API key does not exist", async () => {
       const userId = "user-123";
-      mockAuthRepository.findUserById.mockResolvedValue({ id: userId });
+      const mockUser = { id: userId };
+
+      mockAuthRepository.findUserById.mockResolvedValue(mockUser);
       mockRepository.findApiKeyById.mockResolvedValue(null);
 
       await expect(
         service.deleteApiKey(userId, "non-existent"),
       ).rejects.toThrow(NotFoundError);
+
+      expect(mockAuthRepository.findUserById).toHaveBeenCalledWith(userId);
+      expect(mockRepository.findApiKeyById).toHaveBeenCalledWith(
+        "non-existent",
+      );
+      expect(mockRepository.deleteApiKey).not.toHaveBeenCalled();
     });
 
     it("should throw NotFoundError if API key does not belong to user", async () => {
       const userId = "user-123";
       const apiKeyId = "key-1";
 
-      mockAuthRepository.findUserById.mockResolvedValue({ id: userId });
-      mockRepository.findApiKeyById.mockResolvedValue({
+      const mockUser = { id: userId };
+      const mockApiKey = {
         id: apiKeyId,
         userId: "other-user",
         apiKey: "sk_test123",
-      });
+      };
+
+      mockAuthRepository.findUserById.mockResolvedValue(mockUser);
+      mockRepository.findApiKeyById.mockResolvedValue(mockApiKey);
 
       await expect(service.deleteApiKey(userId, apiKeyId)).rejects.toThrow(
         NotFoundError,
       );
+
+      expect(mockAuthRepository.findUserById).toHaveBeenCalledWith(userId);
+      expect(mockRepository.findApiKeyById).toHaveBeenCalledWith(apiKeyId);
+      expect(mockRepository.deleteApiKey).not.toHaveBeenCalled();
     });
   });
 
   describe("verifyApiKey", () => {
     it("should return key details if API key is valid", async () => {
       const apiKey = "sk_test123";
-      mockRepository.findApiKeyByKey.mockResolvedValue({
+      const mockApiKey = {
         id: "key-1",
         userId: "user-123",
         apiKey,
-      });
+      };
+
+      mockRepository.findApiKeyByKey.mockResolvedValue(mockApiKey);
 
       const result = await service.verifyApiKey(apiKey);
 
+      expect(mockRepository.findApiKeyByKey).toHaveBeenCalledWith(apiKey);
       expect(result).toEqual({
         id: "key-1",
         userId: "user-123",
-        apiKey,
+        apiKey: "sk_test123",
       });
-      expect(mockRepository.findApiKeyByKey).toHaveBeenCalledWith(apiKey);
     });
 
     it("should return null if API key is invalid", async () => {
+      const apiKey = "invalid-key";
       mockRepository.findApiKeyByKey.mockResolvedValue(null);
 
-      const result = await service.verifyApiKey("invalid-key");
+      const result = await service.verifyApiKey(apiKey);
 
+      expect(mockRepository.findApiKeyByKey).toHaveBeenCalledWith(apiKey);
       expect(result).toBeNull();
     });
   });

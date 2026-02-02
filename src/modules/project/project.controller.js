@@ -1,4 +1,5 @@
 import ProjectService from "./project.service.js";
+import { SUCCESS_MESSAGES } from "../../constants/http.js";
 
 export class ProjectController {
   constructor() {
@@ -16,8 +17,8 @@ export class ProjectController {
       });
 
       return res.status(201).json({
-        status: "success",
-        message: "Project created successfully",
+        success: true,
+        message: SUCCESS_MESSAGES.PROJECT_CREATED,
         data: project,
       });
     } catch (error) {
@@ -33,8 +34,8 @@ export class ProjectController {
       const project = await this.service.getProjectById(projectId, userId);
 
       return res.status(200).json({
-        status: "success",
-        message: "Project retrieved successfully",
+        success: true,
+        message: SUCCESS_MESSAGES.PROJECT_RETRIEVED,
         data: project,
       });
     } catch (error) {
@@ -49,8 +50,8 @@ export class ProjectController {
       const projects = await this.service.getUserProjects(userId);
 
       return res.status(200).json({
-        status: "success",
-        message: "Projects retrieved successfully",
+        success: true,
+        message: SUCCESS_MESSAGES.PROJECTS_RETRIEVED,
         data: projects,
       });
     } catch (error) {
@@ -70,8 +71,8 @@ export class ProjectController {
       });
 
       return res.status(200).json({
-        status: "success",
-        message: "Project updated successfully",
+        success: true,
+        message: SUCCESS_MESSAGES.PROJECT_UPDATED,
         data: project,
       });
     } catch (error) {
@@ -87,8 +88,8 @@ export class ProjectController {
       await this.service.deleteProject(projectId, userId);
 
       return res.status(200).json({
-        status: "success",
-        message: "Project deleted successfully",
+        success: true,
+        message: SUCCESS_MESSAGES.PROJECT_DELETED,
       });
     } catch (error) {
       next(error);

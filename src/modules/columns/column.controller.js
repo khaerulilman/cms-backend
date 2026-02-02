@@ -1,4 +1,10 @@
 import ColumnService from "./column.service.js";
+import columnValidationSchemas from "./column.validation.js";
+import {
+  HTTP_STATUS,
+  ERROR_MESSAGES,
+  SUCCESS_MESSAGES,
+} from "../../constants/http.js";
 
 export class ColumnController {
   constructor() {
@@ -10,22 +16,32 @@ export class ColumnController {
       const userId = req.user.id;
       const { tableId, columns } = req.body;
 
-      if (!tableId) {
-        return res.status(400).json({
-          status: "fail",
-          message: "Table ID is required",
+      // Validate input
+      const { error, value } = columnValidationSchemas.createColumns.validate(
+        { tableId, columns },
+        { abortEarly: false },
+      );
+
+      if (error) {
+        return res.status(HTTP_STATUS.BAD_REQUEST).json({
+          success: false,
+          message: ERROR_MESSAGES.VALIDATION_ERROR,
+          errors: error.details.map((err) => ({
+            field: err.path[0],
+            message: err.message,
+          })),
         });
       }
 
       const createdColumns = await this.service.createColumns(
-        tableId,
+        value.tableId,
         userId,
-        columns,
+        value.columns,
       );
 
-      return res.status(201).json({
-        status: "success",
-        message: "Columns created successfully",
+      return res.status(HTTP_STATUS.CREATED).json({
+        success: true,
+        message: SUCCESS_MESSAGES.COLUMNS_CREATED,
         data: createdColumns,
       });
     } catch (error) {
@@ -40,9 +56,9 @@ export class ColumnController {
 
       const columns = await this.service.getColumnsByTable(tableId, userId);
 
-      return res.status(200).json({
-        status: "success",
-        message: "Columns retrieved successfully",
+      return res.status(HTTP_STATUS.OK).json({
+        success: true,
+        message: SUCCESS_MESSAGES.COLUMNS_RETRIEVED,
         data: columns,
       });
     } catch (error) {
@@ -57,9 +73,9 @@ export class ColumnController {
 
       const column = await this.service.getColumnById(columnId, userId);
 
-      return res.status(200).json({
-        status: "success",
-        message: "Column retrieved successfully",
+      return res.status(HTTP_STATUS.OK).json({
+        success: true,
+        message: SUCCESS_MESSAGES.COLUMN_RETRIEVED,
         data: column,
       });
     } catch (error) {
@@ -73,20 +89,32 @@ export class ColumnController {
       const { columnId } = req.params;
       const { name } = req.body;
 
-      if (!name) {
-        return res.status(400).json({
-          status: "fail",
-          message: "Column name is required",
+      // Validate input
+      const { error, value } = columnValidationSchemas.updateColumn.validate(
+        { name },
+        { abortEarly: false },
+      );
+
+      if (error) {
+        return res.status(HTTP_STATUS.BAD_REQUEST).json({
+          success: false,
+          message: ERROR_MESSAGES.VALIDATION_ERROR,
+          errors: error.details.map((err) => ({
+            field: err.path[0],
+            message: err.message,
+          })),
         });
       }
 
-      const updatedColumn = await this.service.updateColumn(columnId, userId, {
-        name,
-      });
+      const updatedColumn = await this.service.updateColumn(
+        columnId,
+        userId,
+        value,
+      );
 
-      return res.status(200).json({
-        status: "success",
-        message: "Column updated successfully",
+      return res.status(HTTP_STATUS.OK).json({
+        success: true,
+        message: SUCCESS_MESSAGES.COLUMN_UPDATED,
         data: updatedColumn,
       });
     } catch (error) {
@@ -101,9 +129,9 @@ export class ColumnController {
 
       const deletedColumn = await this.service.deleteColumn(columnId, userId);
 
-      return res.status(200).json({
-        status: "success",
-        message: "Column deleted successfully",
+      return res.status(HTTP_STATUS.OK).json({
+        success: true,
+        message: SUCCESS_MESSAGES.COLUMN_DELETED,
         data: deletedColumn,
       });
     } catch (error) {

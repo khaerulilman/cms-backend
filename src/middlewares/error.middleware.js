@@ -7,14 +7,6 @@ export const errorMiddleware = (err, req, res, next) => {
     return next(err);
   }
 
-  // Log error details for debugging
-  console.error("Error:", {
-    name: err.name,
-    message: err.message,
-    statusCode: err.statusCode,
-    stack: process.env.NODE_ENV === "development" ? err.stack : undefined,
-  });
-
   // Handle custom error classes
   let statusCode = HTTP_STATUS.INTERNAL_SERVER_ERROR;
   let message = ERROR_MESSAGES.INTERNAL_SERVER_ERROR;
