@@ -1,6 +1,10 @@
 import { v4 as uuidv4 } from "uuid";
 import TableRepository from "./table.repository.js";
-import { NotFoundError, ValidationError } from "../../utils/errors.js";
+import {
+  NotFoundError,
+  ValidationError,
+  TableNotFoundError,
+} from "../../utils/errors.js";
 import ImageCleanupService from "../../utils/imageCleanupService.js";
 
 export class TableService {
@@ -17,11 +21,11 @@ export class TableService {
     // Check project ownership
     const isProjectOwner = await this.repository.checkProjectOwnership(
       projectId,
-      userId
+      userId,
     );
 
     if (!isProjectOwner) {
-      throw new NotFoundError("Project not found");
+      throw new TableNotFoundError("Project not found");
     }
 
     const table = await this.repository.createTable({
@@ -38,11 +42,11 @@ export class TableService {
     // Check project ownership
     const isProjectOwner = await this.repository.checkProjectOwnership(
       projectId,
-      userId
+      userId,
     );
 
     if (!isProjectOwner) {
-      throw new NotFoundError("Project not found");
+      throw new TableNotFoundError("Project not found");
     }
 
     const tables = await this.repository.findTablesByProjectId(projectId);
@@ -54,12 +58,12 @@ export class TableService {
     const table = await this.repository.findTableById(tableId);
 
     if (!table) {
-      throw new NotFoundError("Table not found");
+      throw new TableNotFoundError("Table not found");
     }
 
     // Check ownership
     if (table.project.userId !== userId) {
-      throw new NotFoundError("Table not found");
+      throw new TableNotFoundError("Table not found");
     }
 
     return this._formatTableWithFullData(table);
@@ -69,7 +73,7 @@ export class TableService {
     // Check ownership
     const isOwner = await this.repository.checkTableOwnership(tableId, userId);
     if (!isOwner) {
-      throw new NotFoundError("Table not found");
+      throw new TableNotFoundError("Table not found");
     }
 
     // Validate input
@@ -89,7 +93,7 @@ export class TableService {
     // Check ownership
     const isOwner = await this.repository.checkTableOwnership(tableId, userId);
     if (!isOwner) {
-      throw new NotFoundError("Table not found");
+      throw new TableNotFoundError("Table not found");
     }
 
     // Cleanup images from Cloudinary before deleting table
@@ -145,12 +149,12 @@ export class TableService {
     const table = await this.repository.findTableById(tableId);
 
     if (!table) {
-      throw new NotFoundError("Table not found");
+      throw new TableNotFoundError("Table not found");
     }
 
     // Check ownership
     if (table.project.userId !== userId) {
-      throw new NotFoundError("Table not found");
+      throw new TableNotFoundError("Table not found");
     }
 
     // Pass empty Set for tracking visited tables (prevent infinite loops)
@@ -194,7 +198,7 @@ export class TableService {
       return this._formatTableSimplifiedWithResolution(
         referencedTable,
         userId,
-        visitedTableIds
+        visitedTableIds,
       );
     } catch (error) {
       // If error, return original value
@@ -229,7 +233,7 @@ export class TableService {
   async _formatTableSimplifiedWithResolution(
     table,
     userId,
-    visitedTableIds = new Set()
+    visitedTableIds = new Set(),
   ) {
     const normalizeKey = (name) =>
       name.trim().toLowerCase().replace(/\s+/g, "_"); // spasi jadi underscore
@@ -241,7 +245,7 @@ export class TableService {
         await Promise.all(
           row.cells.map(async (cell) => {
             const column = table.columns.find(
-              (col) => col.id === cell.columnId
+              (col) => col.id === cell.columnId,
             );
             if (column) {
               const key = normalizeKey(column.name);
@@ -249,14 +253,14 @@ export class TableService {
               rowData[key] = await this._resolveTableReference(
                 cell.value,
                 userId,
-                visitedTableIds
+                visitedTableIds,
               );
             }
-          })
+          }),
         );
 
         return rowData;
-      })
+      }),
     );
 
     return {

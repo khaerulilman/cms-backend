@@ -1,0 +1,6 @@
+- tambahkan test api collection yang lengkap untuk column api ini
+- rubah jangan "status" : "succes" tapi "success" : true
+- tambahkan validation nya menggunakan joi scheme mirip seperti validation di auth ini
+- terapkan juga konsep yang sama seperti table (kalo table itu berkaitan id project) tapi kalo api column
+itu berkaitan dengan table id untuk delete (untuk delete) dan table id (yange tersimpan di database) di collections
+- coba terapkan juga http.js di constsnt agar pesan nya konsistent

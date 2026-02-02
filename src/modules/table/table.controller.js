@@ -1,4 +1,5 @@
 import TableService from "./table.service.js";
+import tableValidationSchemas from "./table.validation.js";
 
 export class TableController {
   constructor() {
@@ -10,20 +11,30 @@ export class TableController {
       const userId = req.user.id;
       const { projectId, name, isSubTable } = req.body;
 
-      if (!projectId) {
+      // Validate input
+      const { error, value } = tableValidationSchemas.createTable.validate(
+        { projectId, name, isSubTable },
+        { abortEarly: false },
+      );
+
+      if (error) {
         return res.status(400).json({
           success: false,
-          message: "Project ID is required",
+          message: "Validation error",
+          errors: error.details.map((err) => ({
+            field: err.path[0],
+            message: err.message,
+          })),
         });
       }
 
       const table = await this.service.createTable(projectId, userId, {
-        name,
-        isSubTable,
+        name: value.name,
+        isSubTable: value.isSubTable,
       });
 
       return res.status(201).json({
-        status: "success",
+        success: true,
         message: "Table created successfully",
         data: table,
       });
@@ -43,7 +54,7 @@ export class TableController {
       );
 
       return res.status(200).json({
-        status: "success",
+        success: true,
         message: "Tables retrieved successfully",
         data: tables,
       });
@@ -60,7 +71,7 @@ export class TableController {
       const table = await this.service.getTableById(tableId, userId);
 
       return res.status(200).json({
-        status: "success",
+        success: true,
         message: "Table retrieved successfully",
         data: table,
       });
@@ -75,10 +86,29 @@ export class TableController {
       const { tableId } = req.params;
       const { name } = req.body;
 
-      const table = await this.service.updateTable(tableId, userId, { name });
+      // Validate input
+      const { error, value } = tableValidationSchemas.updateTable.validate(
+        { name },
+        { abortEarly: false },
+      );
+
+      if (error) {
+        return res.status(400).json({
+          success: false,
+          message: "Validation error",
+          errors: error.details.map((err) => ({
+            field: err.path[0],
+            message: err.message,
+          })),
+        });
+      }
+
+      const table = await this.service.updateTable(tableId, userId, {
+        name: value.name,
+      });
 
       return res.status(200).json({
-        status: "success",
+        success: true,
         message: "Table updated successfully",
         data: table,
       });
@@ -95,7 +125,7 @@ export class TableController {
       await this.service.deleteTable(tableId, userId);
 
       return res.status(200).json({
-        status: "success",
+        success: true,
         message: "Table deleted successfully",
       });
     } catch (error) {
@@ -111,7 +141,7 @@ export class TableController {
       const table = await this.service.getTableSimplified(tableId, userId);
 
       return res.status(200).json({
-        status: "success",
+        success: true,
         message: "Table retrieved successfully",
         data: table,
       });

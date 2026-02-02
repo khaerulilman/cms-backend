@@ -2,10 +2,17 @@ import { v4 as uuidv4 } from "uuid";
 import ProjectRepository from "./project.repository.js";
 import ImageCleanupService from "../../utils/imageCleanupService.js";
 import { NotFoundError, ValidationError } from "../../utils/errors.js";
+import { Validator } from "../../utils/validator.js";
 
 export class ProjectService {
   constructor() {
     this.repository = new ProjectRepository();
+  }
+
+  validateUUID(id, fieldName = "ID") {
+    if (!id || !Validator.isValidUUID(id)) {
+      throw new NotFoundError(`${fieldName} not found`);
+    }
   }
 
   async createProject(userId, data) {
@@ -32,6 +39,9 @@ export class ProjectService {
   }
 
   async getProjectById(projectId, userId) {
+    // Validate UUID format
+    this.validateUUID(projectId, "Project");
+
     const project = await this.repository.findProjectById(projectId);
 
     if (!project) {
@@ -68,23 +78,31 @@ export class ProjectService {
   }
 
   async updateProject(projectId, userId, data) {
-    // Check ownership
-    const isOwner = await this.repository.checkProjectOwnership(
-      projectId,
-      userId
-    );
-    if (!isOwner) {
-      throw new NotFoundError("Project not found");
-    }
+    // Validate UUID format
+    this.validateUUID(projectId, "Project");
 
-    if (data.name && data.name.trim() === "") {
+    // Validate input before checking ownership
+    if (data.name !== undefined && (!data.name || data.name.trim() === "")) {
       throw new ValidationError("Project name cannot be empty");
     }
 
-    if (data.description && data.description.length > 500) {
+    if (
+      data.description !== undefined &&
+      data.description &&
+      data.description.length > 500
+    ) {
       throw new ValidationError(
-        "Project description must not exceed 500 characters"
+        "Project description must not exceed 500 characters",
       );
+    }
+
+    // Check ownership
+    const isOwner = await this.repository.checkProjectOwnership(
+      projectId,
+      userId,
+    );
+    if (!isOwner) {
+      throw new NotFoundError("Project not found");
     }
 
     const updateData = {};
@@ -107,10 +125,13 @@ export class ProjectService {
   }
 
   async deleteProject(projectId, userId) {
+    // Validate UUID format
+    this.validateUUID(projectId, "Project");
+
     // Check ownership
     const isOwner = await this.repository.checkProjectOwnership(
       projectId,
-      userId
+      userId,
     );
     if (!isOwner) {
       throw new NotFoundError("Project not found");

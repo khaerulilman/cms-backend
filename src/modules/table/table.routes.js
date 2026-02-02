@@ -13,22 +13,22 @@ router.post("/", (req, res, next) => controller.createTable(req, res, next));
 
 // Get all tables by project
 router.get("/project/:projectId", (req, res, next) =>
-  controller.getTablesByProject(req, res, next)
+  controller.getTablesByProject(req, res, next),
 );
 
 // Get specific table
 router.get("/:tableId", (req, res, next) =>
-  controller.getTableById(req, res, next)
+  controller.getTableById(req, res, next),
 );
 
 // Update table
 router.put("/:tableId", (req, res, next) =>
-  controller.updateTable(req, res, next)
+  controller.updateTable(req, res, next),
 );
 
 // Delete table
 router.delete("/:tableId", (req, res, next) =>
-  controller.deleteTable(req, res, next)
+  controller.deleteTable(req, res, next),
 );
 
 export default router;

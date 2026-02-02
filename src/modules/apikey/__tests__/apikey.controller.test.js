@@ -36,28 +36,31 @@ describe("ApiKeyController", () => {
 
   describe("generateApiKey", () => {
     it("should return 201 with generated API key", async () => {
-      const mockResult = {
+      const mockServiceResult = {
         id: "key-1",
         apiKey: "sk_test123",
-        createdAt: new Date(),
+        createdAt: new Date("2025-01-15"),
         message: "API key generated successfully",
       };
 
-      mockService.generateApiKey.mockResolvedValue(mockResult);
+      const expectedResponse = {
+        success: true,
+        message: "API key generated successfully",
+        data: {
+          id: "key-1",
+          apiKey: "sk_test123",
+          createdAt: new Date("2025-01-15"),
+        },
+      };
+
+      mockService.generateApiKey.mockResolvedValue(mockServiceResult);
 
       await controller.generateApiKey(mockReq, mockRes, mockNext);
 
-      expect(mockRes.status).toHaveBeenCalledWith(201);
-      expect(mockRes.json).toHaveBeenCalledWith({
-        success: true,
-        message: mockResult.message,
-        data: {
-          id: mockResult.id,
-          apiKey: mockResult.apiKey,
-          createdAt: mockResult.createdAt,
-        },
-      });
       expect(mockService.generateApiKey).toHaveBeenCalledWith("user-123");
+      expect(mockRes.status).toHaveBeenCalledWith(201);
+      expect(mockRes.json).toHaveBeenCalledWith(expectedResponse);
+      expect(mockNext).not.toHaveBeenCalled();
     });
 
     it("should call next with error if service throws", async () => {
@@ -73,30 +76,44 @@ describe("ApiKeyController", () => {
 
   describe("getApiKeys", () => {
     it("should return 200 with list of API keys", async () => {
-      const mockResult = {
+      const mockServiceResult = {
         userId: "user-123",
         apiKeys: [
           {
             id: "key-1",
             apiKey: "sk_a****f",
-            createdAt: new Date(),
-            updatedAt: new Date(),
+            createdAt: new Date("2025-01-15"),
+            updatedAt: new Date("2025-01-15"),
           },
         ],
         total: 1,
       };
 
-      mockService.getApiKeys.mockResolvedValue(mockResult);
+      const expectedResponse = {
+        success: true,
+        message: "API keys retrieved successfully",
+        data: {
+          userId: "user-123",
+          apiKeys: [
+            {
+              id: "key-1",
+              apiKey: "sk_a****f",
+              createdAt: new Date("2025-01-15"),
+              updatedAt: new Date("2025-01-15"),
+            },
+          ],
+          total: 1,
+        },
+      };
+
+      mockService.getApiKeys.mockResolvedValue(mockServiceResult);
 
       await controller.getApiKeys(mockReq, mockRes, mockNext);
 
-      expect(mockRes.status).toHaveBeenCalledWith(200);
-      expect(mockRes.json).toHaveBeenCalledWith({
-        success: true,
-        message: "API keys retrieved successfully",
-        data: mockResult,
-      });
       expect(mockService.getApiKeys).toHaveBeenCalledWith("user-123");
+      expect(mockRes.status).toHaveBeenCalledWith(200);
+      expect(mockRes.json).toHaveBeenCalledWith(expectedResponse);
+      expect(mockNext).not.toHaveBeenCalled();
     });
 
     it("should call next with error if service throws", async () => {
@@ -105,7 +122,10 @@ describe("ApiKeyController", () => {
 
       await controller.getApiKeys(mockReq, mockRes, mockNext);
 
+      expect(mockService.getApiKeys).toHaveBeenCalledWith("user-123");
       expect(mockNext).toHaveBeenCalledWith(error);
+      expect(mockRes.status).not.toHaveBeenCalled();
+      expect(mockRes.json).not.toHaveBeenCalled();
     });
   });
 
@@ -114,48 +134,59 @@ describe("ApiKeyController", () => {
       const apiKeyId = "key-1";
       mockReq.params = { apiKeyId };
 
-      const mockResult = {
+      const mockServiceResult = {
         message: "API key deleted successfully",
       };
 
-      mockService.deleteApiKey.mockResolvedValue(mockResult);
-
-      await controller.deleteApiKey(mockReq, mockRes, mockNext);
-
-      expect(mockRes.status).toHaveBeenCalledWith(200);
-      expect(mockRes.json).toHaveBeenCalledWith({
+      const expectedResponse = {
         success: true,
-        message: mockResult.message,
+        message: "API key deleted successfully",
         data: {
           deletedId: undefined,
         },
-      });
+      };
+
+      mockService.deleteApiKey.mockResolvedValue(mockServiceResult);
+
+      await controller.deleteApiKey(mockReq, mockRes, mockNext);
+
       expect(mockService.deleteApiKey).toHaveBeenCalledWith(
         "user-123",
         apiKeyId,
       );
+      expect(mockRes.status).toHaveBeenCalledWith(200);
+      expect(mockRes.json).toHaveBeenCalledWith(expectedResponse);
+      expect(mockNext).not.toHaveBeenCalled();
     });
 
     it("should include deletedId in response if provided", async () => {
       const apiKeyId = "key-1";
       mockReq.params = { apiKeyId };
 
-      const mockResult = {
+      const mockServiceResult = {
         message: "API key deleted successfully",
         deletedId: apiKeyId,
       };
 
-      mockService.deleteApiKey.mockResolvedValue(mockResult);
+      const expectedResponse = {
+        success: true,
+        message: "API key deleted successfully",
+        data: {
+          deletedId: "key-1",
+        },
+      };
+
+      mockService.deleteApiKey.mockResolvedValue(mockServiceResult);
 
       await controller.deleteApiKey(mockReq, mockRes, mockNext);
 
-      expect(mockRes.json).toHaveBeenCalledWith({
-        success: true,
-        message: mockResult.message,
-        data: {
-          deletedId: apiKeyId,
-        },
-      });
+      expect(mockService.deleteApiKey).toHaveBeenCalledWith(
+        "user-123",
+        apiKeyId,
+      );
+      expect(mockRes.status).toHaveBeenCalledWith(200);
+      expect(mockRes.json).toHaveBeenCalledWith(expectedResponse);
+      expect(mockNext).not.toHaveBeenCalled();
     });
 
     it("should call next with error if service throws", async () => {
@@ -165,7 +196,13 @@ describe("ApiKeyController", () => {
 
       await controller.deleteApiKey(mockReq, mockRes, mockNext);
 
+      expect(mockService.deleteApiKey).toHaveBeenCalledWith(
+        "user-123",
+        "key-1",
+      );
       expect(mockNext).toHaveBeenCalledWith(error);
+      expect(mockRes.status).not.toHaveBeenCalled();
+      expect(mockRes.json).not.toHaveBeenCalled();
     });
   });
 });
