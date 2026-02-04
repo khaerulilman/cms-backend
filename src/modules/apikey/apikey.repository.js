@@ -1,10 +1,10 @@
-import prisma from "../../prisma/client.js";
+import prisma from '../../prisma/client.js';
 
 export class ApiKeyRepository {
   async findApiKeysByUserId(userId) {
     return prisma.apiKey.findMany({
       where: { userId },
-      orderBy: { createdAt: "desc" },
+      orderBy: { createdAt: 'desc' },
     });
   }
 

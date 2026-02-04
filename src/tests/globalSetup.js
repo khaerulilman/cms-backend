@@ -1,7 +1,8 @@
-import { beforeAll } from "vitest";
-import { setupTestDatabase } from "./setup.js";
+import { beforeAll } from 'vitest';
 
-const isIntegrationTest = process.env.TEST_TYPE === "integration";
+import { setupTestDatabase } from './setup.js';
+
+const isIntegrationTest = process.env.TEST_TYPE === 'integration';
 
 beforeAll(async () => {
   if (isIntegrationTest) {

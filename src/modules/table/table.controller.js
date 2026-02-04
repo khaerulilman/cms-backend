@@ -1,5 +1,5 @@
-import TableService from "./table.service.js";
-import tableValidationSchemas from "./table.validation.js";
+import TableService from './table.service.js';
+import tableValidationSchemas from './table.validation.js';
 
 export class TableController {
   constructor() {
@@ -20,7 +20,7 @@ export class TableController {
       if (error) {
         return res.status(400).json({
           success: false,
-          message: "Validation error",
+          message: 'Validation error',
           errors: error.details.map((err) => ({
             field: err.path[0],
             message: err.message,
@@ -35,7 +35,7 @@ export class TableController {
 
       return res.status(201).json({
         success: true,
-        message: "Table created successfully",
+        message: 'Table created successfully',
         data: table,
       });
     } catch (error) {
@@ -55,7 +55,7 @@ export class TableController {
 
       return res.status(200).json({
         success: true,
-        message: "Tables retrieved successfully",
+        message: 'Tables retrieved successfully',
         data: tables,
       });
     } catch (error) {
@@ -72,7 +72,7 @@ export class TableController {
 
       return res.status(200).json({
         success: true,
-        message: "Table retrieved successfully",
+        message: 'Table retrieved successfully',
         data: table,
       });
     } catch (error) {
@@ -95,7 +95,7 @@ export class TableController {
       if (error) {
         return res.status(400).json({
           success: false,
-          message: "Validation error",
+          message: 'Validation error',
           errors: error.details.map((err) => ({
             field: err.path[0],
             message: err.message,
@@ -109,7 +109,7 @@ export class TableController {
 
       return res.status(200).json({
         success: true,
-        message: "Table updated successfully",
+        message: 'Table updated successfully',
         data: table,
       });
     } catch (error) {
@@ -126,7 +126,7 @@ export class TableController {
 
       return res.status(200).json({
         success: true,
-        message: "Table deleted successfully",
+        message: 'Table deleted successfully',
       });
     } catch (error) {
       next(error);
@@ -142,7 +142,7 @@ export class TableController {
 
       return res.status(200).json({
         success: true,
-        message: "Table retrieved successfully",
+        message: 'Table retrieved successfully',
         data: table,
       });
     } catch (error) {

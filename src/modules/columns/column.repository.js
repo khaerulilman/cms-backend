@@ -1,4 +1,4 @@
-import prisma from "../../prisma/client.js";
+import prisma from '../../prisma/client.js';
 
 export class ColumnRepository {
   async createColumns(data) {
@@ -12,8 +12,8 @@ export class ColumnRepository {
           include: {
             table: true,
           },
-        })
-      )
+        }),
+      ),
     );
     return columns;
   }

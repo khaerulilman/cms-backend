@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken';
+
 import { config } from './env.js';
 
 export class JwtConfig {

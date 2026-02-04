@@ -1,8 +1,10 @@
-import { v4 as uuidv4 } from "uuid";
-import ApiKeyRepository from "./apikey.repository.js";
-import AuthRepository from "../auth/auth.repository.js";
-import { NotFoundError } from "../../utils/errors.js";
-import { ERROR_MESSAGES, SUCCESS_MESSAGES } from "../../constants/http.js";
+import { v4 as uuidv4 } from 'uuid';
+
+import { ERROR_MESSAGES, SUCCESS_MESSAGES } from '../../constants/http.js';
+import { NotFoundError } from '../../utils/errors.js';
+import AuthRepository from '../auth/auth.repository.js';
+
+import ApiKeyRepository from './apikey.repository.js';
 
 export class ApiKeyService {
   constructor() {
@@ -12,8 +14,8 @@ export class ApiKeyService {
 
   _generateRandomApiKey() {
     const chars =
-      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    let result = "sk_";
+      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let result = 'sk_';
     for (let i = 0; i < 32; i++) {
       result += chars.charAt(Math.floor(Math.random() * chars.length));
     }
@@ -113,7 +115,7 @@ export class ApiKeyService {
     }
     return (
       apiKey.substring(0, 4) +
-      "*".repeat(apiKey.length - 8) +
+      '*'.repeat(apiKey.length - 8) +
       apiKey.substring(apiKey.length - 4)
     );
   }

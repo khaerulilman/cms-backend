@@ -1,8 +1,10 @@
 import { v4 as uuidv4 } from "uuid";
-import CellRepository from "./cell.repository.js";
+
+import CloudinaryService from "../../utils/cloudinary.js";
 import { NotFoundError, ValidationError } from "../../utils/errors.js";
 import ImageCleanupService from "../../utils/imageCleanupService.js";
-import CloudinaryService from "../../utils/cloudinary.js";
+
+import CellRepository from "./cell.repository.js";
 
 export class CellService {
   constructor() {
@@ -20,21 +22,6 @@ export class CellService {
     return cells.map((cell) => this._formatCell(cell));
   }
 
-  async getCellById(cellId, userId) {
-    // Check cell ownership
-    const isOwner = await this.repository.checkCellOwnership(cellId, userId);
-    if (!isOwner) {
-      throw new NotFoundError("Cell not found");
-    }
-
-    const cell = await this.repository.findCellById(cellId);
-    if (!cell) {
-      throw new NotFoundError("Cell not found");
-    }
-
-    return this._formatCell(cell);
-  }
-
   // Upsert cell (update if exists, create if not)
   async upsertCell(rowId, columnId, userId, value, imageFile = null) {
     // Check row ownership
@@ -46,7 +33,7 @@ export class CellService {
     // Check if cell already exists
     const existingCell = await this.repository.findCellByRowAndColumn(
       rowId,
-      columnId
+      columnId,
     );
 
     let finalValue = null;
@@ -63,7 +50,7 @@ export class CellService {
 
         // Upload new image to Cloudinary
         const uploadResult = await CloudinaryService.uploadImage(
-          imageFile.path
+          imageFile.path,
         );
         imageUrl = uploadResult.imageUrl;
         cloudinaryPublicId = uploadResult.publicId;
@@ -84,7 +71,7 @@ export class CellService {
           await CloudinaryService.deleteImage(existingCell.cloudinaryPublicId);
         } catch (error) {
           console.error(
-            `Failed to delete image from Cloudinary: ${error.message}`
+            `Failed to delete image from Cloudinary: ${error.message}`,
           );
         }
       }
@@ -103,7 +90,7 @@ export class CellService {
           await CloudinaryService.deleteImage(existingCell.cloudinaryPublicId);
         } catch (error) {
           console.error(
-            `Failed to delete image from Cloudinary: ${error.message}`
+            `Failed to delete image from Cloudinary: ${error.message}`,
           );
         }
       }
@@ -117,7 +104,7 @@ export class CellService {
       columnId,
       finalValue,
       imageUrl,
-      cloudinaryPublicId
+      cloudinaryPublicId,
     );
 
     if (!cell) {
@@ -125,26 +112,6 @@ export class CellService {
     }
 
     return this._formatCell(cell);
-  }
-
-  // Delete cell and its image if exists
-  async deleteCell(cellId, userId) {
-    // Check cell ownership
-    const isOwner = await this.repository.checkCellOwnership(cellId, userId);
-    if (!isOwner) {
-      throw new NotFoundError("Cell not found");
-    }
-
-    const cell = await this.repository.findCellById(cellId);
-    if (!cell) {
-      throw new NotFoundError("Cell not found");
-    }
-
-    // Cleanup image from Cloudinary if exists
-    await ImageCleanupService.deleteImagesByCellId(cellId);
-
-    const deletedCell = await this.repository.deleteCell(cellId);
-    return this._formatCell(deletedCell);
   }
 
   _formatCell(cell) {

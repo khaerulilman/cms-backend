@@ -1,4 +1,4 @@
-import bcrypt from "bcryptjs";
+import bcrypt from 'bcryptjs';
 
 export class HashUtil {
   static async hashPassword(password) {

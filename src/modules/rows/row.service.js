@@ -1,7 +1,10 @@
-import { v4 as uuidv4 } from "uuid";
-import RowRepository from "./row.repository.js";
-import { NotFoundError, ValidationError } from "../../utils/errors.js";
-import ImageCleanupService from "../../utils/imageCleanupService.js";
+import { v4 as uuidv4 } from 'uuid';
+
+import { ERROR_MESSAGES } from '../../constants/http.js';
+import { NotFoundError, ValidationError } from '../../utils/errors.js';
+import ImageCleanupService from '../../utils/imageCleanupService.js';
+
+import RowRepository from './row.repository.js';
 
 export class RowService {
   constructor() {
@@ -12,10 +15,10 @@ export class RowService {
     // Check table ownership
     const isTableOwner = await this.repository.checkTableOwnership(
       tableId,
-      userId
+      userId,
     );
     if (!isTableOwner) {
-      throw new NotFoundError("Table not found");
+      throw new NotFoundError(ERROR_MESSAGES.TABLE_NOT_FOUND);
     }
 
     const row = await this.repository.createRow({
@@ -30,10 +33,10 @@ export class RowService {
     // Check table ownership
     const isTableOwner = await this.repository.checkTableOwnership(
       tableId,
-      userId
+      userId,
     );
     if (!isTableOwner) {
-      throw new NotFoundError("Table not found");
+      throw new NotFoundError(ERROR_MESSAGES.TABLE_NOT_FOUND);
     }
 
     const rows = await this.repository.findRowsByTableId(tableId);
@@ -44,12 +47,12 @@ export class RowService {
     // Check row ownership
     const isOwner = await this.repository.checkRowOwnership(rowId, userId);
     if (!isOwner) {
-      throw new NotFoundError("Row not found");
+      throw new NotFoundError(ERROR_MESSAGES.ROW_NOT_FOUND);
     }
 
     const row = await this.repository.findRowById(rowId);
     if (!row) {
-      throw new NotFoundError("Row not found");
+      throw new NotFoundError(ERROR_MESSAGES.ROW_NOT_FOUND);
     }
 
     return this._formatRow(row);
@@ -59,14 +62,14 @@ export class RowService {
     // Check row ownership
     const isOwner = await this.repository.checkRowOwnership(rowId, userId);
     if (!isOwner) {
-      throw new NotFoundError("Row not found");
+      throw new NotFoundError(ERROR_MESSAGES.ROW_NOT_FOUND);
     }
 
     // For now, we don't allow direct row updates
     // Rows are updated via cell updates
     const row = await this.repository.findRowById(rowId);
     if (!row) {
-      throw new NotFoundError("Row not found");
+      throw new NotFoundError(ERROR_MESSAGES.ROW_NOT_FOUND);
     }
 
     return this._formatRow(row);
@@ -76,7 +79,7 @@ export class RowService {
     // Check row ownership
     const isOwner = await this.repository.checkRowOwnership(rowId, userId);
     if (!isOwner) {
-      throw new NotFoundError("Row not found");
+      throw new NotFoundError(ERROR_MESSAGES.ROW_NOT_FOUND);
     }
 
     // Cleanup images from Cloudinary before deleting row
@@ -85,7 +88,7 @@ export class RowService {
     const row = await this.repository.deleteRow(rowId);
 
     if (!row) {
-      throw new NotFoundError("Row not found");
+      throw new NotFoundError(ERROR_MESSAGES.ROW_NOT_FOUND);
     }
 
     return this._formatRow(row);
@@ -97,16 +100,16 @@ export class RowService {
       tableId: row.tableId,
       cells: row.cells
         ? row.cells.map((cell) => ({
-            id: cell.id,
-            rowId: cell.rowId,
-            columnId: cell.columnId,
-            columnName: cell.column?.name,
-            value: cell.value,
-            imageUrl: cell.imageUrl,
-            cloudinaryPublicId: cell.cloudinaryPublicId,
-            createdAt: cell.createdAt,
-            updatedAt: cell.updatedAt,
-          }))
+          id: cell.id,
+          rowId: cell.rowId,
+          columnId: cell.columnId,
+          columnName: cell.column?.name,
+          value: cell.value,
+          imageUrl: cell.imageUrl,
+          cloudinaryPublicId: cell.cloudinaryPublicId,
+          createdAt: cell.createdAt,
+          updatedAt: cell.updatedAt,
+        }))
         : [],
       createdAt: row.createdAt,
       updatedAt: row.updatedAt,

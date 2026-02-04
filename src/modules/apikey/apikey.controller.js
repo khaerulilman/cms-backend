@@ -1,5 +1,6 @@
-import ApiKeyService from "./apikey.service.js";
-import { HTTP_STATUS, SUCCESS_MESSAGES } from "../../constants/http.js";
+import { HTTP_STATUS, SUCCESS_MESSAGES } from '../../constants/http.js';
+
+import ApiKeyService from './apikey.service.js';
 
 export class ApiKeyController {
   constructor() {

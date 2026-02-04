@@ -1,4 +1,0 @@
-coba terapkan table id for delete , jadi set item 
-ketika create table itu ada 2 di pre req  , 1 untuk 
-disimpan ke database (table_id) , 
-yang satu untuk pengetesan delete (table_id_for_delete)

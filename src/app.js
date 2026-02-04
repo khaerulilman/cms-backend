@@ -1,10 +1,11 @@
-import express from "express";
-import cors from "cors";
-import session from "express-session";
-import { config } from "./config/env.js";
-import routes from "./routes.js";
-import errorMiddleware from "./middlewares/error.middleware.js";
-import passport from "./config/google-oauth.js";
+import cors from 'cors';
+import express from 'express';
+import session from 'express-session';
+
+import { config } from './config/env.js';
+import passport from './config/google-oauth.js';
+import errorMiddleware from './middlewares/error.middleware.js';
+import routes from './routes.js';
 
 const app = express();
 
@@ -13,7 +14,7 @@ app.use(
   cors({
     origin: config.FRONTEND_URL,
     credentials: true,
-  })
+  }),
 );
 
 app.use(express.json());
@@ -26,7 +27,7 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: { secure: false, httpOnly: true }, // Set secure: true in production with HTTPS
-  })
+  }),
 );
 
 // Passport middleware
@@ -37,15 +38,15 @@ app.use(passport.session());
 app.use(routes);
 
 // Health check
-app.get("/health", (req, res) => {
-  res.json({ status: "ok" });
+app.get('/health', (req, res) => {
+  res.json({ status: 'ok' });
 });
 
 // 404 handler
 app.use((req, res) => {
   res.status(404).json({
     success: false,
-    message: "Route not found",
+    message: 'Route not found',
   });
 });
 

@@ -1,5 +1,6 @@
-import ProjectService from "./project.service.js";
-import { SUCCESS_MESSAGES } from "../../constants/http.js";
+import { SUCCESS_MESSAGES } from '../../constants/http.js';
+
+import ProjectService from './project.service.js';
 
 export class ProjectController {
   constructor() {
