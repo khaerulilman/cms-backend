@@ -1,8 +1,10 @@
-import { v4 as uuidv4 } from "uuid";
-import ColumnRepository from "./column.repository.js";
-import ImageCleanupService from "../../utils/imageCleanupService.js";
-import { NotFoundError, ValidationError } from "../../utils/errors.js";
-import { ERROR_MESSAGES } from "../../constants/http.js";
+import { v4 as uuidv4 } from 'uuid';
+
+import { ERROR_MESSAGES } from '../../constants/http.js';
+import { NotFoundError, ValidationError } from '../../utils/errors.js';
+import ImageCleanupService from '../../utils/imageCleanupService.js';
+
+import ColumnRepository from './column.repository.js';
 
 export class ColumnService {
   constructor() {
@@ -11,7 +13,7 @@ export class ColumnService {
 
   async createColumns(tableId, userId, columns) {
     // Validate tableId
-    if (!tableId || tableId.trim() === "") {
+    if (!tableId || tableId.trim() === '') {
       throw new ValidationError(ERROR_MESSAGES.TABLE_ID_REQUIRED);
     }
 
@@ -21,8 +23,8 @@ export class ColumnService {
     }
 
     // Check if all columns have names
-    for (let column of columns) {
-      if (!column.name || column.name.trim() === "") {
+    for (const column of columns) {
+      if (!column.name || column.name.trim() === '') {
         throw new ValidationError(ERROR_MESSAGES.COLUMN_NAME_REQUIRED);
       }
     }
@@ -82,7 +84,7 @@ export class ColumnService {
 
   async updateColumn(columnId, userId, data) {
     // Validate input
-    if (!data.name || data.name.trim() === "") {
+    if (!data.name || data.name.trim() === '') {
       throw new ValidationError(ERROR_MESSAGES.COLUMN_NAME_REQUIRED);
     }
 

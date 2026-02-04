@@ -1,4 +1,6 @@
-import RowService from "./row.service.js";
+import { SUCCESS_MESSAGES, ERROR_MESSAGES } from '../../constants/http.js';
+
+import RowService from './row.service.js';
 
 export class RowController {
   constructor() {
@@ -13,7 +15,7 @@ export class RowController {
       if (!tableId) {
         return res.status(400).json({
           success: false,
-          message: "Table ID is required",
+          message: ERROR_MESSAGES.TABLE_ID_REQUIRED,
         });
       }
 
@@ -21,7 +23,7 @@ export class RowController {
 
       return res.status(201).json({
         success: true,
-        message: "Row created successfully",
+        message: SUCCESS_MESSAGES.ROW_CREATED,
         data: row,
       });
     } catch (error) {
@@ -38,7 +40,7 @@ export class RowController {
 
       return res.status(200).json({
         success: true,
-        message: "Rows retrieved successfully",
+        message: SUCCESS_MESSAGES.ROWS_RETRIEVED,
         data: rows,
       });
     } catch (error) {
@@ -55,7 +57,7 @@ export class RowController {
 
       return res.status(200).json({
         success: true,
-        message: "Row retrieved successfully",
+        message: SUCCESS_MESSAGES.ROW_RETRIEVED,
         data: row,
       });
     } catch (error) {
@@ -73,7 +75,7 @@ export class RowController {
 
       return res.status(200).json({
         success: true,
-        message: "Row updated successfully",
+        message: SUCCESS_MESSAGES.ROW_UPDATED,
         data: updatedRow,
       });
     } catch (error) {
@@ -90,7 +92,7 @@ export class RowController {
 
       return res.status(200).json({
         success: true,
-        message: "Row deleted successfully",
+        message: SUCCESS_MESSAGES.ROW_DELETED,
         data: deletedRow,
       });
     } catch (error) {

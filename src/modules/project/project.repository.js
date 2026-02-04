@@ -1,4 +1,4 @@
-import prisma from "../../prisma/client.js";
+import prisma from '../../prisma/client.js';
 
 export class ProjectRepository {
   async createProject(data) {
@@ -27,7 +27,7 @@ export class ProjectRepository {
         user: true,
         cmsTables: true,
       },
-      orderBy: { createdAt: "desc" },
+      orderBy: { createdAt: 'desc' },
     });
   }
 

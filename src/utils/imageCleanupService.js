@@ -1,10 +1,11 @@
-import prisma from "../prisma/client.js";
-import CloudinaryService from "./cloudinary.js";
+import prisma from '../prisma/client.js';
+
+import CloudinaryService from './cloudinary.js';
 
 /**
  * ImageCleanupService - Centralized service untuk semua image deletion operations
  * Handles cascade image deletion untuk semua entities yang memiliki relasi
- * 
+ *
  * Hierarchy:
  * User → Projects → Tables → Rows → Cells → Images
  */
@@ -60,7 +61,7 @@ export class ImageCleanupService {
     } catch (error) {
       console.error(
         `Failed to cleanup images for project ${projectId}:`,
-        error.message
+        error.message,
       );
       throw error;
     }
@@ -109,7 +110,7 @@ export class ImageCleanupService {
     } catch (error) {
       console.error(
         `Failed to cleanup images for column ${columnId}:`,
-        error.message
+        error.message,
       );
       throw error;
     }
@@ -181,7 +182,7 @@ export class ImageCleanupService {
     } catch (error) {
       console.error(
         `Failed to delete ${publicIds.length} images from Cloudinary:`,
-        error.message
+        error.message,
       );
       // Non-blocking: jangan throw error, biar database deletion tetap jalan
     }

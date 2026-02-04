@@ -33,6 +33,8 @@ export const ERROR_MESSAGES = {
 
   // API Key errors
   API_KEY_NOT_FOUND: "API key not found",
+  API_KEY_ID_REQUIRED: "API key ID is required",
+  API_KEY_ID_INVALID: "API key ID must be a valid UUID",
 
   // Column errors
   TABLE_ID_REQUIRED: "Table ID is required",
@@ -44,6 +46,18 @@ export const ERROR_MESSAGES = {
   COLUMN_NAME_TOO_LONG: "Column name cannot exceed 255 characters",
   COLUMN_NOT_FOUND: "Column not found",
   TABLE_NOT_FOUND: "Table not found",
+  ROW_NOT_FOUND: "Row not found",
+
+  // Cell errors
+  CELL_NOT_FOUND: "Cell not found",
+  ROW_ID_REQUIRED: "Row ID is required",
+  INVALID_ROW_ID: "Row ID must be a valid UUID",
+  COLUMN_ID_REQUIRED: "Column ID is required",
+  INVALID_COLUMN_ID: "Column ID must be a valid UUID",
+  CELL_ID_REQUIRED: "Cell ID is required",
+  INVALID_CELL_ID: "Cell ID must be a valid UUID",
+  CELL_VALUE_TOO_LONG: "Cell value cannot exceed 5000 characters",
+  CELL_VALUE_OR_IMAGE_REQUIRED: "Either cell value or image is required",
 
   // Server errors
   DATABASE_ERROR: "Database error",
@@ -78,6 +92,20 @@ export const SUCCESS_MESSAGES = {
   COLUMN_RETRIEVED: "Column retrieved successfully",
   COLUMN_UPDATED: "Column updated successfully",
   COLUMN_DELETED: "Column deleted successfully",
+
+  // Row messages
+  ROW_CREATED: "Row created successfully",
+  ROWS_RETRIEVED: "Rows retrieved successfully",
+  ROW_RETRIEVED: "Row retrieved successfully",
+  ROW_UPDATED: "Row updated successfully",
+  ROW_DELETED: "Row deleted successfully",
+
+  // Cell messages
+  CELL_CREATED: "Cell created successfully",
+  CELL_UPSERTED: "Cell upserted successfully",
+  CELLS_RETRIEVED: "Cells retrieved successfully",
+  CELL_RETRIEVED: "Cell retrieved successfully",
+  CELL_UPDATED: "Cell updated successfully",
 };
 
 export default {

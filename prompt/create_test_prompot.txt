@@ -1,0 +1,2 @@
+- buatkan unit test untuk api project ini , buat lengkap , tapi jangan terlalu lengkap juga
+seperti method hasil library joi di test dan lain lain

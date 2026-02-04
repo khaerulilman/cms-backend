@@ -1,8 +1,10 @@
-import passport from "passport";
-import { Strategy as GoogleStrategy } from "passport-google-oauth20";
-import { config } from "./env.js";
-import AuthRepository from "../modules/auth/auth.repository.js";
-import { v4 as uuidv4 } from "uuid";
+import passport from 'passport';
+import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
+import { v4 as uuidv4 } from 'uuid';
+
+import AuthRepository from '../modules/auth/auth.repository.js';
+
+import { config } from './env.js';
 
 const authRepository = new AuthRepository();
 
@@ -35,8 +37,8 @@ passport.use(
       } catch (error) {
         return done(error, null);
       }
-    }
-  )
+    },
+  ),
 );
 
 passport.serializeUser((user, done) => {

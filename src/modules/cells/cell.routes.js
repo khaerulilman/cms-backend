@@ -1,8 +1,14 @@
+import path from "path";
+
 import { Router } from "express";
 import multer from "multer";
-import path from "path";
-import CellController from "./cell.controller.js";
+
 import { authMiddleware } from "../../middlewares/auth.middleware.js";
+import { sanitizeInput } from "../../middlewares/sanitize.middleware.js";
+import { validateRequest } from "../../middlewares/validation.middleware.js";
+
+import CellController from "./cell.controller.js";
+import { cellValidationSchemas } from "./cell.validation.js";
 
 const router = Router();
 const controller = new CellController();
@@ -41,23 +47,20 @@ const upload = multer({
 router.use(authMiddleware);
 
 // Get all cells for a specific row
-router.get("/row/:rowId", (req, res, next) =>
-  controller.getCellsByRow(req, res, next),
-);
-
-// Get specific cell by ID
-router.get("/:cellId", (req, res, next) =>
-  controller.getCellById(req, res, next),
+router.get(
+  "/row/:rowId",
+  sanitizeInput,
+  validateRequest(cellValidationSchemas.getCellsByRow, "params"),
+  (req, res, next) => controller.getCellsByRow(req, res, next),
 );
 
 // Upsert cell (update if exists, create if not) - with optional image upload
-router.post("/row/:rowId", upload.single("image"), (req, res, next) =>
-  controller.upsertCell(req, res, next),
-);
-
-// Delete cell
-router.delete("/:cellId", (req, res, next) =>
-  controller.deleteCell(req, res, next),
+router.post(
+  "/row/:rowId",
+  upload.single("image"),
+  sanitizeInput,
+  validateRequest(cellValidationSchemas.upsertCell, ["params", "body"]),
+  (req, res, next) => controller.upsertCell(req, res, next),
 );
 
 export default router;

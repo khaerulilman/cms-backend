@@ -1,10 +1,11 @@
-import AuthService from "./auth.service.js";
-import JwtUtil from "../../utils/jwt.js";
 import {
   SUCCESS_MESSAGES,
   HTTP_STATUS,
   ERROR_MESSAGES,
 } from "../../constants/http.js";
+import JwtUtil from "../../utils/jwt.js";
+
+import AuthService from "./auth.service.js";
 
 export class AuthController {
   constructor() {

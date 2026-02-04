@@ -1,13 +1,15 @@
-import { v4 as uuidv4 } from "uuid";
-import AuthRepository from "./auth.repository.js";
-import HashUtil from "../../utils/hash.js";
-import JwtUtil from "../../utils/jwt.js";
+import { v4 as uuidv4 } from 'uuid';
+
+import { ERROR_MESSAGES } from '../../constants/http.js';
 import {
   ConflictError,
   AuthenticationError,
   NotFoundError,
-} from "../../utils/errors.js";
-import { ERROR_MESSAGES } from "../../constants/http.js";
+} from '../../utils/errors.js';
+import HashUtil from '../../utils/hash.js';
+import JwtUtil from '../../utils/jwt.js';
+
+import AuthRepository from './auth.repository.js';
 
 export class AuthService {
   constructor() {
@@ -86,7 +88,7 @@ export class AuthService {
     }
 
     const decoded = JwtUtil.verifyToken(refreshToken);
-    if (!decoded || decoded.type !== "refresh") {
+    if (!decoded || decoded.type !== 'refresh') {
       throw new AuthenticationError(ERROR_MESSAGES.INVALID_REFRESH_TOKEN);
     }
 

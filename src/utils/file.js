@@ -1,5 +1,5 @@
-import fs from "fs/promises";
-import path from "path";
+import fs from 'fs/promises';
+import path from 'path';
 
 export class FileUtils {
   static async deleteFile(filePath) {
@@ -12,7 +12,7 @@ export class FileUtils {
   }
 
   static async ensureUploadsDir() {
-    const uploadsDir = path.resolve("uploads");
+    const uploadsDir = path.resolve('uploads');
     try {
       await fs.access(uploadsDir);
     } catch {
@@ -35,7 +35,7 @@ export class FileUtils {
         }
       }
     } catch (error) {
-      console.error("Failed to clean old files:", error);
+      console.error('Failed to clean old files:', error);
     }
   }
 }
