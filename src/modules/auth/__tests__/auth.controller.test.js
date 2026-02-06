@@ -17,6 +17,7 @@ describe('AuthController', () => {
       login: vi.fn(),
       refreshToken: vi.fn(),
       getProfile: vi.fn(),
+      storeRefreshToken: vi.fn(),
     };
 
     controller = new AuthController();
@@ -26,12 +27,22 @@ describe('AuthController', () => {
       user: { id: 'user-123', email: 'test@example.com' },
       params: {},
       body: {},
+      headers: {
+        'user-agent': 'test-agent',
+      },
+      ip: '127.0.0.1',
+      connection: {
+        remoteAddress: '127.0.0.1',
+      },
+      cookies: {},
     };
 
     mockRes = {
       status: vi.fn().mockReturnThis(),
       json: vi.fn().mockReturnThis(),
       redirect: vi.fn().mockReturnThis(),
+      cookie: vi.fn().mockReturnThis(),
+      clearCookie: vi.fn().mockReturnThis(),
     };
 
     mockNext = vi.fn();
@@ -64,12 +75,19 @@ describe('AuthController', () => {
         'newuser@example.com',
         'securepassword123',
         'New User',
+        {
+          userAgent: 'test-agent',
+          ipAddress: '127.0.0.1',
+        },
       );
       expect(mockRes.status).toHaveBeenCalledWith(201);
+      expect(mockRes.cookie).toHaveBeenCalledTimes(2);
       expect(mockRes.json).toHaveBeenCalledWith({
         success: true,
         message: 'User registered successfully',
-        data: mockServiceResult,
+        data: {
+          user: mockServiceResult.user,
+        },
       });
       expect(mockNext).not.toHaveBeenCalled();
     });
@@ -116,12 +134,19 @@ describe('AuthController', () => {
       expect(mockService.login).toHaveBeenCalledWith(
         'test@example.com',
         'securepassword123',
+        {
+          userAgent: 'test-agent',
+          ipAddress: '127.0.0.1',
+        },
       );
       expect(mockRes.status).toHaveBeenCalledWith(200);
+      expect(mockRes.cookie).toHaveBeenCalledTimes(2);
       expect(mockRes.json).toHaveBeenCalledWith({
         success: true,
         message: 'Login successful',
-        data: mockServiceResult,
+        data: {
+          user: mockServiceResult.user,
+        },
       });
       expect(mockNext).not.toHaveBeenCalled();
     });
@@ -159,12 +184,16 @@ describe('AuthController', () => {
 
       expect(mockService.refreshToken).toHaveBeenCalledWith(
         'refresh_token_123',
+        {
+          userAgent: 'test-agent',
+          ipAddress: '127.0.0.1',
+        },
       );
       expect(mockRes.status).toHaveBeenCalledWith(200);
+      expect(mockRes.cookie).toHaveBeenCalledTimes(2);
       expect(mockRes.json).toHaveBeenCalledWith({
         success: true,
         message: 'Token refreshed successfully',
-        data: mockServiceResult,
       });
       expect(mockNext).not.toHaveBeenCalled();
     });
@@ -233,20 +262,18 @@ describe('AuthController', () => {
         createdAt: new Date('2025-01-15'),
       };
 
-      // We'll mock JwtUtil indirectly through the result
-      const expectedAccessToken = 'access_token_123';
-      const expectedRefreshToken = 'refresh_token_123';
+      mockService.storeRefreshToken.mockResolvedValue();
 
-      // Mock the JWT generation if needed - for now we'll test the structure
       await controller.googleCallback(mockReq, mockRes, mockNext);
 
+      expect(mockService.storeRefreshToken).toHaveBeenCalled();
+      expect(mockRes.cookie).toHaveBeenCalledTimes(2);
       expect(mockRes.redirect).toHaveBeenCalled();
       const redirectUrl = mockRes.redirect.mock.calls[0][0];
 
       expect(redirectUrl).toContain('http://localhost:3000/login');
-      expect(redirectUrl).toContain('accessToken=');
-      expect(redirectUrl).toContain('refreshToken=');
       expect(redirectUrl).toContain('user=');
+      expect(redirectUrl).toContain('oauth=success');
       expect(mockNext).not.toHaveBeenCalled();
     });
 
@@ -272,10 +299,8 @@ describe('AuthController', () => {
 
       const error = new Error('Callback error');
 
-      // Mock redirect to throw error
-      mockRes.redirect.mockImplementation(() => {
-        throw error;
-      });
+      // Mock storeRefreshToken to throw error
+      mockService.storeRefreshToken.mockRejectedValue(error);
 
       await controller.googleCallback(mockReq, mockRes, mockNext);
 
