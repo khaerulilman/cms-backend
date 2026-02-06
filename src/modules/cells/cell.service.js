@@ -1,8 +1,5 @@
-import { v4 as uuidv4 } from "uuid";
-
 import CloudinaryService from "../../utils/cloudinary.js";
-import { NotFoundError, ValidationError } from "../../utils/errors.js";
-import ImageCleanupService from "../../utils/imageCleanupService.js";
+import { NotFoundError } from "../../utils/errors.js";
 
 import CellRepository from "./cell.repository.js";
 

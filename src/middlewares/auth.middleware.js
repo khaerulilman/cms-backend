@@ -1,21 +1,27 @@
-import { HTTP_STATUS, ERROR_MESSAGES } from '../constants/http.js';
-import JwtUtil from '../utils/jwt.js';
+import { HTTP_STATUS, ERROR_MESSAGES } from "../constants/http.js";
+import JwtUtil from "../utils/jwt.js";
 
 export const authMiddleware = (req, res, next) => {
   try {
-    const authHeader = req.headers.authorization;
+    // Try to get token from cookie first, then fallback to Authorization header
+    let token = req.cookies?.accessToken;
 
-    if (!authHeader || !authHeader.startsWith('Bearer')) {
+    if (!token) {
+      const authHeader = req.headers.authorization;
+      if (authHeader && authHeader.startsWith("Bearer")) {
+        token = authHeader.substring(7);
+      }
+    }
+
+    if (!token) {
       return res.status(HTTP_STATUS.UNAUTHORIZED).json({
         success: false,
         message: ERROR_MESSAGES.NO_TOKEN_PROVIDED,
       });
     }
-
-    const token = authHeader.substring(7);
     const decoded = JwtUtil.verifyToken(token);
 
-    if (!decoded || decoded.type !== 'access') {
+    if (!decoded || decoded.type !== "access") {
       return res.status(HTTP_STATUS.UNAUTHORIZED).json({
         success: false,
         message: ERROR_MESSAGES.INVALID_TOKEN,

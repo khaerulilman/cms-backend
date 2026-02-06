@@ -39,7 +39,7 @@ export const validateRequest = (schema, sources = "body") => {
       const validatedSourceData = {};
 
       sourceKeys.forEach((key) => {
-        if (value.hasOwnProperty(key)) {
+        if (Object.prototype.hasOwnProperty.call(value, key)) {
           validatedSourceData[key] = value[key];
         }
       });

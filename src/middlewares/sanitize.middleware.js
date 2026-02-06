@@ -1,4 +1,4 @@
-import xss from 'xss';
+import xss from "xss";
 
 /**
  * Recursively sanitize object properties
@@ -9,22 +9,22 @@ function sanitizeObject(obj) {
   const sanitized = {};
 
   for (const key in obj) {
-    if (obj.hasOwnProperty(key)) {
+    if (Object.prototype.hasOwnProperty.call(obj, key)) {
       const value = obj[key];
 
-      if (typeof value === 'string') {
+      if (typeof value === "string") {
         // Sanitize string values
         sanitized[key] = xss(value);
       } else if (Array.isArray(value)) {
         // Sanitize array elements
         sanitized[key] = value.map((item) =>
-          typeof item === 'string'
+          typeof item === "string"
             ? xss(item)
-            : typeof item === 'object'
+            : typeof item === "object"
               ? sanitizeObject(item)
               : item,
         );
-      } else if (typeof value === 'object' && value !== null) {
+      } else if (typeof value === "object" && value !== null) {
         // Recursively sanitize nested objects
         sanitized[key] = sanitizeObject(value);
       } else {

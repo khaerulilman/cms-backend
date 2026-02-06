@@ -88,14 +88,8 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/v1/auth/register",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "auth",
-                    "register"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["v1", "auth", "register"]
                 }
               },
               "response": []
@@ -128,9 +122,7 @@
                 {
                   "listen": "prerequest",
                   "script": {
-                    "exec": [
-                      ""
-                    ],
+                    "exec": [""],
                     "type": "text/javascript",
                     "packages": {},
                     "requests": {}
@@ -151,14 +143,8 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/v1/auth/register",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "auth",
-                    "register"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["v1", "auth", "register"]
                 }
               },
               "response": []
@@ -203,14 +189,8 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/v1/auth/register",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "auth",
-                    "register"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["v1", "auth", "register"]
                 }
               },
               "response": []
@@ -249,14 +229,8 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/v1/auth/register",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "auth",
-                    "register"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["v1", "auth", "register"]
                 }
               },
               "response": []
@@ -288,9 +262,7 @@
                 {
                   "listen": "prerequest",
                   "script": {
-                    "exec": [
-                      ""
-                    ],
+                    "exec": [""],
                     "type": "text/javascript",
                     "packages": {},
                     "requests": {}
@@ -311,14 +283,8 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/v1/auth/register",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "auth",
-                    "register"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["v1", "auth", "register"]
                 }
               },
               "response": []
@@ -363,14 +329,8 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/v1/auth/register",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "auth",
-                    "register"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["v1", "auth", "register"]
                 }
               },
               "response": []
@@ -411,14 +371,8 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/v1/auth/register",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "auth",
-                    "register"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["v1", "auth", "register"]
                 }
               },
               "response": []
@@ -479,14 +433,8 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/v1/auth/register",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "auth",
-                    "register"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["v1", "auth", "register"]
                 }
               },
               "response": []
@@ -502,9 +450,7 @@
                 {
                   "listen": "prerequest",
                   "script": {
-                    "exec": [
-                      ""
-                    ],
+                    "exec": [""],
                     "type": "text/javascript",
                     "packages": {},
                     "requests": {}
@@ -569,14 +515,8 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/v1/auth/login",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "auth",
-                    "login"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["v1", "auth", "login"]
                 }
               },
               "response": []
@@ -618,14 +558,8 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/v1/auth/login",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "auth",
-                    "login"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["v1", "auth", "login"]
                 }
               },
               "response": []
@@ -668,14 +602,8 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/v1/auth/login",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "auth",
-                    "login"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["v1", "auth", "login"]
                 }
               },
               "response": []
@@ -716,14 +644,8 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/v1/auth/login",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "auth",
-                    "login"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["v1", "auth", "login"]
                 }
               },
               "response": []
@@ -764,14 +686,8 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/v1/auth/login",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "auth",
-                    "login"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["v1", "auth", "login"]
                 }
               },
               "response": []
@@ -812,14 +728,8 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/v1/auth/login",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "auth",
-                    "login"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["v1", "auth", "login"]
                 }
               },
               "response": []
@@ -860,14 +770,8 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/v1/auth/login",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "auth",
-                    "login"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["v1", "auth", "login"]
                 }
               },
               "response": []
@@ -908,14 +812,8 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/v1/auth/login",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "auth",
-                    "login"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["v1", "auth", "login"]
                 }
               },
               "response": []
@@ -973,11 +871,6 @@
             "method": "POST",
             "header": [
               {
-                "key": "Authorization",
-                "value": "Bearer {{access_token}}",
-                "type": "text"
-              },
-              {
                 "key": "Content-Type",
                 "value": "application/json"
               }
@@ -988,13 +881,8 @@
             },
             "url": {
               "raw": "{{base_url}}/v1/apikey",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "v1",
-                "apikey"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["v1", "apikey"]
             }
           },
           "response": []
@@ -1043,22 +931,11 @@
           ],
           "request": {
             "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{access_token}}",
-                "type": "text"
-              }
-            ],
+            "header": [],
             "url": {
               "raw": "{{base_url}}/v1/apikey",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "v1",
-                "apikey"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["v1", "apikey"]
             }
           },
           "response": []
@@ -1098,163 +975,11 @@
           ],
           "request": {
             "method": "DELETE",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{access_token}}",
-                "type": "text"
-              }
-            ],
-            "url": {
-              "raw": "{{base_url}}/v1/apikey/{{api_key_id}}",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "v1",
-                "apikey",
-                "{{api_key_id}}"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Generate API Key - No Auth Token",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "pm.test('Status code is 401', function () {",
-                  "    pm.expect(pm.response.code).to.equal(401);",
-                  "});",
-                  "",
-                  "pm.test('Response contains error message', function () {",
-                  "    const jsonData = pm.response.json();",
-                  "    pm.expect(jsonData.success).to.equal(false);",
-                  "    pm.expect(jsonData.message).to.exist;",
-                  "});"
-                ],
-                "type": "text/javascript",
-                "packages": {},
-                "requests": {}
-              }
-            }
-          ],
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": ""
-            },
-            "url": {
-              "raw": "{{base_url}}/v1/apikey",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "v1",
-                "apikey"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Generate API Key - Invalid Token",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "pm.test('Status code is 401', function () {",
-                  "    pm.expect(pm.response.code).to.equal(401);",
-                  "});",
-                  "",
-                  "pm.test('Response contains error message', function () {",
-                  "    const jsonData = pm.response.json();",
-                  "    pm.expect(jsonData.success).to.equal(false);",
-                  "    pm.expect(jsonData.message).to.exist;",
-                  "});"
-                ],
-                "type": "text/javascript",
-                "packages": {},
-                "requests": {}
-              }
-            }
-          ],
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer invalid_token_format",
-                "type": "text"
-              },
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": ""
-            },
-            "url": {
-              "raw": "{{base_url}}/v1/apikey",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "v1",
-                "apikey"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Get API Keys - No Auth Token",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "pm.test('Status code is 401', function () {",
-                  "    pm.expect(pm.response.code).to.equal(401);",
-                  "});",
-                  "",
-                  "pm.test('Response contains error message', function () {",
-                  "    const jsonData = pm.response.json();",
-                  "    pm.expect(jsonData.success).to.equal(false);",
-                  "    pm.expect(jsonData.message).to.exist;",
-                  "});"
-                ],
-                "type": "text/javascript",
-                "packages": {},
-                "requests": {}
-              }
-            }
-          ],
-          "request": {
-            "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{base_url}}/v1/apikey",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "v1",
-                "apikey"
-              ]
+              "raw": "{{base_url}}/v1/apikey/{{api_key_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["v1", "apikey", "{{api_key_id}}"]
             }
           },
           "response": []
@@ -1364,10 +1089,6 @@
                   {
                     "key": "Content-Type",
                     "value": "application/json"
-                  },
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{access_token}}"
                   }
                 ],
                 "body": {
@@ -1376,13 +1097,8 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/v1/projects",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "projects"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["v1", "projects"]
                 }
               },
               "response": []
@@ -1428,10 +1144,6 @@
                   {
                     "key": "Content-Type",
                     "value": "application/json"
-                  },
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{access_token}}"
                   }
                 ],
                 "body": {
@@ -1440,13 +1152,8 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/v1/projects",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "projects"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["v1", "projects"]
                 }
               },
               "response": []
@@ -1479,10 +1186,6 @@
                   {
                     "key": "Content-Type",
                     "value": "application/json"
-                  },
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{access_token}}"
                   }
                 ],
                 "body": {
@@ -1491,13 +1194,8 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/v1/projects",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "projects"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["v1", "projects"]
                 }
               },
               "response": []
@@ -1531,10 +1229,6 @@
                   {
                     "key": "Content-Type",
                     "value": "application/json"
-                  },
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{access_token}}"
                   }
                 ],
                 "body": {
@@ -1543,106 +1237,8 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/v1/projects",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "projects"
-                  ]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Create Project - No Auth Token",
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "exec": [
-                      "pm.test('Status code is 401', function () {",
-                      "    pm.expect(pm.response.code).to.equal(401);",
-                      "});",
-                      "",
-                      "pm.test('Response indicates unauthorized', function () {",
-                      "    const jsonData = pm.response.json();",
-                      "    pm.expect(jsonData.message || jsonData.error).to.exist;",
-                      "});"
-                    ],
-                    "type": "text/javascript",
-                    "packages": {},
-                    "requests": {}
-                  }
-                }
-              ],
-              "request": {
-                "method": "POST",
-                "header": [
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n    \"name\": \"Unauthorized Project\",\n    \"description\": \"Test project without auth token\"\n}"
-                },
-                "url": {
-                  "raw": "{{base_url}}/v1/projects",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "projects"
-                  ]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Create Project - Invalid Token",
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "exec": [
-                      "pm.test('Status code is 401', function () {",
-                      "    pm.expect(pm.response.code).to.equal(401);",
-                      "});"
-                    ],
-                    "type": "text/javascript",
-                    "packages": {},
-                    "requests": {}
-                  }
-                }
-              ],
-              "request": {
-                "method": "POST",
-                "header": [
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json"
-                  },
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer invalid_token_12345"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n    \"name\": \"Invalid Token Project\",\n    \"description\": \"Test with invalid token\"\n}"
-                },
-                "url": {
-                  "raw": "{{base_url}}/v1/projects",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "projects"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["v1", "projects"]
                 }
               },
               "response": []
@@ -1670,10 +1266,6 @@
                   {
                     "key": "Content-Type",
                     "value": "application/json"
-                  },
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{access_token}}"
                   }
                 ],
                 "body": {
@@ -1682,13 +1274,8 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/v1/projects",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "projects"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["v1", "projects"]
                 }
               },
               "response": []
@@ -1735,92 +1322,11 @@
               ],
               "request": {
                 "method": "GET",
-                "header": [
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{access_token}}"
-                  }
-                ],
-                "url": {
-                  "raw": "{{base_url}}/v1/projects",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "projects"
-                  ]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Get All User Projects - No Auth Token",
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "exec": [
-                      "pm.test('Status code is 401', function () {",
-                      "    pm.expect(pm.response.code).to.equal(401);",
-                      "});"
-                    ],
-                    "type": "text/javascript",
-                    "packages": {},
-                    "requests": {}
-                  }
-                }
-              ],
-              "request": {
-                "method": "GET",
                 "header": [],
                 "url": {
                   "raw": "{{base_url}}/v1/projects",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "projects"
-                  ]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Get All User Projects - Invalid Token",
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "exec": [
-                      "pm.test('Status code is 401', function () {",
-                      "    pm.expect(pm.response.code).to.equal(401);",
-                      "});"
-                    ],
-                    "type": "text/javascript",
-                    "packages": {},
-                    "requests": {}
-                  }
-                }
-              ],
-              "request": {
-                "method": "GET",
-                "header": [
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer invalid_token_xyz"
-                  }
-                ],
-                "url": {
-                  "raw": "{{base_url}}/v1/projects",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "projects"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["v1", "projects"]
                 }
               },
               "response": []
@@ -1869,22 +1375,11 @@
               ],
               "request": {
                 "method": "GET",
-                "header": [
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{access_token}}"
-                  }
-                ],
+                "header": [],
                 "url": {
                   "raw": "{{base_url}}/v1/projects/{{project_id}}",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "projects",
-                    "{{project_id}}"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["v1", "projects", "{{project_id}}"]
                 }
               },
               "response": []
@@ -1913,56 +1408,11 @@
               ],
               "request": {
                 "method": "GET",
-                "header": [
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{access_token}}"
-                  }
-                ],
-                "url": {
-                  "raw": "{{base_url}}/v1/projects/invalid-project-id-12345",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "projects",
-                    "invalid-project-id-12345"
-                  ]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Get Project - No Auth Token",
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "exec": [
-                      "pm.test('Status code is 401', function () {",
-                      "    pm.expect(pm.response.code).to.equal(401);",
-                      "});"
-                    ],
-                    "type": "text/javascript",
-                    "packages": {},
-                    "requests": {}
-                  }
-                }
-              ],
-              "request": {
-                "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "{{base_url}}/v1/projects/{{project_id}}",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "projects",
-                    "{{project_id}}"
-                  ]
+                  "raw": "{{base_url}}/v1/projects/invalid-project-id-12345",
+                  "host": ["{{base_url}}"],
+                  "path": ["v1", "projects", "invalid-project-id-12345"]
                 }
               },
               "response": []
@@ -1991,22 +1441,11 @@
               ],
               "request": {
                 "method": "GET",
-                "header": [
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{access_token}}"
-                  }
-                ],
+                "header": [],
                 "url": {
                   "raw": "{{base_url}}/v1/projects/other-user-project-id",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "projects",
-                    "other-user-project-id"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["v1", "projects", "other-user-project-id"]
                 }
               },
               "response": []
@@ -2067,10 +1506,6 @@
                   {
                     "key": "Content-Type",
                     "value": "application/json"
-                  },
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{access_token}}"
                   }
                 ],
                 "body": {
@@ -2079,14 +1514,8 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/v1/projects/{{project_id}}",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "projects",
-                    "{{project_id}}"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["v1", "projects", "{{project_id}}"]
                 }
               },
               "response": []
@@ -2132,10 +1561,6 @@
                   {
                     "key": "Content-Type",
                     "value": "application/json"
-                  },
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{access_token}}"
                   }
                 ],
                 "body": {
@@ -2144,14 +1569,8 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/v1/projects/{{project_id}}",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "projects",
-                    "{{project_id}}"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["v1", "projects", "{{project_id}}"]
                 }
               },
               "response": []
@@ -2184,10 +1603,6 @@
                   {
                     "key": "Content-Type",
                     "value": "application/json"
-                  },
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{access_token}}"
                   }
                 ],
                 "body": {
@@ -2196,14 +1611,8 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/v1/projects/{{project_id}}",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "projects",
-                    "{{project_id}}"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["v1", "projects", "{{project_id}}"]
                 }
               },
               "response": []
@@ -2237,10 +1646,6 @@
                   {
                     "key": "Content-Type",
                     "value": "application/json"
-                  },
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{access_token}}"
                   }
                 ],
                 "body": {
@@ -2249,14 +1654,8 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/v1/projects/{{project_id}}",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "projects",
-                    "{{project_id}}"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["v1", "projects", "{{project_id}}"]
                 }
               },
               "response": []
@@ -2284,10 +1683,6 @@
                   {
                     "key": "Content-Type",
                     "value": "application/json"
-                  },
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{access_token}}"
                   }
                 ],
                 "body": {
@@ -2296,57 +1691,8 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/v1/projects/invalid-id-xyz",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "projects",
-                    "invalid-id-xyz"
-                  ]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Update Project - No Auth Token",
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "exec": [
-                      "pm.test('Status code is 401', function () {",
-                      "    pm.expect(pm.response.code).to.equal(401);",
-                      "});"
-                    ],
-                    "type": "text/javascript",
-                    "packages": {},
-                    "requests": {}
-                  }
-                }
-              ],
-              "request": {
-                "method": "PUT",
-                "header": [
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n    \"name\": \"Test Project\"\n}"
-                },
-                "url": {
-                  "raw": "{{base_url}}/v1/projects/{{project_id}}",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "projects",
-                    "{{project_id}}"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["v1", "projects", "invalid-id-xyz"]
                 }
               },
               "response": []
@@ -2374,10 +1720,6 @@
                   {
                     "key": "Content-Type",
                     "value": "application/json"
-                  },
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{access_token}}"
                   }
                 ],
                 "body": {
@@ -2386,14 +1728,8 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/v1/projects/other-user-project-id",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "projects",
-                    "other-user-project-id"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["v1", "projects", "other-user-project-id"]
                 }
               },
               "response": []
@@ -2432,22 +1768,11 @@
               ],
               "request": {
                 "method": "DELETE",
-                "header": [
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{access_token}}"
-                  }
-                ],
+                "header": [],
                 "url": {
                   "raw": "{{base_url}}/v1/projects/{{project_id_for_delete}}",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "projects",
-                    "{{project_id_for_delete}}"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["v1", "projects", "{{project_id_for_delete}}"]
                 }
               },
               "response": []
@@ -2471,95 +1796,11 @@
               ],
               "request": {
                 "method": "DELETE",
-                "header": [
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{access_token}}"
-                  }
-                ],
-                "url": {
-                  "raw": "{{base_url}}/v1/projects/invalid-id-abc",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "projects",
-                    "invalid-id-abc"
-                  ]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Delete Project - No Auth Token",
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "exec": [
-                      "pm.test('Status code is 401', function () {",
-                      "    pm.expect(pm.response.code).to.equal(401);",
-                      "});"
-                    ],
-                    "type": "text/javascript",
-                    "packages": {},
-                    "requests": {}
-                  }
-                }
-              ],
-              "request": {
-                "method": "DELETE",
                 "header": [],
                 "url": {
-                  "raw": "{{base_url}}/v1/projects/{{project_id}}",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "projects",
-                    "{{project_id}}"
-                  ]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Delete Project - Invalid Token",
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "exec": [
-                      "pm.test('Status code is 401', function () {",
-                      "    pm.expect(pm.response.code).to.equal(401);",
-                      "});"
-                    ],
-                    "type": "text/javascript",
-                    "packages": {},
-                    "requests": {}
-                  }
-                }
-              ],
-              "request": {
-                "method": "DELETE",
-                "header": [
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer invalid_token_123"
-                  }
-                ],
-                "url": {
-                  "raw": "{{base_url}}/v1/projects/{{project_id}}",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "projects",
-                    "{{project_id}}"
-                  ]
+                  "raw": "{{base_url}}/v1/projects/invalid-id-abc",
+                  "host": ["{{base_url}}"],
+                  "path": ["v1", "projects", "invalid-id-abc"]
                 }
               },
               "response": []
@@ -2583,22 +1824,11 @@
               ],
               "request": {
                 "method": "DELETE",
-                "header": [
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{access_token}}"
-                  }
-                ],
+                "header": [],
                 "url": {
                   "raw": "{{base_url}}/v1/projects/other-user-project-id",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "projects",
-                    "other-user-project-id"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["v1", "projects", "other-user-project-id"]
                 }
               },
               "response": []
@@ -2635,14 +1865,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/v1/projects/{{project_id_for_delete}}",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "projects",
-                    "{{project_id_for_delete}}"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["v1", "projects", "{{project_id_for_delete}}"]
                 }
               },
               "response": []
@@ -2700,8 +1924,7 @@
                       "        url: pm.environment.get('base_url') + '/v1/tables',",
                       "        method: 'POST',",
                       "        header: {",
-                      "            'Content-Type': 'application/json',",
-                      "            'Authorization': 'Bearer ' + pm.environment.get('access_token')",
+                      "            'Content-Type': 'application/json'",
                       "        },",
                       "        body: {",
                       "            mode: 'raw',",
@@ -2732,10 +1955,6 @@
                 "method": "POST",
                 "header": [
                   {
-                    "key": "Authorization",
-                    "value": "Bearer {{access_token}}"
-                  },
-                  {
                     "key": "Content-Type",
                     "value": "application/json"
                   }
@@ -2746,13 +1965,8 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/v1/tables",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "tables"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["v1", "tables"]
                 }
               },
               "response": []
@@ -2788,10 +2002,6 @@
                 "method": "POST",
                 "header": [
                   {
-                    "key": "Authorization",
-                    "value": "Bearer {{access_token}}"
-                  },
-                  {
                     "key": "Content-Type",
                     "value": "application/json"
                   }
@@ -2802,13 +2012,8 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/v1/tables",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "tables"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["v1", "tables"]
                 }
               },
               "response": []
@@ -2839,10 +2044,6 @@
                 "method": "POST",
                 "header": [
                   {
-                    "key": "Authorization",
-                    "value": "Bearer {{access_token}}"
-                  },
-                  {
                     "key": "Content-Type",
                     "value": "application/json"
                   }
@@ -2853,60 +2054,8 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/v1/tables",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "tables"
-                  ]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Create Table - No Auth Token",
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "exec": [
-                      "pm.test('Status code is 401', function () {",
-                      "    pm.expect(pm.response.code).to.equal(401);",
-                      "});",
-                      "",
-                      "pm.test('Response indicates unauthorized', function () {",
-                      "    const jsonData = pm.response.json();",
-                      "    pm.expect(jsonData.message || jsonData.error).to.exist;",
-                      "});"
-                    ],
-                    "type": "text/javascript",
-                    "packages": {},
-                    "requests": {}
-                  }
-                }
-              ],
-              "request": {
-                "method": "POST",
-                "header": [
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n    \"projectId\": \"{{project_id}}\",\n    \"name\": \"Test Table\"\n}"
-                },
-                "url": {
-                  "raw": "{{base_url}}/v1/tables",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "tables"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["v1", "tables"]
                 }
               },
               "response": []
@@ -2951,23 +2100,11 @@
               ],
               "request": {
                 "method": "GET",
-                "header": [
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{access_token}}"
-                  }
-                ],
+                "header": [],
                 "url": {
                   "raw": "{{base_url}}/v1/tables/project/{{project_id}}",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "tables",
-                    "project",
-                    "{{project_id}}"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["v1", "tables", "project", "{{project_id}}"]
                 }
               },
               "response": []
@@ -2996,58 +2133,11 @@
               ],
               "request": {
                 "method": "GET",
-                "header": [
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{access_token}}"
-                  }
-                ],
-                "url": {
-                  "raw": "{{base_url}}/v1/tables/project/invalid-id",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "tables",
-                    "project",
-                    "invalid-id"
-                  ]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Get Tables - No Auth Token",
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "exec": [
-                      "pm.test('Status code is 401', function () {",
-                      "    pm.expect(pm.response.code).to.equal(401);",
-                      "});"
-                    ],
-                    "type": "text/javascript",
-                    "packages": {},
-                    "requests": {}
-                  }
-                }
-              ],
-              "request": {
-                "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "{{base_url}}/v1/tables/project/{{project_id}}",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "tables",
-                    "project",
-                    "{{project_id}}"
-                  ]
+                  "raw": "{{base_url}}/v1/tables/project/invalid-id",
+                  "host": ["{{base_url}}"],
+                  "path": ["v1", "tables", "project", "invalid-id"]
                 }
               },
               "response": []
@@ -3090,22 +2180,11 @@
               ],
               "request": {
                 "method": "GET",
-                "header": [
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{access_token}}"
-                  }
-                ],
+                "header": [],
                 "url": {
                   "raw": "{{base_url}}/v1/tables/{{table_id}}",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "tables",
-                    "{{table_id}}"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["v1", "tables", "{{table_id}}"]
                 }
               },
               "response": []
@@ -3134,56 +2213,11 @@
               ],
               "request": {
                 "method": "GET",
-                "header": [
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{access_token}}"
-                  }
-                ],
-                "url": {
-                  "raw": "{{base_url}}/v1/tables/invalid-table-id",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "tables",
-                    "invalid-table-id"
-                  ]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Get Table - No Auth Token",
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "exec": [
-                      "pm.test('Status code is 401', function () {",
-                      "    pm.expect(pm.response.code).to.equal(401);",
-                      "});"
-                    ],
-                    "type": "text/javascript",
-                    "packages": {},
-                    "requests": {}
-                  }
-                }
-              ],
-              "request": {
-                "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "{{base_url}}/v1/tables/{{table_id}}",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "tables",
-                    "{{table_id}}"
-                  ]
+                  "raw": "{{base_url}}/v1/tables/invalid-table-id",
+                  "host": ["{{base_url}}"],
+                  "path": ["v1", "tables", "invalid-table-id"]
                 }
               },
               "response": []
@@ -3226,10 +2260,6 @@
                 "method": "PUT",
                 "header": [
                   {
-                    "key": "Authorization",
-                    "value": "Bearer {{access_token}}"
-                  },
-                  {
                     "key": "Content-Type",
                     "value": "application/json"
                   }
@@ -3240,14 +2270,8 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/v1/tables/{{table_id}}",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "tables",
-                    "{{table_id}}"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["v1", "tables", "{{table_id}}"]
                 }
               },
               "response": []
@@ -3278,10 +2302,6 @@
                 "method": "PUT",
                 "header": [
                   {
-                    "key": "Authorization",
-                    "value": "Bearer {{access_token}}"
-                  },
-                  {
                     "key": "Content-Type",
                     "value": "application/json"
                   }
@@ -3292,14 +2312,8 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/v1/tables/{{table_id}}",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "tables",
-                    "{{table_id}}"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["v1", "tables", "{{table_id}}"]
                 }
               },
               "response": []
@@ -3330,10 +2344,6 @@
                 "method": "PUT",
                 "header": [
                   {
-                    "key": "Authorization",
-                    "value": "Bearer {{access_token}}"
-                  },
-                  {
                     "key": "Content-Type",
                     "value": "application/json"
                   }
@@ -3344,57 +2354,8 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/v1/tables/invalid-table-id",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "tables",
-                    "invalid-table-id"
-                  ]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Update Table - No Auth Token",
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "exec": [
-                      "pm.test('Status code is 401', function () {",
-                      "    pm.expect(pm.response.code).to.equal(401);",
-                      "});"
-                    ],
-                    "type": "text/javascript",
-                    "packages": {},
-                    "requests": {}
-                  }
-                }
-              ],
-              "request": {
-                "method": "PUT",
-                "header": [
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n    \"name\": \"Updated Name\"\n}"
-                },
-                "url": {
-                  "raw": "{{base_url}}/v1/tables/{{table_id}}",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "tables",
-                    "{{table_id}}"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["v1", "tables", "invalid-table-id"]
                 }
               },
               "response": []
@@ -3435,22 +2396,11 @@
               ],
               "request": {
                 "method": "DELETE",
-                "header": [
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{access_token}}"
-                  }
-                ],
+                "header": [],
                 "url": {
                   "raw": "{{base_url}}/v1/tables/{{table_id_for_delete}}",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "tables",
-                    "{{table_id_for_delete}}"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["v1", "tables", "{{table_id_for_delete}}"]
                 }
               },
               "response": []
@@ -3479,56 +2429,11 @@
               ],
               "request": {
                 "method": "DELETE",
-                "header": [
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{access_token}}"
-                  }
-                ],
-                "url": {
-                  "raw": "{{base_url}}/v1/tables/invalid-table-id",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "tables",
-                    "invalid-table-id"
-                  ]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Delete Table - No Auth Token",
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "exec": [
-                      "pm.test('Status code is 401', function () {",
-                      "    pm.expect(pm.response.code).to.equal(401);",
-                      "});"
-                    ],
-                    "type": "text/javascript",
-                    "packages": {},
-                    "requests": {}
-                  }
-                }
-              ],
-              "request": {
-                "method": "DELETE",
                 "header": [],
                 "url": {
-                  "raw": "{{base_url}}/v1/tables/{{table_id}}",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "tables",
-                    "{{table_id}}"
-                  ]
+                  "raw": "{{base_url}}/v1/tables/invalid-table-id",
+                  "host": ["{{base_url}}"],
+                  "path": ["v1", "tables", "invalid-table-id"]
                 }
               },
               "response": []
@@ -3593,10 +2498,6 @@
                 "method": "POST",
                 "header": [
                   {
-                    "key": "Authorization",
-                    "value": "Bearer {{access_token}}"
-                  },
-                  {
                     "key": "Content-Type",
                     "value": "application/json"
                   }
@@ -3607,13 +2508,8 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/v1/cms-columns",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "cms-columns"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["v1", "cms-columns"]
                 }
               },
               "response": []
@@ -3644,10 +2540,6 @@
                 "method": "POST",
                 "header": [
                   {
-                    "key": "Authorization",
-                    "value": "Bearer {{access_token}}"
-                  },
-                  {
                     "key": "Content-Type",
                     "value": "application/json"
                   }
@@ -3658,13 +2550,8 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/v1/cms-columns",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "cms-columns"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["v1", "cms-columns"]
                 }
               },
               "response": []
@@ -3695,10 +2582,6 @@
                 "method": "POST",
                 "header": [
                   {
-                    "key": "Authorization",
-                    "value": "Bearer {{access_token}}"
-                  },
-                  {
                     "key": "Content-Type",
                     "value": "application/json"
                   }
@@ -3709,13 +2592,8 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/v1/cms-columns",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "cms-columns"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["v1", "cms-columns"]
                 }
               },
               "response": []
@@ -3746,10 +2624,6 @@
                 "method": "POST",
                 "header": [
                   {
-                    "key": "Authorization",
-                    "value": "Bearer {{access_token}}"
-                  },
-                  {
                     "key": "Content-Type",
                     "value": "application/json"
                   }
@@ -3760,13 +2634,8 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/v1/cms-columns",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "cms-columns"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["v1", "cms-columns"]
                 }
               },
               "response": []
@@ -3797,10 +2666,6 @@
                 "method": "POST",
                 "header": [
                   {
-                    "key": "Authorization",
-                    "value": "Bearer {{access_token}}"
-                  },
-                  {
                     "key": "Content-Type",
                     "value": "application/json"
                   }
@@ -3811,55 +2676,8 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/v1/cms-columns",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "cms-columns"
-                  ]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Create Column - No Auth Token",
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "exec": [
-                      "pm.test('Status code is 401', function () {",
-                      "    pm.expect(pm.response.code).to.equal(401);",
-                      "});"
-                    ],
-                    "type": "text/javascript",
-                    "packages": {},
-                    "requests": {}
-                  }
-                }
-              ],
-              "request": {
-                "method": "POST",
-                "header": [
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n    \"tableId\": \"{{table_id}}\",\n    \"columns\": [\n        {\n            \"name\": \"Column 1\"\n        }\n    ]\n}"
-                },
-                "url": {
-                  "raw": "{{base_url}}/v1/cms-columns",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "cms-columns"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["v1", "cms-columns"]
                 }
               },
               "response": []
@@ -3902,23 +2720,11 @@
               ],
               "request": {
                 "method": "GET",
-                "header": [
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{access_token}}"
-                  }
-                ],
+                "header": [],
                 "url": {
                   "raw": "{{base_url}}/v1/cms-columns/table/{{table_id}}",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "cms-columns",
-                    "table",
-                    "{{table_id}}"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["v1", "cms-columns", "table", "{{table_id}}"]
                 }
               },
               "response": []
@@ -3947,58 +2753,11 @@
               ],
               "request": {
                 "method": "GET",
-                "header": [
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{access_token}}"
-                  }
-                ],
-                "url": {
-                  "raw": "{{base_url}}/v1/cms-columns/table/invalid-table-id",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "cms-columns",
-                    "table",
-                    "invalid-table-id"
-                  ]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Get Columns by Table - No Auth Token",
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "exec": [
-                      "pm.test('Status code is 401', function () {",
-                      "    pm.expect(pm.response.code).to.equal(401);",
-                      "});"
-                    ],
-                    "type": "text/javascript",
-                    "packages": {},
-                    "requests": {}
-                  }
-                }
-              ],
-              "request": {
-                "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "{{base_url}}/v1/cms-columns/table/{{table_id}}",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "cms-columns",
-                    "table",
-                    "{{table_id}}"
-                  ]
+                  "raw": "{{base_url}}/v1/cms-columns/table/invalid-table-id",
+                  "host": ["{{base_url}}"],
+                  "path": ["v1", "cms-columns", "table", "invalid-table-id"]
                 }
               },
               "response": []
@@ -4043,22 +2802,11 @@
               ],
               "request": {
                 "method": "GET",
-                "header": [
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{access_token}}"
-                  }
-                ],
+                "header": [],
                 "url": {
                   "raw": "{{base_url}}/v1/cms-columns/{{column_id}}",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "cms-columns",
-                    "{{column_id}}"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["v1", "cms-columns", "{{column_id}}"]
                 }
               },
               "response": []
@@ -4087,56 +2835,11 @@
               ],
               "request": {
                 "method": "GET",
-                "header": [
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{access_token}}"
-                  }
-                ],
-                "url": {
-                  "raw": "{{base_url}}/v1/cms-columns/invalid-column-id",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "cms-columns",
-                    "invalid-column-id"
-                  ]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Get Column by ID - No Auth Token",
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "exec": [
-                      "pm.test('Status code is 401', function () {",
-                      "    pm.expect(pm.response.code).to.equal(401);",
-                      "});"
-                    ],
-                    "type": "text/javascript",
-                    "packages": {},
-                    "requests": {}
-                  }
-                }
-              ],
-              "request": {
-                "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "{{base_url}}/v1/cms-columns/{{column_id}}",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "cms-columns",
-                    "{{column_id}}"
-                  ]
+                  "raw": "{{base_url}}/v1/cms-columns/invalid-column-id",
+                  "host": ["{{base_url}}"],
+                  "path": ["v1", "cms-columns", "invalid-column-id"]
                 }
               },
               "response": []
@@ -4181,10 +2884,6 @@
                 "method": "PUT",
                 "header": [
                   {
-                    "key": "Authorization",
-                    "value": "Bearer {{access_token}}"
-                  },
-                  {
                     "key": "Content-Type",
                     "value": "application/json"
                   }
@@ -4195,14 +2894,8 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/v1/cms-columns/{{column_id}}",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "cms-columns",
-                    "{{column_id}}"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["v1", "cms-columns", "{{column_id}}"]
                 }
               },
               "response": []
@@ -4233,10 +2926,6 @@
                 "method": "PUT",
                 "header": [
                   {
-                    "key": "Authorization",
-                    "value": "Bearer {{access_token}}"
-                  },
-                  {
                     "key": "Content-Type",
                     "value": "application/json"
                   }
@@ -4247,14 +2936,8 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/v1/cms-columns/{{column_id}}",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "cms-columns",
-                    "{{column_id}}"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["v1", "cms-columns", "{{column_id}}"]
                 }
               },
               "response": []
@@ -4285,10 +2968,6 @@
                 "method": "PUT",
                 "header": [
                   {
-                    "key": "Authorization",
-                    "value": "Bearer {{access_token}}"
-                  },
-                  {
                     "key": "Content-Type",
                     "value": "application/json"
                   }
@@ -4299,57 +2978,8 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/v1/cms-columns/invalid-column-id",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "cms-columns",
-                    "invalid-column-id"
-                  ]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Update Column - No Auth Token",
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "exec": [
-                      "pm.test('Status code is 401', function () {",
-                      "    pm.expect(pm.response.code).to.equal(401);",
-                      "});"
-                    ],
-                    "type": "text/javascript",
-                    "packages": {},
-                    "requests": {}
-                  }
-                }
-              ],
-              "request": {
-                "method": "PUT",
-                "header": [
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n    \"name\": \"Updated Name\"\n}"
-                },
-                "url": {
-                  "raw": "{{base_url}}/v1/cms-columns/{{column_id}}",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "cms-columns",
-                    "{{column_id}}"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["v1", "cms-columns", "invalid-column-id"]
                 }
               },
               "response": []
@@ -4387,22 +3017,11 @@
               ],
               "request": {
                 "method": "DELETE",
-                "header": [
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{access_token}}"
-                  }
-                ],
+                "header": [],
                 "url": {
                   "raw": "{{base_url}}/v1/cms-columns/{{column_id_for_delete}}",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "cms-columns",
-                    "{{column_id_for_delete}}"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["v1", "cms-columns", "{{column_id_for_delete}}"]
                 }
               },
               "response": []
@@ -4431,56 +3050,11 @@
               ],
               "request": {
                 "method": "DELETE",
-                "header": [
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{access_token}}"
-                  }
-                ],
-                "url": {
-                  "raw": "{{base_url}}/v1/cms-columns/invalid-column-id",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "cms-columns",
-                    "invalid-column-id"
-                  ]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Delete Column - No Auth Token",
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "exec": [
-                      "pm.test('Status code is 401', function () {",
-                      "    pm.expect(pm.response.code).to.equal(401);",
-                      "});"
-                    ],
-                    "type": "text/javascript",
-                    "packages": {},
-                    "requests": {}
-                  }
-                }
-              ],
-              "request": {
-                "method": "DELETE",
                 "header": [],
                 "url": {
-                  "raw": "{{base_url}}/v1/cms-columns/{{column_id}}",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "cms-columns",
-                    "{{column_id}}"
-                  ]
+                  "raw": "{{base_url}}/v1/cms-columns/invalid-column-id",
+                  "host": ["{{base_url}}"],
+                  "path": ["v1", "cms-columns", "invalid-column-id"]
                 }
               },
               "response": []
@@ -4554,10 +3128,6 @@
                 "method": "POST",
                 "header": [
                   {
-                    "key": "Authorization",
-                    "value": "Bearer {{access_token}}"
-                  },
-                  {
                     "key": "Content-Type",
                     "value": "application/json"
                   }
@@ -4568,13 +3138,8 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/v1/cms-rows",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "cms-rows"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["v1", "cms-rows"]
                 }
               },
               "response": []
@@ -4639,10 +3204,6 @@
                 "method": "POST",
                 "header": [
                   {
-                    "key": "Authorization",
-                    "value": "Bearer {{access_token}}"
-                  },
-                  {
                     "key": "Content-Type",
                     "value": "application/json"
                   }
@@ -4653,13 +3214,8 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/v1/cms-rows",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "cms-rows"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["v1", "cms-rows"]
                 }
               },
               "response": []
@@ -4693,62 +3249,15 @@
               ],
               "request": {
                 "method": "POST",
-                "header": [
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{access_token}}"
-                  }
-                ],
+                "header": [],
                 "body": {
                   "mode": "raw",
                   "raw": "{}"
                 },
                 "url": {
                   "raw": "{{base_url}}/v1/cms-rows",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "cms-rows"
-                  ]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Create Row - No Auth Token",
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "exec": [
-                      "pm.test('Status code is 401', function () {",
-                      "    pm.expect(pm.response.code).to.equal(401);",
-                      "});"
-                    ],
-                    "type": "text/javascript",
-                    "packages": {},
-                    "requests": {}
-                  }
-                }
-              ],
-              "request": {
-                "method": "POST",
-                "header": [],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n    \"tableId\": \"{{table_id}}\"\n}"
-                },
-                "url": {
-                  "raw": "{{base_url}}/v1/cms-rows",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "cms-rows"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["v1", "cms-rows"]
                 }
               },
               "response": []
@@ -4796,23 +3305,11 @@
               ],
               "request": {
                 "method": "GET",
-                "header": [
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{access_token}}"
-                  }
-                ],
+                "header": [],
                 "url": {
                   "raw": "{{base_url}}/v1/cms-rows/table/{{table_id}}",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "cms-rows",
-                    "table",
-                    "{{table_id}}"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["v1", "cms-rows", "table", "{{table_id}}"]
                 }
               },
               "response": []
@@ -4841,58 +3338,11 @@
               ],
               "request": {
                 "method": "GET",
-                "header": [
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{access_token}}"
-                  }
-                ],
-                "url": {
-                  "raw": "{{base_url}}/v1/cms-rows/table/invalid-table-id",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "cms-rows",
-                    "table",
-                    "invalid-table-id"
-                  ]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Get All Rows by Table - No Auth Token",
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "exec": [
-                      "pm.test('Status code is 401', function () {",
-                      "    pm.expect(pm.response.code).to.equal(401);",
-                      "});"
-                    ],
-                    "type": "text/javascript",
-                    "packages": {},
-                    "requests": {}
-                  }
-                }
-              ],
-              "request": {
-                "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "{{base_url}}/v1/cms-rows/table/{{table_id}}",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "cms-rows",
-                    "table",
-                    "{{table_id}}"
-                  ]
+                  "raw": "{{base_url}}/v1/cms-rows/table/invalid-table-id",
+                  "host": ["{{base_url}}"],
+                  "path": ["v1", "cms-rows", "table", "invalid-table-id"]
                 }
               },
               "response": []
@@ -4946,22 +3396,11 @@
               ],
               "request": {
                 "method": "GET",
-                "header": [
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{access_token}}"
-                  }
-                ],
+                "header": [],
                 "url": {
                   "raw": "{{base_url}}/v1/cms-rows/{{row_id}}",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "cms-rows",
-                    "{{row_id}}"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["v1", "cms-rows", "{{row_id}}"]
                 }
               },
               "response": []
@@ -4990,56 +3429,11 @@
               ],
               "request": {
                 "method": "GET",
-                "header": [
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{access_token}}"
-                  }
-                ],
-                "url": {
-                  "raw": "{{base_url}}/v1/cms-rows/invalid-row-id",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "cms-rows",
-                    "invalid-row-id"
-                  ]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Get Row by ID - No Auth Token",
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "exec": [
-                      "pm.test('Status code is 401', function () {",
-                      "    pm.expect(pm.response.code).to.equal(401);",
-                      "});"
-                    ],
-                    "type": "text/javascript",
-                    "packages": {},
-                    "requests": {}
-                  }
-                }
-              ],
-              "request": {
-                "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "{{base_url}}/v1/cms-rows/{{row_id}}",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "cms-rows",
-                    "{{row_id}}"
-                  ]
+                  "raw": "{{base_url}}/v1/cms-rows/invalid-row-id",
+                  "host": ["{{base_url}}"],
+                  "path": ["v1", "cms-rows", "invalid-row-id"]
                 }
               },
               "response": []
@@ -5087,26 +3481,15 @@
               ],
               "request": {
                 "method": "PUT",
-                "header": [
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{access_token}}"
-                  }
-                ],
+                "header": [],
                 "body": {
                   "mode": "raw",
                   "raw": "{}"
                 },
                 "url": {
                   "raw": "{{base_url}}/v1/cms-rows/{{row_id}}",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "cms-rows",
-                    "{{row_id}}"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["v1", "cms-rows", "{{row_id}}"]
                 }
               },
               "response": []
@@ -5135,64 +3518,15 @@
               ],
               "request": {
                 "method": "PUT",
-                "header": [
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{access_token}}"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{}"
-                },
-                "url": {
-                  "raw": "{{base_url}}/v1/cms-rows/invalid-row-id",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "cms-rows",
-                    "invalid-row-id"
-                  ]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Update Row - No Auth Token",
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "exec": [
-                      "pm.test('Status code is 401', function () {",
-                      "    pm.expect(pm.response.code).to.equal(401);",
-                      "});"
-                    ],
-                    "type": "text/javascript",
-                    "packages": {},
-                    "requests": {}
-                  }
-                }
-              ],
-              "request": {
-                "method": "PUT",
                 "header": [],
                 "body": {
                   "mode": "raw",
                   "raw": "{}"
                 },
                 "url": {
-                  "raw": "{{base_url}}/v1/cms-rows/{{row_id}}",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "cms-rows",
-                    "{{row_id}}"
-                  ]
+                  "raw": "{{base_url}}/v1/cms-rows/invalid-row-id",
+                  "host": ["{{base_url}}"],
+                  "path": ["v1", "cms-rows", "invalid-row-id"]
                 }
               },
               "response": []
@@ -5235,22 +3569,11 @@
               ],
               "request": {
                 "method": "DELETE",
-                "header": [
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{access_token}}"
-                  }
-                ],
+                "header": [],
                 "url": {
                   "raw": "{{base_url}}/v1/cms-rows/{{row_id_for_delete}}",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "cms-rows",
-                    "{{row_id_for_delete}}"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["v1", "cms-rows", "{{row_id_for_delete}}"]
                 }
               },
               "response": []
@@ -5279,56 +3602,11 @@
               ],
               "request": {
                 "method": "DELETE",
-                "header": [
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{access_token}}"
-                  }
-                ],
-                "url": {
-                  "raw": "{{base_url}}/v1/cms-rows/invalid-row-id",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "cms-rows",
-                    "invalid-row-id"
-                  ]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Delete Row - No Auth Token",
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "exec": [
-                      "pm.test('Status code is 401', function () {",
-                      "    pm.expect(pm.response.code).to.equal(401);",
-                      "});"
-                    ],
-                    "type": "text/javascript",
-                    "packages": {},
-                    "requests": {}
-                  }
-                }
-              ],
-              "request": {
-                "method": "DELETE",
                 "header": [],
                 "url": {
-                  "raw": "{{base_url}}/v1/cms-rows/{{row_id}}",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "cms-rows",
-                    "{{row_id}}"
-                  ]
+                  "raw": "{{base_url}}/v1/cms-rows/invalid-row-id",
+                  "host": ["{{base_url}}"],
+                  "path": ["v1", "cms-rows", "invalid-row-id"]
                 }
               },
               "response": []
@@ -5390,10 +3668,6 @@
                 "method": "POST",
                 "header": [
                   {
-                    "key": "Authorization",
-                    "value": "Bearer {{access_token}}"
-                  },
-                  {
                     "key": "Content-Type",
                     "value": "application/json"
                   }
@@ -5404,15 +3678,8 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/v1/cms-cells/row/{{row_id}}",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "cms-cells",
-                    "row",
-                    "{{row_id}}"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["v1", "cms-cells", "row", "{{row_id}}"]
                 }
               },
               "response": []
@@ -5448,10 +3715,6 @@
                 "method": "POST",
                 "header": [
                   {
-                    "key": "Authorization",
-                    "value": "Bearer {{access_token}}"
-                  },
-                  {
                     "key": "Content-Type",
                     "value": "application/json"
                   }
@@ -5462,15 +3725,8 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/v1/cms-cells/row/{{row_id}}",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "cms-cells",
-                    "row",
-                    "{{row_id}}"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["v1", "cms-cells", "row", "{{row_id}}"]
                 }
               },
               "response": []
@@ -5501,10 +3757,6 @@
                 "method": "POST",
                 "header": [
                   {
-                    "key": "Authorization",
-                    "value": "Bearer {{access_token}}"
-                  },
-                  {
                     "key": "Content-Type",
                     "value": "application/json"
                   }
@@ -5515,59 +3767,8 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/v1/cms-cells/row/invalid-row-id",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "cms-cells",
-                    "row",
-                    "invalid-row-id"
-                  ]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Upsert Cell - No Auth Token",
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "exec": [
-                      "pm.test('Status code is 401', function () {",
-                      "    pm.expect(pm.response.code).to.equal(401);",
-                      "});"
-                    ],
-                    "type": "text/javascript",
-                    "packages": {},
-                    "requests": {}
-                  }
-                }
-              ],
-              "request": {
-                "method": "POST",
-                "header": [
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n    \"columnId\": \"{{column_id}}\",\n    \"value\": \"Test cell content\"\n}"
-                },
-                "url": {
-                  "raw": "{{base_url}}/v1/cms-cells/row/{{row_id}}",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "cms-cells",
-                    "row",
-                    "{{row_id}}"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["v1", "cms-cells", "row", "invalid-row-id"]
                 }
               },
               "response": []
@@ -5622,23 +3823,11 @@
               ],
               "request": {
                 "method": "GET",
-                "header": [
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{access_token}}"
-                  }
-                ],
+                "header": [],
                 "url": {
                   "raw": "{{base_url}}/v1/cms-cells/row/{{row_id}}",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "cms-cells",
-                    "row",
-                    "{{row_id}}"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["v1", "cms-cells", "row", "{{row_id}}"]
                 }
               },
               "response": []
@@ -5667,58 +3856,11 @@
               ],
               "request": {
                 "method": "GET",
-                "header": [
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{access_token}}"
-                  }
-                ],
-                "url": {
-                  "raw": "{{base_url}}/v1/cms-cells/row/invalid-row-id",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "cms-cells",
-                    "row",
-                    "invalid-row-id"
-                  ]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Get Cells by Row - No Auth Token",
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "exec": [
-                      "pm.test('Status code is 401', function () {",
-                      "    pm.expect(pm.response.code).to.equal(401);",
-                      "});"
-                    ],
-                    "type": "text/javascript",
-                    "packages": {},
-                    "requests": {}
-                  }
-                }
-              ],
-              "request": {
-                "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "{{base_url}}/v1/cms-cells/row/{{row_id}}",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "cms-cells",
-                    "row",
-                    "{{row_id}}"
-                  ]
+                  "raw": "{{base_url}}/v1/cms-cells/row/invalid-row-id",
+                  "host": ["{{base_url}}"],
+                  "path": ["v1", "cms-cells", "row", "invalid-row-id"]
                 }
               },
               "response": []

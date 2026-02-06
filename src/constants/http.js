@@ -20,6 +20,8 @@ export const ERROR_MESSAGES = {
   INVALID_TOKEN: "Invalid or expired token",
   NO_TOKEN_PROVIDED: "No token provided",
   INVALID_REFRESH_TOKEN: "Invalid refresh token",
+  TOKEN_REVOKED: "Token has been revoked",
+  REFRESH_TOKEN_EXPIRED: "Refresh token has expired",
 
   // Validation errors
   EMAIL_REQUIRED: "Email is required",
@@ -71,8 +73,10 @@ export const SUCCESS_MESSAGES = {
   USER_REGISTERED: "User registered successfully",
   LOGIN_SUCCESS: "Login successful",
   LOGOUT_SUCCESS: "Logout successful",
+  LOGOUT_ALL_SUCCESS: "Logged out from all devices successfully",
   PROFILE_RETRIEVED: "Profile retrieved successfully",
   TOKEN_REFRESHED: "Token refreshed successfully",
+  SESSIONS_RETRIEVED: "Active sessions retrieved successfully",
 
   // API Key messages
   API_KEY_GENERATED: "API key generated successfully",
