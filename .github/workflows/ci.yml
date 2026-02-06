@@ -51,9 +51,7 @@ jobs:
           DATABASE_URL: ${{ secrets.TEST_DATABASE_URL }}
 
       - name: Setup Test Database
-        run: npx prisma db push --skip-generate
-        env:
-          DATABASE_URL: ${{ secrets.TEST_DATABASE_URL }}
+        run: npm run db:push:test
 
       - name: Run tests
         run: npm test
