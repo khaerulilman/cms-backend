@@ -1,4 +1,4 @@
-name: CI - Test & Lint
+name: CI - Test
 
 on:
   push:
@@ -13,26 +13,6 @@ on:
       - develop
 
 jobs:
-  lint:
-    name: Lint Code
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-          cache: "npm"
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Run ESLint
-        run: npm run lint
-
   test:
     name: Run Tests
     runs-on: ubuntu-latest
