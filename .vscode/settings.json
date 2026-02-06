@@ -1,0 +1,20 @@
+{
+  "sqltools.connections": [
+    {
+      "pgOptions": {
+        "ssl": {
+          "rejectUnauthorized": true
+        }
+      },
+      "ssh": "Disabled",
+      "previewLimit": 50,
+      "server": "cms-db.cbmqcq8q64uz.ap-southeast-1.rds.amazonaws.com",
+      "port": 5432,
+      "driver": "PostgreSQL",
+      "name": "CMS_DB",
+      "database": "cms-db",
+      "username": "postgres",
+      "password": "nG8NkuZN2RKTdeX"
+    }
+  ]
+}

@@ -5,3 +5,4 @@ node_modules
 /generated/prisma
 # Upload directory
 uploads/
+coverage/
