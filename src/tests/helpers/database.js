@@ -2,15 +2,31 @@ import { PrismaClient } from "@prisma/client";
 
 let prisma;
 
+/**
+ * Safety check: ensure tests never run against a production database.
+ * The DATABASE_URL should be overridden by .env.test in test scripts.
+ */
+function assertTestDatabase() {
+  const dbUrl = process.env.DATABASE_URL;
+  if (!dbUrl) {
+    throw new Error("DATABASE_URL is not set. Make sure .env.test is loaded.");
+  }
+  // Block known production database hosts
+  const productionPatterns = ["rds.amazonaws.com", "production"];
+  for (const pattern of productionPatterns) {
+    if (dbUrl.includes(pattern)) {
+      throw new Error(
+        `SAFETY: DATABASE_URL appears to point to a production database (contains "${pattern}"). ` +
+          "Ensure .env.test is loaded to override DATABASE_URL for tests.",
+      );
+    }
+  }
+}
+
 export function getPrismaTestClient() {
   if (!prisma) {
-    prisma = new PrismaClient({
-      datasources: {
-        db: {
-          url: process.env.DATABASE_TEST_URL,
-        },
-      },
-    });
+    assertTestDatabase();
+    prisma = new PrismaClient();
   }
   return prisma;
 }
