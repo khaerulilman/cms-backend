@@ -1,26 +1,15 @@
 import { exec } from "child_process";
-import path from "path";
-import { fileURLToPath } from "url";
 import { promisify } from "util";
 
-import dotenv from "dotenv";
-
 const execAsync = promisify(exec);
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
-// Load environment variables from .env
-dotenv.config({ path: path.resolve(__dirname, "../../.env") });
-
+/**
+ * Push Prisma schema to the test database.
+ * DATABASE_URL is already overridden by .env.test via dotenv-cli in npm scripts.
+ */
 export async function setupTestDatabase() {
   try {
-    const testDbUrl = process.env.DATABASE_TEST_URL || process.env.DATABASE_URL;
-    await execAsync("npx prisma db push --skip-generate", {
-      env: {
-        ...process.env,
-        DATABASE_URL: testDbUrl,
-      },
-    });
+    await execAsync("npx prisma db push --skip-generate");
   } catch (error) {
     throw error;
   }
