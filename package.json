@@ -8,16 +8,16 @@
     "start": "node src/server.js",
     "prod": "cross-env NODE_ENV=production node src/server.js",
     "dev": "nodemon",
-    "test": "cross-env NODE_ENV=test dotenv -e .env.test -- vitest",
-    "test:ui": "cross-env NODE_ENV=test dotenv -e .env.test -- vitest --ui",
-    "test:coverage": "cross-env NODE_ENV=test dotenv -e .env.test -- vitest --coverage",
+    "test": "dotenv -e .env -e .env.test -- cross-env NODE_ENV=test vitest",
+    "test:ui": "dotenv -e .env -e .env.test -- cross-env NODE_ENV=test vitest --ui",
+    "test:coverage": "dotenv -e .env -e .env.test -- cross-env NODE_ENV=test vitest --coverage",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "lint:report": "eslint . --output-file eslint-report.json --format json",
     "db:migrate": "prisma migrate dev",
-    "db:migrate:test": "dotenv -e .env.test -- prisma migrate deploy",
-    "db:reset:test": "dotenv -e .env.test -- prisma migrate reset --force --skip-seed",
-    "db:push:test": "dotenv -e .env.test -- prisma db push"
+    "db:migrate:test": "dotenv -e .env -e .env.test -- cross-env NODE_ENV=test prisma migrate deploy",
+    "db:reset:test": "dotenv -e .env -e .env.test -- cross-env NODE_ENV=test prisma migrate reset --force --skip-seed",
+    "db:push:test": "dotenv -e .env -e .env.test -- cross-env NODE_ENV=test prisma db push"
   },
   "dependencies": {
     "@prisma/client": "^5.22.0",
