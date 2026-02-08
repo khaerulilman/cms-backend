@@ -26,37 +26,35 @@ jobs:
           script: |
             echo "========== Starting deployment =========="
 
-            # Navigate to project directory
-            cd ~/portfolio-cms-backend/backend-express || {
-              echo "Project directory not found. Cloning repository..."
-              cd ~
-              git clone ${{ secrets.REPO_URL }} portfolio-cms-backend
-              cd ~/portfolio-cms-backend/backend-express
-            }
+            cd ~
 
-            # Pull latest changes
+            # Clone once if not exists
+            if [ ! -d "cms-backend/.git" ]; then
+              echo "Cloning repository..."
+              git clone git@github.com:khaerulilman/cms-backend.git cms-backend
+            fi
+
+            cd ~/cms-backend || exit 1
+
             echo "Pulling latest changes..."
-            git fetch origin main
+            git fetch origin
             git reset --hard origin/main
 
-            # Install dependencies
             echo "Installing dependencies..."
-            npm ci --production
+            npm install --omit=dev
 
-            # Generate Prisma Client
             echo "Generating Prisma Client..."
             npx prisma generate
 
-            # Run database migrations
             echo "Running database migrations..."
             npx prisma migrate deploy
 
-            # Restart application with PM2
             echo "Restarting application..."
+
             if pm2 describe portfolio-cms > /dev/null 2>&1; then
               pm2 restart portfolio-cms
             else
-              pm2 start src/server.js --name portfolio-cms --env production
+              pm2 start src/server.js --name portfolio-cms
             fi
 
             pm2 save
