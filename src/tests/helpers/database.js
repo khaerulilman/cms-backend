@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from "@prisma/client";
 
 let prisma;
 
@@ -7,7 +7,7 @@ export function getPrismaTestClient() {
     prisma = new PrismaClient({
       datasources: {
         db: {
-          url: process.env.DATABASE_URL,
+          url: process.env.DATABASE_TEST_URL,
         },
       },
     });
@@ -39,9 +39,9 @@ export async function createTestUser(data = {}) {
   const prisma = getPrismaTestClient();
   return await prisma.user.create({
     data: {
-      email: data.email || 'test@example.com',
-      password: data.password || 'hashedpassword',
-      name: data.name || 'Test User',
+      email: data.email || "test@example.com",
+      password: data.password || "hashedpassword",
+      name: data.name || "Test User",
       ...data,
     },
   });
@@ -52,8 +52,8 @@ export async function createTestProject(userId, data = {}) {
   return await prisma.project.create({
     data: {
       userId,
-      name: data.name || 'Test Project',
-      description: data.description || 'Test Description',
+      name: data.name || "Test Project",
+      description: data.description || "Test Description",
       ...data,
     },
   });
@@ -64,7 +64,7 @@ export async function createTestTable(projectId, data = {}) {
   return await prisma.cmsTable.create({
     data: {
       projectId,
-      name: data.name || 'Test Table',
+      name: data.name || "Test Table",
       isSubTable: data.isSubTable || false,
       ...data,
     },

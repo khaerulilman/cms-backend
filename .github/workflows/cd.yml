@@ -2,97 +2,63 @@ name: CD - Deploy to EC2
 
 on:
   push:
-    branches:
-      - main
-      - master
+    branches: [main]
   workflow_dispatch:
 
 jobs:
-  # Tunggu CI selesai dulu
-  check-ci:
-    name: Wait for CI to Pass
-    runs-on: ubuntu-latest
-    steps:
-      - name: Wait for CI workflow
-        uses: lewagon/wait-on-check-action@v1.3.1
-        with:
-          ref: ${{ github.ref }}
-          check-name: "Run Tests"
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          wait-interval: 10
-
   deploy:
-    name: Deploy to EC2 Production
-    needs: check-ci
+    name: Deploy to EC2
     runs-on: ubuntu-latest
-    environment:
-      name: production
-      url: http://ec2-47-129-85-94.ap-southeast-1.compute.amazonaws.com
 
+    # Only deploy if CI passes (on push to main, CI runs in parallel)
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Deploy to EC2 via SSH
-        uses: appleboy/ssh-action@v1.0.0
+        uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_SSH_KEY }}
+          port: 22
+          script_stop: true
           script: |
-            echo "🚀 Starting deployment..."
+            echo "========== Starting deployment =========="
 
             # Navigate to project directory
-            cd /home/ubuntu/portfolio-cms-backend || {
-              echo "❌ Project directory not found!"
-              exit 1
+            cd ~/portfolio-cms-backend/backend-express || {
+              echo "Project directory not found. Cloning repository..."
+              cd ~
+              git clone ${{ secrets.REPO_URL }} portfolio-cms-backend
+              cd ~/portfolio-cms-backend/backend-express
             }
 
-            echo "📥 Pulling latest changes..."
-            git pull origin main || git pull origin master
+            # Pull latest changes
+            echo "Pulling latest changes..."
+            git fetch origin main
+            git reset --hard origin/main
 
-            echo "📦 Installing dependencies..."
+            # Install dependencies
+            echo "Installing dependencies..."
             npm ci --production
 
-            echo "📝 Updating environment variables..."
-            cat > .env << 'EOF'
-            DATABASE_URL=${{ secrets.PROD_DATABASE_URL }}
-            JWT_SECRET=${{ secrets.JWT_SECRET }}
-            NODE_ENV=production
-            GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}
-            GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}
-            GOOGLE_CALLBACK_URL=${{ secrets.GOOGLE_CALLBACK_URL }}
-            FRONTEND_URL=${{ secrets.FRONTEND_URL }}
-            CLOUDINARY_CLOUD_NAME=${{ secrets.CLOUDINARY_CLOUD_NAME }}
-            CLOUDINARY_API_KEY=${{ secrets.CLOUDINARY_API_KEY }}
-            CLOUDINARY_API_SECRET=${{ secrets.CLOUDINARY_API_SECRET }}
-            EOF
+            # Generate Prisma Client
+            echo "Generating Prisma Client..."
+            npx prisma generate
 
-            echo "🗄️ Running database migrations..."
+            # Run database migrations
+            echo "Running database migrations..."
             npx prisma migrate deploy
 
-            echo "🔄 Restarting application with PM2..."
-            if pm2 describe portfolio-cms-backend > /dev/null 2>&1; then
-              pm2 restart portfolio-cms-backend
-              echo "✅ Application restarted"
+            # Restart application with PM2
+            echo "Restarting application..."
+            if pm2 describe portfolio-cms > /dev/null 2>&1; then
+              pm2 restart portfolio-cms
             else
-              pm2 start npm --name "portfolio-cms-backend" -- start
-              echo "✅ Application started"
+              pm2 start src/server.js --name portfolio-cms --env production
             fi
 
-            # Save PM2 process list
             pm2 save
 
-            echo "📊 Application status:"
-            pm2 status portfolio-cms-backend
-
-            echo "✅ Deployment completed successfully!"
-
-      - name: Deployment notification
-        if: always()
-        run: |
-          if [ "${{ job.status }}" == "success" ]; then
-            echo "✅ Deployment to EC2 successful!"
-          else
-            echo "❌ Deployment to EC2 failed!"
-          fi
+            echo "========== Deployment complete =========="
