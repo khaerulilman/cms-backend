@@ -1,5 +1,7 @@
 # ESLint Setup
 
+trigeredd test
+
 ## Overview
 
 Project ini menggunakan ESLint versi 9+ dengan konfigurasi flat config (eslint.config.js) untuk menjaga kualitas kode dan konsistensi style.
