@@ -22,7 +22,6 @@ export const ERROR_MESSAGES = {
   INVALID_REFRESH_TOKEN: "Invalid refresh token",
   TOKEN_REVOKED: "Token has been revoked",
   REFRESH_TOKEN_EXPIRED: "Refresh token has expired",
-  REFRESH_TOKEN_EXPIRED_TESTT: "Refresh token has expired TEST",
 
   // Validation errors
   EMAIL_REQUIRED: "Email is required",
