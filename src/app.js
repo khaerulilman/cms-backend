@@ -10,20 +10,32 @@ import routes from "./routes.js";
 
 const app = express();
 
-// Middlewares
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      // Allow requests with no origin (mobile apps, curl, server-to-server)
-      if (!origin) return callback(null, true);
-      if (config.ALLOWED_ORIGINS.includes(origin)) {
-        return callback(null, true);
-      }
-      return callback(new Error(`Origin ${origin} not allowed by CORS`));
-    },
-    credentials: true,
-  }),
-);
+// Dynamic CORS middleware
+app.use((req, res, next) => {
+  // Allow all origins for public simplify endpoint
+  if (req.path.includes("/simplify")) {
+    cors({
+      origin: "*",
+      credentials: false,
+      methods: ["GET", "OPTIONS"],
+      allowedHeaders: ["x-api-key", "Content-Type"],
+    })(req, res, next);
+  } else {
+    // Standard CORS for other routes
+    cors({
+      origin: function (origin, callback) {
+        // Allow requests with no origin (mobile apps, curl, server-to-server)
+        if (!origin) return callback(null, true);
+
+        if (config.ALLOWED_ORIGINS.includes(origin)) {
+          return callback(null, true);
+        }
+        return callback(new Error(`Origin ${origin} not allowed by CORS`));
+      },
+      credentials: true,
+    })(req, res, next);
+  }
+});
 
 // make express can read json
 app.use(express.json());
