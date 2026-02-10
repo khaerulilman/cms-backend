@@ -1,30 +1,30 @@
-import { config } from '../../config/env.js';
+import { config } from "../../config/env.js";
 import {
   SUCCESS_MESSAGES,
   HTTP_STATUS,
   ERROR_MESSAGES,
-} from '../../constants/http.js';
-import JwtUtil from '../../utils/jwt.js';
+} from "../../constants/http.js";
+import JwtUtil from "../../utils/jwt.js";
 
-import AuthService from './auth.service.js';
+import AuthService from "./auth.service.js";
 
 // Detect if frontend and backend are on different sites (cross-site)
 // Cross-site cookies require SameSite=None and Secure=true
 // Controlled via COOKIE_CROSS_SITE env var
 const isCrossSite =
-  config.COOKIE_CROSS_SITE === 'true' || config.COOKIE_CROSS_SITE === true;
+  config.COOKIE_CROSS_SITE === "true" || config.COOKIE_CROSS_SITE === true;
 
 // Cookie options for HTTP-only cookies
 const getCookieOptions = (maxAge) => ({
   httpOnly: true,
-  secure: isCrossSite || config.NODE_ENV === 'production',
+  secure: isCrossSite || config.NODE_ENV === "production",
   sameSite: isCrossSite
-    ? 'none'
-    : config.NODE_ENV === 'production'
-      ? 'strict'
-      : 'lax',
+    ? "none"
+    : config.NODE_ENV === "production"
+      ? "strict"
+      : "lax",
   maxAge,
-  path: '/',
+  path: "/",
 });
 
 // clearCookie must use the SAME options (secure, sameSite, path) as setCookie
@@ -42,7 +42,7 @@ export class AuthController {
   // Helper method to get client metadata
   getClientMetadata(req) {
     return {
-      userAgent: req.headers['user-agent'] || null,
+      userAgent: req.headers["user-agent"] || null,
       ipAddress: req.ip || req.connection?.remoteAddress || null,
     };
   }
@@ -60,12 +60,12 @@ export class AuthController {
 
       // Set HTTP-only cookies
       res.cookie(
-        'accessToken',
+        "accessToken",
         result.accessToken,
         getCookieOptions(15 * 60 * 1000),
       ); // 15 minutes
       res.cookie(
-        'refreshToken',
+        "refreshToken",
         result.refreshToken,
         getCookieOptions(7 * 24 * 60 * 60 * 1000),
       ); // 7 days
@@ -94,12 +94,12 @@ export class AuthController {
 
       // Set HTTP-only cookies
       res.cookie(
-        'accessToken',
+        "accessToken",
         result.accessToken,
         getCookieOptions(15 * 60 * 1000),
       ); // 15 minutes
       res.cookie(
-        'refreshToken',
+        "refreshToken",
         result.refreshToken,
         getCookieOptions(7 * 24 * 60 * 60 * 1000),
       ); // 7 days
@@ -139,9 +139,9 @@ export class AuthController {
       );
 
       // Set HTTP-only cookies (works when frontend & backend share same domain)
-      res.cookie('accessToken', accessToken, getCookieOptions(15 * 60 * 1000)); // 15 minutes
+      res.cookie("accessToken", accessToken, getCookieOptions(15 * 60 * 1000)); // 15 minutes
       res.cookie(
-        'refreshToken',
+        "refreshToken",
         refreshToken,
         getCookieOptions(7 * 24 * 60 * 60 * 1000),
       ); // 7 days
@@ -158,13 +158,13 @@ export class AuthController {
           name: user.name,
           createdAt: user.createdAt,
         }),
-      ).toString('base64');
+      ).toString("base64");
 
       // Redirect with user data and setup token
       const frontendUrl = new URL(`${config.FRONTEND_URL}/login`);
-      frontendUrl.searchParams.append('user', userData);
-      frontendUrl.searchParams.append('oauth', 'success');
-      frontendUrl.searchParams.append('setup_token', setupToken);
+      frontendUrl.searchParams.append("user", userData);
+      frontendUrl.searchParams.append("oauth", "success");
+      frontendUrl.searchParams.append("setup_token", setupToken);
 
       return res.redirect(frontendUrl.toString());
     } catch (error) {
@@ -185,12 +185,12 @@ export class AuthController {
 
       // Set new HTTP-only cookies
       res.cookie(
-        'accessToken',
+        "accessToken",
         result.accessToken,
         getCookieOptions(15 * 60 * 1000),
       ); // 15 minutes
       res.cookie(
-        'refreshToken',
+        "refreshToken",
         result.refreshToken,
         getCookieOptions(7 * 24 * 60 * 60 * 1000),
       ); // 7 days
@@ -215,8 +215,8 @@ export class AuthController {
       }
 
       // Clear cookies (must match secure/sameSite/path used when setting) ss
-      res.clearCookie('accessToken', getClearCookieOptions());
-      res.clearCookie('refreshToken', getClearCookieOptions());
+      res.clearCookie("accessToken", getClearCookieOptions());
+      res.clearCookie("refreshToken", getClearCookieOptions());
 
       return res.status(HTTP_STATUS.OK).json({
         success: true,
@@ -250,8 +250,8 @@ export class AuthController {
       await this.service.logoutAllDevices(userId);
 
       // Clear cookies (must match secure/sameSite/path used when setting)
-      res.clearCookie('accessToken', getClearCookieOptions());
-      res.clearCookie('refreshToken', getClearCookieOptions());
+      res.clearCookie("accessToken", getClearCookieOptions());
+      res.clearCookie("refreshToken", getClearCookieOptions());
 
       return res.status(HTTP_STATUS.OK).json({
         success: true,
@@ -288,42 +288,60 @@ export class AuthController {
       if (!setupToken) {
         return res.status(HTTP_STATUS.BAD_REQUEST).json({
           success: false,
-          message: 'Setup token is required',
+          message: "Setup token is required",
         });
       }
 
       // Verify the setup token
       const decoded = JwtUtil.verifyToken(setupToken);
 
-      if (!decoded || decoded.type !== 'setup') {
+      if (!decoded || decoded.type !== "setup") {
         return res.status(HTTP_STATUS.UNAUTHORIZED).json({
           success: false,
-          message: 'Invalid or expired setup token',
+          message: "Invalid or expired setup token",
         });
       }
 
-      // Generate real session tokens
-      const accessToken = JwtUtil.generateAccessToken(decoded.id, decoded.email);
-      const refreshToken = JwtUtil.generateRefreshToken(decoded.id, decoded.email);
+      // Revoke any existing tokens from this device to prevent duplicates
+      // This handles cases where establishSession is called multiple times (React re-renders)
+      const metadata = this.getClientMetadata(req);
+      if (metadata.userAgent) {
+        const existingTokens =
+          await this.service.repository.getUserActiveTokens(decoded.id);
+        const tokensToRevoke = existingTokens.filter(
+          (token) =>
+            token.userAgent === metadata.userAgent &&
+            token.ipAddress === metadata.ipAddress,
+        );
+        for (const token of tokensToRevoke) {
+          await this.service.repository.revokeRefreshToken(token.token);
+        }
+      }
 
-      // Store refresh token in database
-      await this.service.storeRefreshToken(
+      // Generate real session tokens
+      const accessToken = JwtUtil.generateAccessToken(
         decoded.id,
-        refreshToken,
-        this.getClientMetadata(req),
+        decoded.email,
+      );
+      const refreshToken = JwtUtil.generateRefreshToken(
+        decoded.id,
+        decoded.email,
       );
 
+      // Store refresh token in database
+      await this.service.storeRefreshToken(decoded.id, refreshToken, metadata);
+
       // Set HTTP-only cookies (via proxy, these will be on frontend domain)
-      res.cookie('accessToken', accessToken, getCookieOptions(15 * 60 * 1000));
+      res.cookie("accessToken", accessToken, getCookieOptions(15 * 60 * 1000));
       res.cookie(
-        'refreshToken',
+        "refreshToken",
         refreshToken,
         getCookieOptions(7 * 24 * 60 * 60 * 1000),
       );
 
       return res.status(HTTP_STATUS.OK).json({
         success: true,
-        message: 'Session established successfully',
+        message: "Session established successfully",
       });
     } catch (error) {
       next(error);
