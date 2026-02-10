@@ -2,10 +2,10 @@ import {
   HTTP_STATUS,
   SUCCESS_MESSAGES,
   ERROR_MESSAGES,
-} from "../../constants/http.js";
-import FileUtils from "../../utils/file.js";
+} from '../../constants/http.js';
+import FileUtils from '../../utils/file.js';
 
-import CellService from "./cell.service.js";
+import CellService from './cell.service.js';
 
 export class CellController {
   constructor() {

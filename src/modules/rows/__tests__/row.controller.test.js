@@ -1,8 +1,8 @@
-import { describe, it, expect, beforeEach, vi } from "vitest";
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 
-import { RowController } from "../row.controller.js";
+import { RowController } from '../row.controller.js';
 
-describe("RowController", () => {
+describe('RowController', () => {
   let controller;
   let mockService;
   let mockReq;
@@ -24,7 +24,7 @@ describe("RowController", () => {
     controller.service = mockService;
 
     mockReq = {
-      user: { id: "user-123" },
+      user: { id: 'user-123' },
       params: {},
       body: {},
     };
@@ -37,18 +37,18 @@ describe("RowController", () => {
     mockNext = vi.fn();
   });
 
-  describe("createRow", () => {
-    it("should return 201 with created row data", async () => {
+  describe('createRow', () => {
+    it('should return 201 with created row data', async () => {
       // Arrange
-      mockReq.body = { tableId: "table-456" };
+      mockReq.body = { tableId: 'table-456' };
 
       // Mock service return (different from expected response structure)
       const mockCreatedRow = {
-        id: "row-123",
-        tableId: "table-456",
+        id: 'row-123',
+        tableId: 'table-456',
         cells: [],
-        createdAt: new Date("2026-01-15"),
-        updatedAt: new Date("2026-01-15"),
+        createdAt: new Date('2026-01-15'),
+        updatedAt: new Date('2026-01-15'),
       };
 
       mockService.createRow.mockResolvedValue(mockCreatedRow);
@@ -58,19 +58,19 @@ describe("RowController", () => {
 
       // Assert - verify mock was called correctly
       expect(mockService.createRow).toHaveBeenCalledWith(
-        "table-456",
-        "user-123",
+        'table-456',
+        'user-123',
       );
       expect(mockRes.status).toHaveBeenCalledWith(201);
       expect(mockRes.json).toHaveBeenCalledWith({
         success: true,
-        message: "Row created successfully",
+        message: 'Row created successfully',
         data: mockCreatedRow,
       });
       expect(mockNext).not.toHaveBeenCalled();
     });
 
-    it("should return 400 if tableId is not provided", async () => {
+    it('should return 400 if tableId is not provided', async () => {
       // Arrange
       mockReq.body = {};
 
@@ -82,15 +82,15 @@ describe("RowController", () => {
       expect(mockRes.status).toHaveBeenCalledWith(400);
       expect(mockRes.json).toHaveBeenCalledWith({
         success: false,
-        message: "Table ID is required",
+        message: 'Table ID is required',
       });
       expect(mockNext).not.toHaveBeenCalled();
     });
 
-    it("should call next with error if service throws", async () => {
+    it('should call next with error if service throws', async () => {
       // Arrange
-      mockReq.body = { tableId: "table-456" };
-      const error = new Error("Service error");
+      mockReq.body = { tableId: 'table-456' };
+      const error = new Error('Service error');
       mockService.createRow.mockRejectedValue(error);
 
       // Act
@@ -98,33 +98,33 @@ describe("RowController", () => {
 
       // Assert
       expect(mockService.createRow).toHaveBeenCalledWith(
-        "table-456",
-        "user-123",
+        'table-456',
+        'user-123',
       );
       expect(mockNext).toHaveBeenCalledWith(error);
       expect(mockRes.status).not.toHaveBeenCalled();
     });
   });
 
-  describe("getRowsByTable", () => {
-    it("should return 200 with rows data", async () => {
+  describe('getRowsByTable', () => {
+    it('should return 200 with rows data', async () => {
       // Arrange
-      mockReq.params = { tableId: "table-456" };
+      mockReq.params = { tableId: 'table-456' };
 
       const mockRows = [
         {
-          id: "row-1",
-          tableId: "table-456",
+          id: 'row-1',
+          tableId: 'table-456',
           cells: [],
-          createdAt: new Date("2026-01-15"),
-          updatedAt: new Date("2026-01-15"),
+          createdAt: new Date('2026-01-15'),
+          updatedAt: new Date('2026-01-15'),
         },
         {
-          id: "row-2",
-          tableId: "table-456",
+          id: 'row-2',
+          tableId: 'table-456',
           cells: [],
-          createdAt: new Date("2026-01-16"),
-          updatedAt: new Date("2026-01-16"),
+          createdAt: new Date('2026-01-16'),
+          updatedAt: new Date('2026-01-16'),
         },
       ];
 
@@ -135,22 +135,22 @@ describe("RowController", () => {
 
       // Assert
       expect(mockService.getRowsByTable).toHaveBeenCalledWith(
-        "table-456",
-        "user-123",
+        'table-456',
+        'user-123',
       );
       expect(mockRes.status).toHaveBeenCalledWith(200);
       expect(mockRes.json).toHaveBeenCalledWith({
         success: true,
-        message: "Rows retrieved successfully",
+        message: 'Rows retrieved successfully',
         data: mockRows,
       });
       expect(mockNext).not.toHaveBeenCalled();
     });
 
-    it("should call next with error if service throws", async () => {
+    it('should call next with error if service throws', async () => {
       // Arrange
-      mockReq.params = { tableId: "table-456" };
-      const error = new Error("Table not found");
+      mockReq.params = { tableId: 'table-456' };
+      const error = new Error('Table not found');
       mockService.getRowsByTable.mockRejectedValue(error);
 
       // Act
@@ -158,37 +158,37 @@ describe("RowController", () => {
 
       // Assert
       expect(mockService.getRowsByTable).toHaveBeenCalledWith(
-        "table-456",
-        "user-123",
+        'table-456',
+        'user-123',
       );
       expect(mockNext).toHaveBeenCalledWith(error);
       expect(mockRes.status).not.toHaveBeenCalled();
     });
   });
 
-  describe("getRowById", () => {
-    it("should return 200 with row data", async () => {
+  describe('getRowById', () => {
+    it('should return 200 with row data', async () => {
       // Arrange
-      mockReq.params = { rowId: "row-123" };
+      mockReq.params = { rowId: 'row-123' };
 
       const mockRow = {
-        id: "row-123",
-        tableId: "table-456",
+        id: 'row-123',
+        tableId: 'table-456',
         cells: [
           {
-            id: "cell-1",
-            rowId: "row-123",
-            columnId: "col-1",
-            columnName: "Name",
-            value: "John Doe",
+            id: 'cell-1',
+            rowId: 'row-123',
+            columnId: 'col-1',
+            columnName: 'Name',
+            value: 'John Doe',
             imageUrl: null,
             cloudinaryPublicId: null,
-            createdAt: new Date("2026-01-15"),
-            updatedAt: new Date("2026-01-15"),
+            createdAt: new Date('2026-01-15'),
+            updatedAt: new Date('2026-01-15'),
           },
         ],
-        createdAt: new Date("2026-01-15"),
-        updatedAt: new Date("2026-01-15"),
+        createdAt: new Date('2026-01-15'),
+        updatedAt: new Date('2026-01-15'),
       };
 
       mockService.getRowById.mockResolvedValue(mockRow);
@@ -198,22 +198,22 @@ describe("RowController", () => {
 
       // Assert
       expect(mockService.getRowById).toHaveBeenCalledWith(
-        "row-123",
-        "user-123",
+        'row-123',
+        'user-123',
       );
       expect(mockRes.status).toHaveBeenCalledWith(200);
       expect(mockRes.json).toHaveBeenCalledWith({
         success: true,
-        message: "Row retrieved successfully",
+        message: 'Row retrieved successfully',
         data: mockRow,
       });
       expect(mockNext).not.toHaveBeenCalled();
     });
 
-    it("should call next with error if service throws", async () => {
+    it('should call next with error if service throws', async () => {
       // Arrange
-      mockReq.params = { rowId: "row-123" };
-      const error = new Error("Row not found");
+      mockReq.params = { rowId: 'row-123' };
+      const error = new Error('Row not found');
       mockService.getRowById.mockRejectedValue(error);
 
       // Act
@@ -221,26 +221,26 @@ describe("RowController", () => {
 
       // Assert
       expect(mockService.getRowById).toHaveBeenCalledWith(
-        "row-123",
-        "user-123",
+        'row-123',
+        'user-123',
       );
       expect(mockNext).toHaveBeenCalledWith(error);
       expect(mockRes.status).not.toHaveBeenCalled();
     });
   });
 
-  describe("updateRow", () => {
-    it("should return 200 with updated row data", async () => {
+  describe('updateRow', () => {
+    it('should return 200 with updated row data', async () => {
       // Arrange
-      mockReq.params = { rowId: "row-123" };
-      mockReq.body = { someData: "value" };
+      mockReq.params = { rowId: 'row-123' };
+      mockReq.body = { someData: 'value' };
 
       const mockUpdatedRow = {
-        id: "row-123",
-        tableId: "table-456",
+        id: 'row-123',
+        tableId: 'table-456',
         cells: [],
-        createdAt: new Date("2026-01-15"),
-        updatedAt: new Date("2026-01-20"),
+        createdAt: new Date('2026-01-15'),
+        updatedAt: new Date('2026-01-20'),
       };
 
       mockService.updateRow.mockResolvedValue(mockUpdatedRow);
@@ -250,24 +250,24 @@ describe("RowController", () => {
 
       // Assert
       expect(mockService.updateRow).toHaveBeenCalledWith(
-        "row-123",
-        "user-123",
-        { someData: "value" },
+        'row-123',
+        'user-123',
+        { someData: 'value' },
       );
       expect(mockRes.status).toHaveBeenCalledWith(200);
       expect(mockRes.json).toHaveBeenCalledWith({
         success: true,
-        message: "Row updated successfully",
+        message: 'Row updated successfully',
         data: mockUpdatedRow,
       });
       expect(mockNext).not.toHaveBeenCalled();
     });
 
-    it("should call next with error if service throws", async () => {
+    it('should call next with error if service throws', async () => {
       // Arrange
-      mockReq.params = { rowId: "row-123" };
+      mockReq.params = { rowId: 'row-123' };
       mockReq.body = {};
-      const error = new Error("Row not found");
+      const error = new Error('Row not found');
       mockService.updateRow.mockRejectedValue(error);
 
       // Act
@@ -275,8 +275,8 @@ describe("RowController", () => {
 
       // Assert
       expect(mockService.updateRow).toHaveBeenCalledWith(
-        "row-123",
-        "user-123",
+        'row-123',
+        'user-123',
         {},
       );
       expect(mockNext).toHaveBeenCalledWith(error);
@@ -284,17 +284,17 @@ describe("RowController", () => {
     });
   });
 
-  describe("deleteRow", () => {
-    it("should return 200 with deleted row data", async () => {
+  describe('deleteRow', () => {
+    it('should return 200 with deleted row data', async () => {
       // Arrange
-      mockReq.params = { rowId: "row-123" };
+      mockReq.params = { rowId: 'row-123' };
 
       const mockDeletedRow = {
-        id: "row-123",
-        tableId: "table-456",
+        id: 'row-123',
+        tableId: 'table-456',
         cells: [],
-        createdAt: new Date("2026-01-15"),
-        updatedAt: new Date("2026-01-15"),
+        createdAt: new Date('2026-01-15'),
+        updatedAt: new Date('2026-01-15'),
       };
 
       mockService.deleteRow.mockResolvedValue(mockDeletedRow);
@@ -303,27 +303,27 @@ describe("RowController", () => {
       await controller.deleteRow(mockReq, mockRes, mockNext);
 
       // Assert
-      expect(mockService.deleteRow).toHaveBeenCalledWith("row-123", "user-123");
+      expect(mockService.deleteRow).toHaveBeenCalledWith('row-123', 'user-123');
       expect(mockRes.status).toHaveBeenCalledWith(200);
       expect(mockRes.json).toHaveBeenCalledWith({
         success: true,
-        message: "Row deleted successfully",
+        message: 'Row deleted successfully',
         data: mockDeletedRow,
       });
       expect(mockNext).not.toHaveBeenCalled();
     });
 
-    it("should call next with error if service throws", async () => {
+    it('should call next with error if service throws', async () => {
       // Arrange
-      mockReq.params = { rowId: "row-123" };
-      const error = new Error("Row not found");
+      mockReq.params = { rowId: 'row-123' };
+      const error = new Error('Row not found');
       mockService.deleteRow.mockRejectedValue(error);
 
       // Act
       await controller.deleteRow(mockReq, mockRes, mockNext);
 
       // Assert
-      expect(mockService.deleteRow).toHaveBeenCalledWith("row-123", "user-123");
+      expect(mockService.deleteRow).toHaveBeenCalledWith('row-123', 'user-123');
       expect(mockNext).toHaveBeenCalledWith(error);
       expect(mockRes.status).not.toHaveBeenCalled();
     });

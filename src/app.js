@@ -1,11 +1,12 @@
-import cookieParser from "cookie-parser";
-import cors from "cors";
-import express from "express";
-import session from "express-session";
-import { config } from "./config/env.js";
-import passport from "./config/google-oauth.js";
-import errorMiddleware from "./middlewares/error.middleware.js";
-import routes from "./routes.js";
+import cookieParser from 'cookie-parser';
+import cors from 'cors';
+import express from 'express';
+import session from 'express-session';
+
+import { config } from './config/env.js';
+import passport from './config/google-oauth.js';
+import errorMiddleware from './middlewares/error.middleware.js';
+import routes from './routes.js';
 
 const app = express();
 
@@ -51,15 +52,15 @@ app.use(passport.session());
 app.use(routes);
 
 // Health check
-app.get("/health", (req, res) => {
-  res.json({ status: "ok" });
+app.get('/health', (req, res) => {
+  res.json({ status: 'ok' });
 });
 
 // 404 handler
 app.use((req, res) => {
   res.status(404).json({
     success: false,
-    message: "Route not found",
+    message: 'Route not found',
   });
 });
 

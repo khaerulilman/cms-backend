@@ -1,8 +1,8 @@
-import { describe, it, expect, beforeEach, vi } from "vitest";
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 
-import { ColumnController } from "../column.controller.js";
+import { ColumnController } from '../column.controller.js';
 
-describe("ColumnController", () => {
+describe('ColumnController', () => {
   let controller;
   let mockService;
   let mockReq;
@@ -24,7 +24,7 @@ describe("ColumnController", () => {
     controller.service = mockService;
 
     mockReq = {
-      user: { id: "user-123" },
+      user: { id: 'user-123' },
       params: {},
       body: {},
     };
@@ -37,28 +37,28 @@ describe("ColumnController", () => {
     mockNext = vi.fn();
   });
 
-  describe("createColumns", () => {
-    it("should return 201 with created columns data", async () => {
+  describe('createColumns', () => {
+    it('should return 201 with created columns data', async () => {
       // Arrange
       mockReq.body = {
-        tableId: "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
-        columns: [{ name: "Name" }, { name: "Email" }],
+        tableId: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
+        columns: [{ name: 'Name' }, { name: 'Email' }],
       };
 
       const mockCreatedColumns = [
         {
-          id: "col-1",
-          tableId: "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
-          name: "Name",
-          createdAt: new Date("2026-01-15"),
-          updatedAt: new Date("2026-01-15"),
+          id: 'col-1',
+          tableId: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
+          name: 'Name',
+          createdAt: new Date('2026-01-15'),
+          updatedAt: new Date('2026-01-15'),
         },
         {
-          id: "col-2",
-          tableId: "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
-          name: "Email",
-          createdAt: new Date("2026-01-15"),
-          updatedAt: new Date("2026-01-15"),
+          id: 'col-2',
+          tableId: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
+          name: 'Email',
+          createdAt: new Date('2026-01-15'),
+          updatedAt: new Date('2026-01-15'),
         },
       ];
 
@@ -69,23 +69,23 @@ describe("ColumnController", () => {
 
       // Assert
       expect(mockService.createColumns).toHaveBeenCalledWith(
-        "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
-        "user-123",
-        [{ name: "Name" }, { name: "Email" }],
+        'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
+        'user-123',
+        [{ name: 'Name' }, { name: 'Email' }],
       );
       expect(mockRes.status).toHaveBeenCalledWith(201);
       expect(mockRes.json).toHaveBeenCalledWith({
         success: true,
-        message: "Columns created successfully",
+        message: 'Columns created successfully',
         data: mockCreatedColumns,
       });
       expect(mockNext).not.toHaveBeenCalled();
     });
 
-    it("should return 400 if tableId is not provided", async () => {
+    it('should return 400 if tableId is not provided', async () => {
       // Arrange
       mockReq.body = {
-        columns: [{ name: "Name" }],
+        columns: [{ name: 'Name' }],
       };
 
       // Act
@@ -97,16 +97,16 @@ describe("ColumnController", () => {
       expect(mockRes.json).toHaveBeenCalledWith(
         expect.objectContaining({
           success: false,
-          message: "Validation error",
+          message: 'Validation error',
         }),
       );
     });
 
-    it("should return 400 if tableId is not a valid UUID", async () => {
+    it('should return 400 if tableId is not a valid UUID', async () => {
       // Arrange
       mockReq.body = {
-        tableId: "invalid-uuid",
-        columns: [{ name: "Name" }],
+        tableId: 'invalid-uuid',
+        columns: [{ name: 'Name' }],
       };
 
       // Act
@@ -118,15 +118,15 @@ describe("ColumnController", () => {
       expect(mockRes.json).toHaveBeenCalledWith(
         expect.objectContaining({
           success: false,
-          message: "Validation error",
+          message: 'Validation error',
         }),
       );
     });
 
-    it("should return 400 if columns array is not provided", async () => {
+    it('should return 400 if columns array is not provided', async () => {
       // Arrange
       mockReq.body = {
-        tableId: "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+        tableId: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
       };
 
       // Act
@@ -137,10 +137,10 @@ describe("ColumnController", () => {
       expect(mockRes.status).toHaveBeenCalledWith(400);
     });
 
-    it("should return 400 if columns array is empty", async () => {
+    it('should return 400 if columns array is empty', async () => {
       // Arrange
       mockReq.body = {
-        tableId: "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+        tableId: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
         columns: [],
       };
 
@@ -152,11 +152,11 @@ describe("ColumnController", () => {
       expect(mockRes.status).toHaveBeenCalledWith(400);
     });
 
-    it("should return 400 if column name is missing", async () => {
+    it('should return 400 if column name is missing', async () => {
       // Arrange
       mockReq.body = {
-        tableId: "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
-        columns: [{ name: "" }],
+        tableId: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
+        columns: [{ name: '' }],
       };
 
       // Act
@@ -167,14 +167,14 @@ describe("ColumnController", () => {
       expect(mockRes.status).toHaveBeenCalledWith(400);
     });
 
-    it("should call next with error if service throws", async () => {
+    it('should call next with error if service throws', async () => {
       // Arrange
       mockReq.body = {
-        tableId: "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
-        columns: [{ name: "Name" }],
+        tableId: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
+        columns: [{ name: 'Name' }],
       };
 
-      const error = new Error("Service error");
+      const error = new Error('Service error');
       mockService.createColumns.mockRejectedValue(error);
 
       // Act
@@ -187,25 +187,25 @@ describe("ColumnController", () => {
     });
   });
 
-  describe("getColumnsByTable", () => {
-    it("should return 200 with columns data", async () => {
+  describe('getColumnsByTable', () => {
+    it('should return 200 with columns data', async () => {
       // Arrange
-      mockReq.params = { tableId: "table-456" };
+      mockReq.params = { tableId: 'table-456' };
 
       const mockColumns = [
         {
-          id: "col-1",
-          tableId: "table-456",
-          name: "Name",
-          createdAt: new Date("2026-01-15"),
-          updatedAt: new Date("2026-01-15"),
+          id: 'col-1',
+          tableId: 'table-456',
+          name: 'Name',
+          createdAt: new Date('2026-01-15'),
+          updatedAt: new Date('2026-01-15'),
         },
         {
-          id: "col-2",
-          tableId: "table-456",
-          name: "Email",
-          createdAt: new Date("2026-01-15"),
-          updatedAt: new Date("2026-01-15"),
+          id: 'col-2',
+          tableId: 'table-456',
+          name: 'Email',
+          createdAt: new Date('2026-01-15'),
+          updatedAt: new Date('2026-01-15'),
         },
       ];
 
@@ -216,22 +216,22 @@ describe("ColumnController", () => {
 
       // Assert
       expect(mockService.getColumnsByTable).toHaveBeenCalledWith(
-        "table-456",
-        "user-123",
+        'table-456',
+        'user-123',
       );
       expect(mockRes.status).toHaveBeenCalledWith(200);
       expect(mockRes.json).toHaveBeenCalledWith({
         success: true,
-        message: "Columns retrieved successfully",
+        message: 'Columns retrieved successfully',
         data: mockColumns,
       });
       expect(mockNext).not.toHaveBeenCalled();
     });
 
-    it("should call next with error if service throws", async () => {
+    it('should call next with error if service throws', async () => {
       // Arrange
-      mockReq.params = { tableId: "table-456" };
-      const error = new Error("Table not found");
+      mockReq.params = { tableId: 'table-456' };
+      const error = new Error('Table not found');
       mockService.getColumnsByTable.mockRejectedValue(error);
 
       // Act
@@ -239,25 +239,25 @@ describe("ColumnController", () => {
 
       // Assert
       expect(mockService.getColumnsByTable).toHaveBeenCalledWith(
-        "table-456",
-        "user-123",
+        'table-456',
+        'user-123',
       );
       expect(mockNext).toHaveBeenCalledWith(error);
       expect(mockRes.status).not.toHaveBeenCalled();
     });
   });
 
-  describe("getColumnById", () => {
-    it("should return 200 with column data", async () => {
+  describe('getColumnById', () => {
+    it('should return 200 with column data', async () => {
       // Arrange
-      mockReq.params = { columnId: "col-123" };
+      mockReq.params = { columnId: 'col-123' };
 
       const mockColumn = {
-        id: "col-123",
-        tableId: "table-456",
-        name: "Name",
-        createdAt: new Date("2026-01-15"),
-        updatedAt: new Date("2026-01-15"),
+        id: 'col-123',
+        tableId: 'table-456',
+        name: 'Name',
+        createdAt: new Date('2026-01-15'),
+        updatedAt: new Date('2026-01-15'),
       };
 
       mockService.getColumnById.mockResolvedValue(mockColumn);
@@ -267,22 +267,22 @@ describe("ColumnController", () => {
 
       // Assert
       expect(mockService.getColumnById).toHaveBeenCalledWith(
-        "col-123",
-        "user-123",
+        'col-123',
+        'user-123',
       );
       expect(mockRes.status).toHaveBeenCalledWith(200);
       expect(mockRes.json).toHaveBeenCalledWith({
         success: true,
-        message: "Column retrieved successfully",
+        message: 'Column retrieved successfully',
         data: mockColumn,
       });
       expect(mockNext).not.toHaveBeenCalled();
     });
 
-    it("should call next with error if service throws", async () => {
+    it('should call next with error if service throws', async () => {
       // Arrange
-      mockReq.params = { columnId: "col-123" };
-      const error = new Error("Column not found");
+      mockReq.params = { columnId: 'col-123' };
+      const error = new Error('Column not found');
       mockService.getColumnById.mockRejectedValue(error);
 
       // Act
@@ -290,26 +290,26 @@ describe("ColumnController", () => {
 
       // Assert
       expect(mockService.getColumnById).toHaveBeenCalledWith(
-        "col-123",
-        "user-123",
+        'col-123',
+        'user-123',
       );
       expect(mockNext).toHaveBeenCalledWith(error);
       expect(mockRes.status).not.toHaveBeenCalled();
     });
   });
 
-  describe("updateColumn", () => {
-    it("should return 200 with updated column data", async () => {
+  describe('updateColumn', () => {
+    it('should return 200 with updated column data', async () => {
       // Arrange
-      mockReq.params = { columnId: "col-123" };
-      mockReq.body = { name: "Updated Name" };
+      mockReq.params = { columnId: 'col-123' };
+      mockReq.body = { name: 'Updated Name' };
 
       const mockUpdatedColumn = {
-        id: "col-123",
-        tableId: "table-456",
-        name: "Updated Name",
-        createdAt: new Date("2026-01-15"),
-        updatedAt: new Date("2026-01-20"),
+        id: 'col-123',
+        tableId: 'table-456',
+        name: 'Updated Name',
+        createdAt: new Date('2026-01-15'),
+        updatedAt: new Date('2026-01-20'),
       };
 
       mockService.updateColumn.mockResolvedValue(mockUpdatedColumn);
@@ -319,22 +319,22 @@ describe("ColumnController", () => {
 
       // Assert
       expect(mockService.updateColumn).toHaveBeenCalledWith(
-        "col-123",
-        "user-123",
-        { name: "Updated Name" },
+        'col-123',
+        'user-123',
+        { name: 'Updated Name' },
       );
       expect(mockRes.status).toHaveBeenCalledWith(200);
       expect(mockRes.json).toHaveBeenCalledWith({
         success: true,
-        message: "Column updated successfully",
+        message: 'Column updated successfully',
         data: mockUpdatedColumn,
       });
       expect(mockNext).not.toHaveBeenCalled();
     });
 
-    it("should return 400 if name is not provided", async () => {
+    it('should return 400 if name is not provided', async () => {
       // Arrange
-      mockReq.params = { columnId: "col-123" };
+      mockReq.params = { columnId: 'col-123' };
       mockReq.body = {};
 
       // Act
@@ -346,15 +346,15 @@ describe("ColumnController", () => {
       expect(mockRes.json).toHaveBeenCalledWith(
         expect.objectContaining({
           success: false,
-          message: "Validation error",
+          message: 'Validation error',
         }),
       );
     });
 
-    it("should return 400 if name is empty", async () => {
+    it('should return 400 if name is empty', async () => {
       // Arrange
-      mockReq.params = { columnId: "col-123" };
-      mockReq.body = { name: "" };
+      mockReq.params = { columnId: 'col-123' };
+      mockReq.body = { name: '' };
 
       // Act
       await controller.updateColumn(mockReq, mockRes, mockNext);
@@ -364,11 +364,11 @@ describe("ColumnController", () => {
       expect(mockRes.status).toHaveBeenCalledWith(400);
     });
 
-    it("should call next with error if service throws", async () => {
+    it('should call next with error if service throws', async () => {
       // Arrange
-      mockReq.params = { columnId: "col-123" };
-      mockReq.body = { name: "Valid Name" };
-      const error = new Error("Column not found");
+      mockReq.params = { columnId: 'col-123' };
+      mockReq.body = { name: 'Valid Name' };
+      const error = new Error('Column not found');
       mockService.updateColumn.mockRejectedValue(error);
 
       // Act
@@ -381,17 +381,17 @@ describe("ColumnController", () => {
     });
   });
 
-  describe("deleteColumn", () => {
-    it("should return 200 with deleted column data", async () => {
+  describe('deleteColumn', () => {
+    it('should return 200 with deleted column data', async () => {
       // Arrange
-      mockReq.params = { columnId: "col-123" };
+      mockReq.params = { columnId: 'col-123' };
 
       const mockDeletedColumn = {
-        id: "col-123",
-        tableId: "table-456",
-        name: "Deleted Column",
-        createdAt: new Date("2026-01-15"),
-        updatedAt: new Date("2026-01-15"),
+        id: 'col-123',
+        tableId: 'table-456',
+        name: 'Deleted Column',
+        createdAt: new Date('2026-01-15'),
+        updatedAt: new Date('2026-01-15'),
       };
 
       mockService.deleteColumn.mockResolvedValue(mockDeletedColumn);
@@ -401,22 +401,22 @@ describe("ColumnController", () => {
 
       // Assert
       expect(mockService.deleteColumn).toHaveBeenCalledWith(
-        "col-123",
-        "user-123",
+        'col-123',
+        'user-123',
       );
       expect(mockRes.status).toHaveBeenCalledWith(200);
       expect(mockRes.json).toHaveBeenCalledWith({
         success: true,
-        message: "Column deleted successfully",
+        message: 'Column deleted successfully',
         data: mockDeletedColumn,
       });
       expect(mockNext).not.toHaveBeenCalled();
     });
 
-    it("should call next with error if service throws", async () => {
+    it('should call next with error if service throws', async () => {
       // Arrange
-      mockReq.params = { columnId: "col-123" };
-      const error = new Error("Column not found");
+      mockReq.params = { columnId: 'col-123' };
+      const error = new Error('Column not found');
       mockService.deleteColumn.mockRejectedValue(error);
 
       // Act
@@ -424,8 +424,8 @@ describe("ColumnController", () => {
 
       // Assert
       expect(mockService.deleteColumn).toHaveBeenCalledWith(
-        "col-123",
-        "user-123",
+        'col-123',
+        'user-123',
       );
       expect(mockNext).toHaveBeenCalledWith(error);
       expect(mockRes.status).not.toHaveBeenCalled();

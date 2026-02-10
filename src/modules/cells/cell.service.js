@@ -1,7 +1,7 @@
-import CloudinaryService from "../../utils/cloudinary.js";
-import { NotFoundError } from "../../utils/errors.js";
+import CloudinaryService from '../../utils/cloudinary.js';
+import { NotFoundError } from '../../utils/errors.js';
 
-import CellRepository from "./cell.repository.js";
+import CellRepository from './cell.repository.js';
 
 export class CellService {
   constructor() {
@@ -12,7 +12,7 @@ export class CellService {
     // Check row ownership
     const isRowOwner = await this.repository.checkRowOwnership(rowId, userId);
     if (!isRowOwner) {
-      throw new NotFoundError("Row not found");
+      throw new NotFoundError('Row not found');
     }
 
     const cells = await this.repository.findCellsByRowId(rowId);
@@ -24,7 +24,7 @@ export class CellService {
     // Check row ownership
     const isRowOwner = await this.repository.checkRowOwnership(rowId, userId);
     if (!isRowOwner) {
-      throw new NotFoundError("Row not found");
+      throw new NotFoundError('Row not found');
     }
 
     // Check if cell already exists
@@ -105,7 +105,7 @@ export class CellService {
     );
 
     if (!cell) {
-      throw new NotFoundError("Cell not found");
+      throw new NotFoundError('Cell not found');
     }
 
     return this._formatCell(cell);

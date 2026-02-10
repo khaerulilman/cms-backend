@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from '@prisma/client';
 
 let prisma;
 
@@ -9,15 +9,15 @@ let prisma;
 function assertTestDatabase() {
   const dbUrl = process.env.DATABASE_URL;
   if (!dbUrl) {
-    throw new Error("DATABASE_URL is not set. Make sure .env.test is loaded.");
+    throw new Error('DATABASE_URL is not set. Make sure .env.test is loaded.');
   }
   // Block known production database hosts
-  const productionPatterns = ["rds.amazonaws.com", "production"];
+  const productionPatterns = ['rds.amazonaws.com', 'production'];
   for (const pattern of productionPatterns) {
     if (dbUrl.includes(pattern)) {
       throw new Error(
         `SAFETY: DATABASE_URL appears to point to a production database (contains "${pattern}"). ` +
-          "Ensure .env.test is loaded to override DATABASE_URL for tests.",
+          'Ensure .env.test is loaded to override DATABASE_URL for tests.',
       );
     }
   }
@@ -55,9 +55,9 @@ export async function createTestUser(data = {}) {
   const prisma = getPrismaTestClient();
   return await prisma.user.create({
     data: {
-      email: data.email || "test@example.com",
-      password: data.password || "hashedpassword",
-      name: data.name || "Test User",
+      email: data.email || 'test@example.com',
+      password: data.password || 'hashedpassword',
+      name: data.name || 'Test User',
       ...data,
     },
   });
@@ -68,8 +68,8 @@ export async function createTestProject(userId, data = {}) {
   return await prisma.project.create({
     data: {
       userId,
-      name: data.name || "Test Project",
-      description: data.description || "Test Description",
+      name: data.name || 'Test Project',
+      description: data.description || 'Test Description',
       ...data,
     },
   });
@@ -80,7 +80,7 @@ export async function createTestTable(projectId, data = {}) {
   return await prisma.cmsTable.create({
     data: {
       projectId,
-      name: data.name || "Test Table",
+      name: data.name || 'Test Table',
       isSubTable: data.isSubTable || false,
       ...data,
     },

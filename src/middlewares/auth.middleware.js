@@ -1,5 +1,5 @@
-import { HTTP_STATUS, ERROR_MESSAGES } from "../constants/http.js";
-import JwtUtil from "../utils/jwt.js";
+import { HTTP_STATUS, ERROR_MESSAGES } from '../constants/http.js';
+import JwtUtil from '../utils/jwt.js';
 
 export const authMiddleware = (req, res, next) => {
   try {
@@ -8,7 +8,7 @@ export const authMiddleware = (req, res, next) => {
 
     if (!token) {
       const authHeader = req.headers.authorization;
-      if (authHeader && authHeader.startsWith("Bearer")) {
+      if (authHeader && authHeader.startsWith('Bearer')) {
         token = authHeader.substring(7);
       }
     }
@@ -21,7 +21,7 @@ export const authMiddleware = (req, res, next) => {
     }
     const decoded = JwtUtil.verifyToken(token);
 
-    if (!decoded || decoded.type !== "access") {
+    if (!decoded || decoded.type !== 'access') {
       return res.status(HTTP_STATUS.UNAUTHORIZED).json({
         success: false,
         message: ERROR_MESSAGES.INVALID_TOKEN,

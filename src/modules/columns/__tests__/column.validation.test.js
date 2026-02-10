@@ -1,15 +1,15 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect } from 'vitest';
 
-import { ERROR_MESSAGES } from "../../../constants/http.js";
-import { columnValidationSchemas } from "../column.validation.js";
+import { ERROR_MESSAGES } from '../../../constants/http.js';
+import { columnValidationSchemas } from '../column.validation.js';
 
-describe("Column Validation Schemas", () => {
-  describe("createColumns schema", () => {
-    describe("valid input", () => {
-      it("should validate with valid tableId and columns", () => {
+describe('Column Validation Schemas', () => {
+  describe('createColumns schema', () => {
+    describe('valid input', () => {
+      it('should validate with valid tableId and columns', () => {
         const validData = {
-          tableId: "123e4567-e89b-12d3-a456-426614174000",
-          columns: [{ name: "Column 1" }, { name: "Column 2" }],
+          tableId: '123e4567-e89b-12d3-a456-426614174000',
+          columns: [{ name: 'Column 1' }, { name: 'Column 2' }],
         };
 
         const { error, value } =
@@ -17,15 +17,15 @@ describe("Column Validation Schemas", () => {
 
         expect(error).toBeUndefined();
         expect(value).toEqual({
-          tableId: "123e4567-e89b-12d3-a456-426614174000",
-          columns: [{ name: "Column 1" }, { name: "Column 2" }],
+          tableId: '123e4567-e89b-12d3-a456-426614174000',
+          columns: [{ name: 'Column 1' }, { name: 'Column 2' }],
         });
       });
 
-      it("should validate with single column", () => {
+      it('should validate with single column', () => {
         const validData = {
-          tableId: "123e4567-e89b-12d3-a456-426614174000",
-          columns: [{ name: "Single Column" }],
+          tableId: '123e4567-e89b-12d3-a456-426614174000',
+          columns: [{ name: 'Single Column' }],
         };
 
         const { error, value } =
@@ -35,23 +35,23 @@ describe("Column Validation Schemas", () => {
         expect(value.columns).toHaveLength(1);
       });
 
-      it("should trim column names", () => {
+      it('should trim column names', () => {
         const dataWithSpaces = {
-          tableId: "123e4567-e89b-12d3-a456-426614174000",
-          columns: [{ name: "  Column Name  " }],
+          tableId: '123e4567-e89b-12d3-a456-426614174000',
+          columns: [{ name: '  Column Name  ' }],
         };
 
         const { error, value } =
           columnValidationSchemas.createColumns.validate(dataWithSpaces);
 
         expect(error).toBeUndefined();
-        expect(value.columns[0].name).toBe("Column Name");
+        expect(value.columns[0].name).toBe('Column Name');
       });
 
-      it("should validate column name at max length (255 characters)", () => {
-        const maxLengthName = "a".repeat(255);
+      it('should validate column name at max length (255 characters)', () => {
+        const maxLengthName = 'a'.repeat(255);
         const validData = {
-          tableId: "123e4567-e89b-12d3-a456-426614174000",
+          tableId: '123e4567-e89b-12d3-a456-426614174000',
           columns: [{ name: maxLengthName }],
         };
 
@@ -62,10 +62,10 @@ describe("Column Validation Schemas", () => {
       });
     });
 
-    describe("invalid tableId", () => {
-      it("should fail when tableId is missing", () => {
+    describe('invalid tableId', () => {
+      it('should fail when tableId is missing', () => {
         const invalidData = {
-          columns: [{ name: "Column 1" }],
+          columns: [{ name: 'Column 1' }],
         };
 
         const { error } =
@@ -75,10 +75,10 @@ describe("Column Validation Schemas", () => {
         expect(error.details[0].message).toBe(ERROR_MESSAGES.TABLE_ID_REQUIRED);
       });
 
-      it("should fail when tableId is empty string", () => {
+      it('should fail when tableId is empty string', () => {
         const invalidData = {
-          tableId: "",
-          columns: [{ name: "Column 1" }],
+          tableId: '',
+          columns: [{ name: 'Column 1' }],
         };
 
         const { error } =
@@ -88,10 +88,10 @@ describe("Column Validation Schemas", () => {
         expect(error.details[0].message).toBe(ERROR_MESSAGES.TABLE_ID_REQUIRED);
       });
 
-      it("should fail when tableId is not a valid UUID", () => {
+      it('should fail when tableId is not a valid UUID', () => {
         const invalidData = {
-          tableId: "not-a-uuid",
-          columns: [{ name: "Column 1" }],
+          tableId: 'not-a-uuid',
+          columns: [{ name: 'Column 1' }],
         };
 
         const { error } =
@@ -101,10 +101,10 @@ describe("Column Validation Schemas", () => {
         expect(error.details[0].message).toBe(ERROR_MESSAGES.INVALID_TABLE_ID);
       });
 
-      it("should fail when tableId is invalid UUID format (missing parts)", () => {
+      it('should fail when tableId is invalid UUID format (missing parts)', () => {
         const invalidData = {
-          tableId: "123e4567-e89b-12d3-a456",
-          columns: [{ name: "Column 1" }],
+          tableId: '123e4567-e89b-12d3-a456',
+          columns: [{ name: 'Column 1' }],
         };
 
         const { error } =
@@ -115,10 +115,10 @@ describe("Column Validation Schemas", () => {
       });
     });
 
-    describe("invalid columns", () => {
-      it("should fail when columns is missing", () => {
+    describe('invalid columns', () => {
+      it('should fail when columns is missing', () => {
         const invalidData = {
-          tableId: "123e4567-e89b-12d3-a456-426614174000",
+          tableId: '123e4567-e89b-12d3-a456-426614174000',
         };
 
         const { error } =
@@ -128,9 +128,9 @@ describe("Column Validation Schemas", () => {
         expect(error.details[0].message).toBe(ERROR_MESSAGES.COLUMNS_REQUIRED);
       });
 
-      it("should fail when columns is empty array", () => {
+      it('should fail when columns is empty array', () => {
         const invalidData = {
-          tableId: "123e4567-e89b-12d3-a456-426614174000",
+          tableId: '123e4567-e89b-12d3-a456-426614174000',
           columns: [],
         };
 
@@ -141,10 +141,10 @@ describe("Column Validation Schemas", () => {
         expect(error.details[0].message).toBe(ERROR_MESSAGES.COLUMNS_EMPTY);
       });
 
-      it("should fail when columns is not an array", () => {
+      it('should fail when columns is not an array', () => {
         const invalidData = {
-          tableId: "123e4567-e89b-12d3-a456-426614174000",
-          columns: "not-an-array",
+          tableId: '123e4567-e89b-12d3-a456-426614174000',
+          columns: 'not-an-array',
         };
 
         const { error } =
@@ -154,9 +154,9 @@ describe("Column Validation Schemas", () => {
         expect(error.details[0].message).toBe(ERROR_MESSAGES.COLUMNS_REQUIRED);
       });
 
-      it("should fail when column name is missing", () => {
+      it('should fail when column name is missing', () => {
         const invalidData = {
-          tableId: "123e4567-e89b-12d3-a456-426614174000",
+          tableId: '123e4567-e89b-12d3-a456-426614174000',
           columns: [{}],
         };
 
@@ -169,10 +169,10 @@ describe("Column Validation Schemas", () => {
         );
       });
 
-      it("should fail when column name is empty string", () => {
+      it('should fail when column name is empty string', () => {
         const invalidData = {
-          tableId: "123e4567-e89b-12d3-a456-426614174000",
-          columns: [{ name: "" }],
+          tableId: '123e4567-e89b-12d3-a456-426614174000',
+          columns: [{ name: '' }],
         };
 
         const { error } =
@@ -184,10 +184,10 @@ describe("Column Validation Schemas", () => {
         );
       });
 
-      it("should fail when column name exceeds 255 characters", () => {
-        const longName = "a".repeat(256);
+      it('should fail when column name exceeds 255 characters', () => {
+        const longName = 'a'.repeat(256);
         const invalidData = {
-          tableId: "123e4567-e89b-12d3-a456-426614174000",
+          tableId: '123e4567-e89b-12d3-a456-426614174000',
           columns: [{ name: longName }],
         };
 
@@ -200,10 +200,10 @@ describe("Column Validation Schemas", () => {
         );
       });
 
-      it("should fail when one of multiple columns has invalid name", () => {
+      it('should fail when one of multiple columns has invalid name', () => {
         const invalidData = {
-          tableId: "123e4567-e89b-12d3-a456-426614174000",
-          columns: [{ name: "Valid Column" }, { name: "" }],
+          tableId: '123e4567-e89b-12d3-a456-426614174000',
+          columns: [{ name: 'Valid Column' }, { name: '' }],
         };
 
         const { error } =
@@ -214,11 +214,11 @@ describe("Column Validation Schemas", () => {
     });
   });
 
-  describe("updateColumn schema", () => {
-    describe("valid input", () => {
-      it("should validate with valid column name", () => {
+  describe('updateColumn schema', () => {
+    describe('valid input', () => {
+      it('should validate with valid column name', () => {
         const validData = {
-          name: "Updated Column Name",
+          name: 'Updated Column Name',
         };
 
         const { error, value } =
@@ -226,24 +226,24 @@ describe("Column Validation Schemas", () => {
 
         expect(error).toBeUndefined();
         expect(value).toEqual({
-          name: "Updated Column Name",
+          name: 'Updated Column Name',
         });
       });
 
-      it("should trim column name", () => {
+      it('should trim column name', () => {
         const dataWithSpaces = {
-          name: "  Updated Column Name  ",
+          name: '  Updated Column Name  ',
         };
 
         const { error, value } =
           columnValidationSchemas.updateColumn.validate(dataWithSpaces);
 
         expect(error).toBeUndefined();
-        expect(value.name).toBe("Updated Column Name");
+        expect(value.name).toBe('Updated Column Name');
       });
 
-      it("should validate column name at max length (255 characters)", () => {
-        const maxLengthName = "a".repeat(255);
+      it('should validate column name at max length (255 characters)', () => {
+        const maxLengthName = 'a'.repeat(255);
         const validData = {
           name: maxLengthName,
         };
@@ -254,9 +254,9 @@ describe("Column Validation Schemas", () => {
         expect(error).toBeUndefined();
       });
 
-      it("should validate single character column name", () => {
+      it('should validate single character column name', () => {
         const validData = {
-          name: "A",
+          name: 'A',
         };
 
         const { error } =
@@ -266,8 +266,8 @@ describe("Column Validation Schemas", () => {
       });
     });
 
-    describe("invalid input", () => {
-      it("should fail when name is missing", () => {
+    describe('invalid input', () => {
+      it('should fail when name is missing', () => {
         const invalidData = {};
 
         const { error } =
@@ -279,9 +279,9 @@ describe("Column Validation Schemas", () => {
         );
       });
 
-      it("should fail when name is empty string", () => {
+      it('should fail when name is empty string', () => {
         const invalidData = {
-          name: "",
+          name: '',
         };
 
         const { error } =
@@ -291,9 +291,9 @@ describe("Column Validation Schemas", () => {
         expect(error.details[0].message).toBe(ERROR_MESSAGES.COLUMN_NAME_EMPTY);
       });
 
-      it("should fail when name is only whitespace", () => {
+      it('should fail when name is only whitespace', () => {
         const invalidData = {
-          name: "   ",
+          name: '   ',
         };
 
         const { error } =
@@ -303,8 +303,8 @@ describe("Column Validation Schemas", () => {
         expect(error.details[0].message).toBe(ERROR_MESSAGES.COLUMN_NAME_EMPTY);
       });
 
-      it("should fail when name exceeds 255 characters", () => {
-        const longName = "a".repeat(256);
+      it('should fail when name exceeds 255 characters', () => {
+        const longName = 'a'.repeat(256);
         const invalidData = {
           name: longName,
         };
@@ -318,7 +318,7 @@ describe("Column Validation Schemas", () => {
         );
       });
 
-      it("should fail when name is not a string", () => {
+      it('should fail when name is not a string', () => {
         const invalidData = {
           name: 123,
         };
@@ -329,7 +329,7 @@ describe("Column Validation Schemas", () => {
         expect(error).toBeDefined();
       });
 
-      it("should fail when name is null", () => {
+      it('should fail when name is null', () => {
         const invalidData = {
           name: null,
         };

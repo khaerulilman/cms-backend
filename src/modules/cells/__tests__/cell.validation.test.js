@@ -1,14 +1,14 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect } from 'vitest';
 
-import { ERROR_MESSAGES } from "../../../constants/http.js";
-import { cellValidationSchemas } from "../cell.validation.js";
+import { ERROR_MESSAGES } from '../../../constants/http.js';
+import { cellValidationSchemas } from '../cell.validation.js';
 
-describe("Cell Validation Schemas", () => {
-  describe("getCellsByRow schema", () => {
-    describe("valid input", () => {
-      it("should validate with valid UUID rowId", () => {
+describe('Cell Validation Schemas', () => {
+  describe('getCellsByRow schema', () => {
+    describe('valid input', () => {
+      it('should validate with valid UUID rowId', () => {
         const validData = {
-          rowId: "123e4567-e89b-12d3-a456-426614174000",
+          rowId: '123e4567-e89b-12d3-a456-426614174000',
         };
 
         const { error, value } =
@@ -16,13 +16,13 @@ describe("Cell Validation Schemas", () => {
 
         expect(error).toBeUndefined();
         expect(value).toEqual({
-          rowId: "123e4567-e89b-12d3-a456-426614174000",
+          rowId: '123e4567-e89b-12d3-a456-426614174000',
         });
       });
 
-      it("should validate with different valid UUID formats", () => {
+      it('should validate with different valid UUID formats', () => {
         const validData = {
-          rowId: "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+          rowId: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
         };
 
         const { error } =
@@ -32,8 +32,8 @@ describe("Cell Validation Schemas", () => {
       });
     });
 
-    describe("invalid rowId", () => {
-      it("should fail when rowId is missing", () => {
+    describe('invalid rowId', () => {
+      it('should fail when rowId is missing', () => {
         const invalidData = {};
 
         const { error } =
@@ -43,9 +43,9 @@ describe("Cell Validation Schemas", () => {
         expect(error.details[0].message).toBe(ERROR_MESSAGES.ROW_ID_REQUIRED);
       });
 
-      it("should fail when rowId is empty string", () => {
+      it('should fail when rowId is empty string', () => {
         const invalidData = {
-          rowId: "",
+          rowId: '',
         };
 
         const { error } =
@@ -55,9 +55,9 @@ describe("Cell Validation Schemas", () => {
         expect(error.details[0].message).toBe(ERROR_MESSAGES.ROW_ID_REQUIRED);
       });
 
-      it("should fail when rowId is not a valid UUID", () => {
+      it('should fail when rowId is not a valid UUID', () => {
         const invalidData = {
-          rowId: "not-a-uuid",
+          rowId: 'not-a-uuid',
         };
 
         const { error } =
@@ -67,9 +67,9 @@ describe("Cell Validation Schemas", () => {
         expect(error.details[0].message).toBe(ERROR_MESSAGES.INVALID_ROW_ID);
       });
 
-      it("should fail when rowId is invalid UUID format (missing parts)", () => {
+      it('should fail when rowId is invalid UUID format (missing parts)', () => {
         const invalidData = {
-          rowId: "123e4567-e89b-12d3-a456",
+          rowId: '123e4567-e89b-12d3-a456',
         };
 
         const { error } =
@@ -79,7 +79,7 @@ describe("Cell Validation Schemas", () => {
         expect(error.details[0].message).toBe(ERROR_MESSAGES.INVALID_ROW_ID);
       });
 
-      it("should fail when rowId is numeric value", () => {
+      it('should fail when rowId is numeric value', () => {
         const invalidData = {
           rowId: 123456,
         };
@@ -92,13 +92,13 @@ describe("Cell Validation Schemas", () => {
     });
   });
 
-  describe("upsertCell schema", () => {
-    describe("valid input", () => {
-      it("should validate with all required fields", () => {
+  describe('upsertCell schema', () => {
+    describe('valid input', () => {
+      it('should validate with all required fields', () => {
         const validData = {
-          rowId: "123e4567-e89b-12d3-a456-426614174000",
-          columnId: "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
-          value: "cell content",
+          rowId: '123e4567-e89b-12d3-a456-426614174000',
+          columnId: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
+          value: 'cell content',
         };
 
         const { error, value } =
@@ -108,10 +108,10 @@ describe("Cell Validation Schemas", () => {
         expect(value).toEqual(validData);
       });
 
-      it("should validate with value as null", () => {
+      it('should validate with value as null', () => {
         const validData = {
-          rowId: "123e4567-e89b-12d3-a456-426614174000",
-          columnId: "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+          rowId: '123e4567-e89b-12d3-a456-426614174000',
+          columnId: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
           value: null,
         };
 
@@ -120,11 +120,11 @@ describe("Cell Validation Schemas", () => {
         expect(error).toBeUndefined();
       });
 
-      it("should validate with value as empty string", () => {
+      it('should validate with value as empty string', () => {
         const validData = {
-          rowId: "123e4567-e89b-12d3-a456-426614174000",
-          columnId: "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
-          value: "",
+          rowId: '123e4567-e89b-12d3-a456-426614174000',
+          columnId: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
+          value: '',
         };
 
         const { error } = cellValidationSchemas.upsertCell.validate(validData);
@@ -132,10 +132,10 @@ describe("Cell Validation Schemas", () => {
         expect(error).toBeUndefined();
       });
 
-      it("should validate without value field (optional)", () => {
+      it('should validate without value field (optional)', () => {
         const validData = {
-          rowId: "123e4567-e89b-12d3-a456-426614174000",
-          columnId: "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+          rowId: '123e4567-e89b-12d3-a456-426614174000',
+          columnId: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
         };
 
         const { error } = cellValidationSchemas.upsertCell.validate(validData);
@@ -143,11 +143,11 @@ describe("Cell Validation Schemas", () => {
         expect(error).toBeUndefined();
       });
 
-      it("should validate with maximum length value (5000 characters)", () => {
+      it('should validate with maximum length value (5000 characters)', () => {
         const validData = {
-          rowId: "123e4567-e89b-12d3-a456-426614174000",
-          columnId: "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
-          value: "a".repeat(5000),
+          rowId: '123e4567-e89b-12d3-a456-426614174000',
+          columnId: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
+          value: 'a'.repeat(5000),
         };
 
         const { error } = cellValidationSchemas.upsertCell.validate(validData);
@@ -155,11 +155,11 @@ describe("Cell Validation Schemas", () => {
         expect(error).toBeUndefined();
       });
 
-      it("should validate with various text content", () => {
+      it('should validate with various text content', () => {
         const validData = {
-          rowId: "123e4567-e89b-12d3-a456-426614174000",
-          columnId: "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
-          value: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+          rowId: '123e4567-e89b-12d3-a456-426614174000',
+          columnId: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
+          value: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
         };
 
         const { error } = cellValidationSchemas.upsertCell.validate(validData);
@@ -168,11 +168,11 @@ describe("Cell Validation Schemas", () => {
       });
     });
 
-    describe("invalid rowId", () => {
-      it("should fail when rowId is missing", () => {
+    describe('invalid rowId', () => {
+      it('should fail when rowId is missing', () => {
         const invalidData = {
-          columnId: "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
-          value: "content",
+          columnId: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
+          value: 'content',
         };
 
         const { error } =
@@ -182,11 +182,11 @@ describe("Cell Validation Schemas", () => {
         expect(error.details[0].message).toBe(ERROR_MESSAGES.ROW_ID_REQUIRED);
       });
 
-      it("should fail when rowId is empty string", () => {
+      it('should fail when rowId is empty string', () => {
         const invalidData = {
-          rowId: "",
-          columnId: "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
-          value: "content",
+          rowId: '',
+          columnId: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
+          value: 'content',
         };
 
         const { error } =
@@ -196,11 +196,11 @@ describe("Cell Validation Schemas", () => {
         expect(error.details[0].message).toBe(ERROR_MESSAGES.ROW_ID_REQUIRED);
       });
 
-      it("should fail when rowId is not a valid UUID", () => {
+      it('should fail when rowId is not a valid UUID', () => {
         const invalidData = {
-          rowId: "invalid-id",
-          columnId: "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
-          value: "content",
+          rowId: 'invalid-id',
+          columnId: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
+          value: 'content',
         };
 
         const { error } =
@@ -211,11 +211,11 @@ describe("Cell Validation Schemas", () => {
       });
     });
 
-    describe("invalid columnId", () => {
-      it("should fail when columnId is missing", () => {
+    describe('invalid columnId', () => {
+      it('should fail when columnId is missing', () => {
         const invalidData = {
-          rowId: "123e4567-e89b-12d3-a456-426614174000",
-          value: "content",
+          rowId: '123e4567-e89b-12d3-a456-426614174000',
+          value: 'content',
         };
 
         const { error } =
@@ -227,11 +227,11 @@ describe("Cell Validation Schemas", () => {
         );
       });
 
-      it("should fail when columnId is empty string", () => {
+      it('should fail when columnId is empty string', () => {
         const invalidData = {
-          rowId: "123e4567-e89b-12d3-a456-426614174000",
-          columnId: "",
-          value: "content",
+          rowId: '123e4567-e89b-12d3-a456-426614174000',
+          columnId: '',
+          value: 'content',
         };
 
         const { error } =
@@ -243,11 +243,11 @@ describe("Cell Validation Schemas", () => {
         );
       });
 
-      it("should fail when columnId is not a valid UUID", () => {
+      it('should fail when columnId is not a valid UUID', () => {
         const invalidData = {
-          rowId: "123e4567-e89b-12d3-a456-426614174000",
-          columnId: "not-a-uuid",
-          value: "content",
+          rowId: '123e4567-e89b-12d3-a456-426614174000',
+          columnId: 'not-a-uuid',
+          value: 'content',
         };
 
         const { error } =
@@ -258,12 +258,12 @@ describe("Cell Validation Schemas", () => {
       });
     });
 
-    describe("invalid value", () => {
-      it("should fail when value exceeds maximum length (5000 characters)", () => {
+    describe('invalid value', () => {
+      it('should fail when value exceeds maximum length (5000 characters)', () => {
         const invalidData = {
-          rowId: "123e4567-e89b-12d3-a456-426614174000",
-          columnId: "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
-          value: "a".repeat(5001),
+          rowId: '123e4567-e89b-12d3-a456-426614174000',
+          columnId: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
+          value: 'a'.repeat(5001),
         };
 
         const { error } =
@@ -275,11 +275,11 @@ describe("Cell Validation Schemas", () => {
         );
       });
 
-      it("should fail when value is very long (10000 characters)", () => {
+      it('should fail when value is very long (10000 characters)', () => {
         const invalidData = {
-          rowId: "123e4567-e89b-12d3-a456-426614174000",
-          columnId: "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
-          value: "a".repeat(10000),
+          rowId: '123e4567-e89b-12d3-a456-426614174000',
+          columnId: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
+          value: 'a'.repeat(10000),
         };
 
         const { error } =
@@ -292,12 +292,12 @@ describe("Cell Validation Schemas", () => {
       });
     });
 
-    describe("multiple invalid fields", () => {
-      it("should return first validation error when multiple fields are invalid", () => {
+    describe('multiple invalid fields', () => {
+      it('should return first validation error when multiple fields are invalid', () => {
         const invalidData = {
-          rowId: "invalid-row",
-          columnId: "invalid-column",
-          value: "a".repeat(5001),
+          rowId: 'invalid-row',
+          columnId: 'invalid-column',
+          value: 'a'.repeat(5001),
         };
 
         const { error } =
@@ -308,7 +308,7 @@ describe("Cell Validation Schemas", () => {
         expect(error.details[0].message).toBe(ERROR_MESSAGES.INVALID_ROW_ID);
       });
 
-      it("should return first validation error when all required fields are missing", () => {
+      it('should return first validation error when all required fields are missing', () => {
         const invalidData = {};
 
         const { error } =

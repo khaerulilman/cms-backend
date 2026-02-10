@@ -1,4 +1,4 @@
-import prisma from "../../prisma/client.js";
+import prisma from '../../prisma/client.js';
 
 export class AuthRepository {
   async findUserByEmail(email) {
@@ -76,7 +76,7 @@ export class AuthRepository {
         },
       },
       orderBy: {
-        createdAt: "desc",
+        createdAt: 'desc',
       },
     });
   }
