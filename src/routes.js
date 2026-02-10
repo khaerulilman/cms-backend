@@ -48,7 +48,6 @@ router.get(
 // Get simplified table by ID with API Key (allows all origins for public implementation)
 router.get(
   `${v1}/project/:projectId/table/:tableId/simplify`,
-  cors({ origin: "*", credentials: false }),
   apiKeyMiddleware,
   (req, res, next) => tableController.getTableSimplified(req, res, next),
 );
