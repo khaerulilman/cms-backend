@@ -14,7 +14,6 @@ jobs:
     env:
       NODE_ENV: test
       DATABASE_URL: ${{ secrets.DATABASE_TEST_URL }}
-      # DATABASE_TEST_URL: ${{ secrets.DATABASE_TEST_URL }}
       JWT_SECRET: ${{ secrets.JWT_SECRET }}
       FRONTEND_URL: ${{ secrets.FRONTEND_URL }}
       GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
