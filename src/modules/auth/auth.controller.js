@@ -10,17 +10,9 @@ import AuthService from "./auth.service.js";
 
 // Detect if frontend and backend are on different sites (cross-site)
 // Cross-site cookies require SameSite=None and Secure=true
-const isCrossSite = (() => {
-  try {
-    const frontendHost = new URL(config.FRONTEND_URL).hostname;
-    const backendHost = config.GOOGLE_CALLBACK_URL
-      ? new URL(config.GOOGLE_CALLBACK_URL).hostname
-      : null;
-    return backendHost ? frontendHost !== backendHost : false;
-  } catch {
-    return false;
-  }
-})();
+// Controlled via COOKIE_CROSS_SITE env var
+const isCrossSite =
+  config.COOKIE_CROSS_SITE === "true" || config.COOKIE_CROSS_SITE === true;
 
 // Cookie options for HTTP-only cookies
 const getCookieOptions = (maxAge) => ({
@@ -37,16 +29,10 @@ const getCookieOptions = (maxAge) => ({
 
 // clearCookie must use the SAME options (secure, sameSite, path) as setCookie
 // otherwise the browser will NOT delete the cookie
-const getClearCookieOptions = () => ({
-  httpOnly: true,
-  secure: isCrossSite || config.NODE_ENV === "production",
-  sameSite: isCrossSite
-    ? "none"
-    : config.NODE_ENV === "production"
-      ? "strict"
-      : "lax",
-  path: "/",
-});
+const getClearCookieOptions = () => {
+  const { maxAge, ...options } = getCookieOptions(0);
+  return options;
+};
 
 export class AuthController {
   constructor() {

@@ -25,6 +25,7 @@ export const config = {
   CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME,
   CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY,
   CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET,
+  COOKIE_CROSS_SITE: process.env.COOKIE_CROSS_SITE,
 };
 
 // Validate required env variables
