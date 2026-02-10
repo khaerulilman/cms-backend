@@ -1,6 +1,6 @@
-import crypto from "crypto";
+import crypto from 'crypto';
 
-import prisma from "../../prisma/client.js";
+import prisma from '../../prisma/client.js';
 
 export class CellRepository {
   // Check if user owns the row (indirectly through project -> table -> row)
@@ -62,7 +62,7 @@ export class CellRepository {
         },
       },
       orderBy: {
-        createdAt: "asc",
+        createdAt: 'asc',
       },
     });
 

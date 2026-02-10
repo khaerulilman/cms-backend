@@ -1,9 +1,9 @@
-import { describe, it, expect, beforeEach, vi } from "vitest";
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 
-import prisma from "../../../prisma/client.js";
-import { RowRepository } from "../row.repository.js";
+import prisma from '../../../prisma/client.js';
+import { RowRepository } from '../row.repository.js';
 
-vi.mock("../../../prisma/client.js", () => ({
+vi.mock('../../../prisma/client.js', () => ({
   default: {
     cmsRow: {
       create: vi.fn(),
@@ -21,7 +21,7 @@ vi.mock("../../../prisma/client.js", () => ({
   },
 }));
 
-describe("RowRepository", () => {
+describe('RowRepository', () => {
   let repository;
 
   beforeEach(() => {
@@ -29,22 +29,22 @@ describe("RowRepository", () => {
     vi.clearAllMocks();
   });
 
-  describe("createRow", () => {
-    it("should create a new row with table and cells included", async () => {
+  describe('createRow', () => {
+    it('should create a new row with table and cells included', async () => {
       // Arrange - mock data untuk return value (bukan expected)
       const inputData = {
-        id: "row-123",
-        tableId: "table-456",
+        id: 'row-123',
+        tableId: 'table-456',
       };
 
       const mockCreatedRow = {
-        id: "row-123",
-        tableId: "table-456",
-        createdAt: new Date("2026-01-15"),
-        updatedAt: new Date("2026-01-15"),
+        id: 'row-123',
+        tableId: 'table-456',
+        createdAt: new Date('2026-01-15'),
+        updatedAt: new Date('2026-01-15'),
         table: {
-          id: "table-456",
-          name: "Test Table",
+          id: 'table-456',
+          name: 'Test Table',
         },
         cells: [],
       };
@@ -70,26 +70,26 @@ describe("RowRepository", () => {
     });
   });
 
-  describe("findRowById", () => {
-    it("should return row when found by id", async () => {
+  describe('findRowById', () => {
+    it('should return row when found by id', async () => {
       // Arrange
-      const rowId = "row-123";
+      const rowId = 'row-123';
       const mockRow = {
-        id: "row-123",
-        tableId: "table-456",
-        createdAt: new Date("2026-01-15"),
-        updatedAt: new Date("2026-01-15"),
+        id: 'row-123',
+        tableId: 'table-456',
+        createdAt: new Date('2026-01-15'),
+        updatedAt: new Date('2026-01-15'),
         table: {
-          id: "table-456",
-          name: "Test Table",
+          id: 'table-456',
+          name: 'Test Table',
         },
         cells: [
           {
-            id: "cell-1",
-            rowId: "row-123",
-            columnId: "col-1",
-            value: "Cell Value",
-            column: { id: "col-1", name: "Column 1" },
+            id: 'cell-1',
+            rowId: 'row-123',
+            columnId: 'col-1',
+            value: 'Cell Value',
+            column: { id: 'col-1', name: 'Column 1' },
           },
         ],
       };
@@ -114,9 +114,9 @@ describe("RowRepository", () => {
       expect(result).toEqual(mockRow);
     });
 
-    it("should return null if row not found", async () => {
+    it('should return null if row not found', async () => {
       // Arrange
-      const rowId = "non-existent-row";
+      const rowId = 'non-existent-row';
       prisma.cmsRow.findUnique.mockResolvedValue(null);
 
       // Act
@@ -138,25 +138,25 @@ describe("RowRepository", () => {
     });
   });
 
-  describe("findRowsByTableId", () => {
-    it("should return rows for a given table id ordered by createdAt desc", async () => {
+  describe('findRowsByTableId', () => {
+    it('should return rows for a given table id ordered by createdAt desc', async () => {
       // Arrange
-      const tableId = "table-456";
+      const tableId = 'table-456';
       const mockRows = [
         {
-          id: "row-2",
-          tableId: "table-456",
-          createdAt: new Date("2026-01-16"),
-          updatedAt: new Date("2026-01-16"),
-          table: { id: "table-456", name: "Test Table" },
+          id: 'row-2',
+          tableId: 'table-456',
+          createdAt: new Date('2026-01-16'),
+          updatedAt: new Date('2026-01-16'),
+          table: { id: 'table-456', name: 'Test Table' },
           cells: [],
         },
         {
-          id: "row-1",
-          tableId: "table-456",
-          createdAt: new Date("2026-01-15"),
-          updatedAt: new Date("2026-01-15"),
-          table: { id: "table-456", name: "Test Table" },
+          id: 'row-1',
+          tableId: 'table-456',
+          createdAt: new Date('2026-01-15'),
+          updatedAt: new Date('2026-01-15'),
+          table: { id: 'table-456', name: 'Test Table' },
           cells: [],
         },
       ];
@@ -178,16 +178,16 @@ describe("RowRepository", () => {
           },
         },
         orderBy: {
-          createdAt: "desc",
+          createdAt: 'desc',
         },
       });
       expect(result).toEqual(mockRows);
       expect(result).toHaveLength(2);
     });
 
-    it("should return empty array if no rows found", async () => {
+    it('should return empty array if no rows found', async () => {
       // Arrange
-      const tableId = "table-empty";
+      const tableId = 'table-empty';
       prisma.cmsRow.findMany.mockResolvedValue([]);
 
       // Act
@@ -205,25 +205,25 @@ describe("RowRepository", () => {
           },
         },
         orderBy: {
-          createdAt: "desc",
+          createdAt: 'desc',
         },
       });
       expect(result).toEqual([]);
     });
   });
 
-  describe("updateRow", () => {
-    it("should update row and return updated data", async () => {
+  describe('updateRow', () => {
+    it('should update row and return updated data', async () => {
       // Arrange
-      const rowId = "row-123";
-      const updateData = { updatedAt: new Date("2026-01-20") };
+      const rowId = 'row-123';
+      const updateData = { updatedAt: new Date('2026-01-20') };
 
       const mockUpdatedRow = {
-        id: "row-123",
-        tableId: "table-456",
-        createdAt: new Date("2026-01-15"),
-        updatedAt: new Date("2026-01-20"),
-        table: { id: "table-456", name: "Test Table" },
+        id: 'row-123',
+        tableId: 'table-456',
+        createdAt: new Date('2026-01-15'),
+        updatedAt: new Date('2026-01-20'),
+        table: { id: 'table-456', name: 'Test Table' },
         cells: [],
       };
 
@@ -249,16 +249,16 @@ describe("RowRepository", () => {
     });
   });
 
-  describe("deleteRow", () => {
-    it("should delete row and return deleted row", async () => {
+  describe('deleteRow', () => {
+    it('should delete row and return deleted row', async () => {
       // Arrange
-      const rowId = "row-123";
+      const rowId = 'row-123';
 
       const mockDeletedRow = {
-        id: "row-123",
-        tableId: "table-456",
-        createdAt: new Date("2026-01-15"),
-        updatedAt: new Date("2026-01-15"),
+        id: 'row-123',
+        tableId: 'table-456',
+        createdAt: new Date('2026-01-15'),
+        updatedAt: new Date('2026-01-15'),
       };
 
       prisma.cmsRow.delete.mockResolvedValue(mockDeletedRow);
@@ -274,18 +274,18 @@ describe("RowRepository", () => {
     });
   });
 
-  describe("findCellsByRowId", () => {
-    it("should return cells with cloudinary info for cleanup", async () => {
+  describe('findCellsByRowId', () => {
+    it('should return cells with cloudinary info for cleanup', async () => {
       // Arrange
-      const rowId = "row-123";
+      const rowId = 'row-123';
       const mockCells = [
         {
-          id: "cell-1",
-          cloudinaryPublicId: "public-id-1",
-          imageUrl: "https://cloudinary.com/image1.jpg",
+          id: 'cell-1',
+          cloudinaryPublicId: 'public-id-1',
+          imageUrl: 'https://cloudinary.com/image1.jpg',
         },
         {
-          id: "cell-2",
+          id: 'cell-2',
           cloudinaryPublicId: null,
           imageUrl: null,
         },
@@ -309,19 +309,19 @@ describe("RowRepository", () => {
     });
   });
 
-  describe("checkRowOwnership", () => {
-    it("should return true if user owns the row", async () => {
+  describe('checkRowOwnership', () => {
+    it('should return true if user owns the row', async () => {
       // Arrange
-      const rowId = "row-123";
-      const userId = "user-789";
+      const rowId = 'row-123';
+      const userId = 'user-789';
 
       const mockRow = {
-        id: "row-123",
+        id: 'row-123',
         table: {
-          id: "table-456",
+          id: 'table-456',
           project: {
-            id: "project-111",
-            userId: "user-789",
+            id: 'project-111',
+            userId: 'user-789',
           },
         },
       };
@@ -345,18 +345,18 @@ describe("RowRepository", () => {
       expect(result).toBe(true);
     });
 
-    it("should return false if user does not own the row", async () => {
+    it('should return false if user does not own the row', async () => {
       // Arrange
-      const rowId = "row-123";
-      const userId = "other-user";
+      const rowId = 'row-123';
+      const userId = 'other-user';
 
       const mockRow = {
-        id: "row-123",
+        id: 'row-123',
         table: {
-          id: "table-456",
+          id: 'table-456',
           project: {
-            id: "project-111",
-            userId: "user-789",
+            id: 'project-111',
+            userId: 'user-789',
           },
         },
       };
@@ -380,10 +380,10 @@ describe("RowRepository", () => {
       expect(result).toBe(false);
     });
 
-    it("should return false if row not found", async () => {
+    it('should return false if row not found', async () => {
       // Arrange
-      const rowId = "non-existent-row";
-      const userId = "user-789";
+      const rowId = 'non-existent-row';
+      const userId = 'user-789';
 
       prisma.cmsRow.findUnique.mockResolvedValue(null);
 
@@ -405,17 +405,17 @@ describe("RowRepository", () => {
     });
   });
 
-  describe("checkTableOwnership", () => {
-    it("should return true if user owns the table", async () => {
+  describe('checkTableOwnership', () => {
+    it('should return true if user owns the table', async () => {
       // Arrange
-      const tableId = "table-456";
-      const userId = "user-789";
+      const tableId = 'table-456';
+      const userId = 'user-789';
 
       const mockTable = {
-        id: "table-456",
+        id: 'table-456',
         project: {
-          id: "project-111",
-          userId: "user-789",
+          id: 'project-111',
+          userId: 'user-789',
         },
       };
 
@@ -434,16 +434,16 @@ describe("RowRepository", () => {
       expect(result).toBe(true);
     });
 
-    it("should return false if user does not own the table", async () => {
+    it('should return false if user does not own the table', async () => {
       // Arrange
-      const tableId = "table-456";
-      const userId = "other-user";
+      const tableId = 'table-456';
+      const userId = 'other-user';
 
       const mockTable = {
-        id: "table-456",
+        id: 'table-456',
         project: {
-          id: "project-111",
-          userId: "user-789",
+          id: 'project-111',
+          userId: 'user-789',
         },
       };
 
@@ -462,10 +462,10 @@ describe("RowRepository", () => {
       expect(result).toBe(false);
     });
 
-    it("should return false if table not found", async () => {
+    it('should return false if table not found', async () => {
       // Arrange
-      const tableId = "non-existent-table";
-      const userId = "user-789";
+      const tableId = 'non-existent-table';
+      const userId = 'user-789';
 
       prisma.cmsTable.findUnique.mockResolvedValue(null);
 

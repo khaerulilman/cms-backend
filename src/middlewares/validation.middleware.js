@@ -1,4 +1,4 @@
-import { HTTP_STATUS, ERROR_MESSAGES } from "../constants/http.js";
+import { HTTP_STATUS, ERROR_MESSAGES } from '../constants/http.js';
 
 /**
  * Validation middleware factory for request body, params, or both
@@ -6,7 +6,7 @@ import { HTTP_STATUS, ERROR_MESSAGES } from "../constants/http.js";
  * @param {string|string[]} sources - Source(s) to validate: 'body', 'params', 'query', or array like ['params', 'body']
  * @returns {Function} Express middleware
  */
-export const validateRequest = (schema, sources = "body") => {
+export const validateRequest = (schema, sources = 'body') => {
   return (req, res, next) => {
     // Normalize sources to array
     const sourcesArray = Array.isArray(sources) ? sources : [sources];

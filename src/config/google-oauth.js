@@ -1,10 +1,10 @@
-import passport from "passport";
-import { Strategy as GoogleStrategy } from "passport-google-oauth20";
-import { v4 as uuidv4 } from "uuid";
+import passport from 'passport';
+import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
+import { v4 as uuidv4 } from 'uuid';
 
-import AuthRepository from "../modules/auth/auth.repository.js";
+import AuthRepository from '../modules/auth/auth.repository.js';
 
-import { config } from "./env.js";
+import { config } from './env.js';
 
 const authRepository = new AuthRepository();
 

@@ -1,9 +1,9 @@
-import { describe, it, expect, beforeEach, vi } from "vitest";
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 
-import prisma from "../../../prisma/client.js";
-import { ColumnRepository } from "../column.repository.js";
+import prisma from '../../../prisma/client.js';
+import { ColumnRepository } from '../column.repository.js';
 
-vi.mock("../../../prisma/client.js", () => ({
+vi.mock('../../../prisma/client.js', () => ({
   default: {
     cmsColumn: {
       create: vi.fn(),
@@ -18,7 +18,7 @@ vi.mock("../../../prisma/client.js", () => ({
   },
 }));
 
-describe("ColumnRepository", () => {
+describe('ColumnRepository', () => {
   let repository;
 
   beforeEach(() => {
@@ -26,30 +26,30 @@ describe("ColumnRepository", () => {
     vi.clearAllMocks();
   });
 
-  describe("createColumns", () => {
-    it("should create multiple columns at once", async () => {
+  describe('createColumns', () => {
+    it('should create multiple columns at once', async () => {
       // Arrange
       const columnsData = [
-        { id: "col-1", tableId: "table-456", name: "Name" },
-        { id: "col-2", tableId: "table-456", name: "Email" },
+        { id: 'col-1', tableId: 'table-456', name: 'Name' },
+        { id: 'col-2', tableId: 'table-456', name: 'Email' },
       ];
 
       const mockCreatedColumns = [
         {
-          id: "col-1",
-          tableId: "table-456",
-          name: "Name",
-          createdAt: new Date("2026-01-15"),
-          updatedAt: new Date("2026-01-15"),
-          table: { id: "table-456", name: "Test Table" },
+          id: 'col-1',
+          tableId: 'table-456',
+          name: 'Name',
+          createdAt: new Date('2026-01-15'),
+          updatedAt: new Date('2026-01-15'),
+          table: { id: 'table-456', name: 'Test Table' },
         },
         {
-          id: "col-2",
-          tableId: "table-456",
-          name: "Email",
-          createdAt: new Date("2026-01-15"),
-          updatedAt: new Date("2026-01-15"),
-          table: { id: "table-456", name: "Test Table" },
+          id: 'col-2',
+          tableId: 'table-456',
+          name: 'Email',
+          createdAt: new Date('2026-01-15'),
+          updatedAt: new Date('2026-01-15'),
+          table: { id: 'table-456', name: 'Test Table' },
         },
       ];
 
@@ -74,17 +74,17 @@ describe("ColumnRepository", () => {
       expect(result).toEqual(mockCreatedColumns);
     });
 
-    it("should create single column", async () => {
+    it('should create single column', async () => {
       // Arrange
-      const columnsData = [{ id: "col-1", tableId: "table-456", name: "Name" }];
+      const columnsData = [{ id: 'col-1', tableId: 'table-456', name: 'Name' }];
 
       const mockCreatedColumn = {
-        id: "col-1",
-        tableId: "table-456",
-        name: "Name",
-        createdAt: new Date("2026-01-15"),
-        updatedAt: new Date("2026-01-15"),
-        table: { id: "table-456", name: "Test Table" },
+        id: 'col-1',
+        tableId: 'table-456',
+        name: 'Name',
+        createdAt: new Date('2026-01-15'),
+        updatedAt: new Date('2026-01-15'),
+        table: { id: 'table-456', name: 'Test Table' },
       };
 
       prisma.cmsColumn.create.mockResolvedValue(mockCreatedColumn);
@@ -102,18 +102,18 @@ describe("ColumnRepository", () => {
     });
   });
 
-  describe("findColumnById", () => {
-    it("should return column when found by id", async () => {
+  describe('findColumnById', () => {
+    it('should return column when found by id', async () => {
       // Arrange
-      const columnId = "col-123";
+      const columnId = 'col-123';
       const mockColumn = {
-        id: "col-123",
-        tableId: "table-456",
-        name: "Test Column",
-        createdAt: new Date("2026-01-15"),
-        updatedAt: new Date("2026-01-15"),
-        table: { id: "table-456", name: "Test Table" },
-        cells: [{ id: "cell-1", value: "Cell Value" }],
+        id: 'col-123',
+        tableId: 'table-456',
+        name: 'Test Column',
+        createdAt: new Date('2026-01-15'),
+        updatedAt: new Date('2026-01-15'),
+        table: { id: 'table-456', name: 'Test Table' },
+        cells: [{ id: 'cell-1', value: 'Cell Value' }],
       };
 
       prisma.cmsColumn.findUnique.mockResolvedValue(mockColumn);
@@ -132,9 +132,9 @@ describe("ColumnRepository", () => {
       expect(result).toEqual(mockColumn);
     });
 
-    it("should return null if column not found", async () => {
+    it('should return null if column not found', async () => {
       // Arrange
-      const columnId = "non-existent-col";
+      const columnId = 'non-existent-col';
       prisma.cmsColumn.findUnique.mockResolvedValue(null);
 
       // Act
@@ -152,28 +152,28 @@ describe("ColumnRepository", () => {
     });
   });
 
-  describe("findColumnsByTableId", () => {
-    it("should return columns for a given table id with limited cells preview", async () => {
+  describe('findColumnsByTableId', () => {
+    it('should return columns for a given table id with limited cells preview', async () => {
       // Arrange
-      const tableId = "table-456";
+      const tableId = 'table-456';
       const mockColumns = [
         {
-          id: "col-1",
-          tableId: "table-456",
-          name: "Name",
-          createdAt: new Date("2026-01-15"),
-          updatedAt: new Date("2026-01-15"),
-          table: { id: "table-456", name: "Test Table" },
-          cells: [{ id: "cell-1", value: "John" }],
+          id: 'col-1',
+          tableId: 'table-456',
+          name: 'Name',
+          createdAt: new Date('2026-01-15'),
+          updatedAt: new Date('2026-01-15'),
+          table: { id: 'table-456', name: 'Test Table' },
+          cells: [{ id: 'cell-1', value: 'John' }],
         },
         {
-          id: "col-2",
-          tableId: "table-456",
-          name: "Email",
-          createdAt: new Date("2026-01-15"),
-          updatedAt: new Date("2026-01-15"),
-          table: { id: "table-456", name: "Test Table" },
-          cells: [{ id: "cell-2", value: "john@example.com" }],
+          id: 'col-2',
+          tableId: 'table-456',
+          name: 'Email',
+          createdAt: new Date('2026-01-15'),
+          updatedAt: new Date('2026-01-15'),
+          table: { id: 'table-456', name: 'Test Table' },
+          cells: [{ id: 'cell-2', value: 'john@example.com' }],
         },
       ];
 
@@ -195,9 +195,9 @@ describe("ColumnRepository", () => {
       expect(result).toEqual(mockColumns);
     });
 
-    it("should return empty array if no columns found", async () => {
+    it('should return empty array if no columns found', async () => {
       // Arrange
-      const tableId = "table-empty";
+      const tableId = 'table-empty';
       prisma.cmsColumn.findMany.mockResolvedValue([]);
 
       // Act
@@ -217,19 +217,19 @@ describe("ColumnRepository", () => {
     });
   });
 
-  describe("updateColumn", () => {
-    it("should update column and return updated data", async () => {
+  describe('updateColumn', () => {
+    it('should update column and return updated data', async () => {
       // Arrange
-      const columnId = "col-123";
-      const updateData = { name: "Updated Name" };
+      const columnId = 'col-123';
+      const updateData = { name: 'Updated Name' };
 
       const mockUpdatedColumn = {
-        id: "col-123",
-        tableId: "table-456",
-        name: "Updated Name",
-        createdAt: new Date("2026-01-15"),
-        updatedAt: new Date("2026-01-20"),
-        table: { id: "table-456", name: "Test Table" },
+        id: 'col-123',
+        tableId: 'table-456',
+        name: 'Updated Name',
+        createdAt: new Date('2026-01-15'),
+        updatedAt: new Date('2026-01-20'),
+        table: { id: 'table-456', name: 'Test Table' },
         cells: [],
       };
 
@@ -251,17 +251,17 @@ describe("ColumnRepository", () => {
     });
   });
 
-  describe("deleteColumn", () => {
-    it("should delete column and return deleted column", async () => {
+  describe('deleteColumn', () => {
+    it('should delete column and return deleted column', async () => {
       // Arrange
-      const columnId = "col-123";
+      const columnId = 'col-123';
 
       const mockDeletedColumn = {
-        id: "col-123",
-        tableId: "table-456",
-        name: "Deleted Column",
-        createdAt: new Date("2026-01-15"),
-        updatedAt: new Date("2026-01-15"),
+        id: 'col-123',
+        tableId: 'table-456',
+        name: 'Deleted Column',
+        createdAt: new Date('2026-01-15'),
+        updatedAt: new Date('2026-01-15'),
       };
 
       prisma.cmsColumn.delete.mockResolvedValue(mockDeletedColumn);
@@ -277,19 +277,19 @@ describe("ColumnRepository", () => {
     });
   });
 
-  describe("checkColumnOwnership", () => {
-    it("should return true if user owns the column", async () => {
+  describe('checkColumnOwnership', () => {
+    it('should return true if user owns the column', async () => {
       // Arrange
-      const columnId = "col-123";
-      const userId = "user-789";
+      const columnId = 'col-123';
+      const userId = 'user-789';
 
       const mockColumn = {
-        id: "col-123",
+        id: 'col-123',
         table: {
-          id: "table-456",
+          id: 'table-456',
           project: {
-            id: "project-111",
-            userId: "user-789",
+            id: 'project-111',
+            userId: 'user-789',
           },
         },
       };
@@ -313,18 +313,18 @@ describe("ColumnRepository", () => {
       expect(result).toBe(true);
     });
 
-    it("should return false if user does not own the column", async () => {
+    it('should return false if user does not own the column', async () => {
       // Arrange
-      const columnId = "col-123";
-      const userId = "other-user";
+      const columnId = 'col-123';
+      const userId = 'other-user';
 
       const mockColumn = {
-        id: "col-123",
+        id: 'col-123',
         table: {
-          id: "table-456",
+          id: 'table-456',
           project: {
-            id: "project-111",
-            userId: "user-789",
+            id: 'project-111',
+            userId: 'user-789',
           },
         },
       };
@@ -348,10 +348,10 @@ describe("ColumnRepository", () => {
       expect(result).toBe(false);
     });
 
-    it("should return false if column not found", async () => {
+    it('should return false if column not found', async () => {
       // Arrange
-      const columnId = "non-existent-col";
-      const userId = "user-789";
+      const columnId = 'non-existent-col';
+      const userId = 'user-789';
 
       prisma.cmsColumn.findUnique.mockResolvedValue(null);
 
@@ -373,17 +373,17 @@ describe("ColumnRepository", () => {
     });
   });
 
-  describe("checkTableOwnership", () => {
-    it("should return true if user owns the table", async () => {
+  describe('checkTableOwnership', () => {
+    it('should return true if user owns the table', async () => {
       // Arrange
-      const tableId = "table-456";
-      const userId = "user-789";
+      const tableId = 'table-456';
+      const userId = 'user-789';
 
       const mockTable = {
-        id: "table-456",
+        id: 'table-456',
         project: {
-          id: "project-111",
-          userId: "user-789",
+          id: 'project-111',
+          userId: 'user-789',
         },
       };
 
@@ -402,16 +402,16 @@ describe("ColumnRepository", () => {
       expect(result).toBe(true);
     });
 
-    it("should return false if user does not own the table", async () => {
+    it('should return false if user does not own the table', async () => {
       // Arrange
-      const tableId = "table-456";
-      const userId = "other-user";
+      const tableId = 'table-456';
+      const userId = 'other-user';
 
       const mockTable = {
-        id: "table-456",
+        id: 'table-456',
         project: {
-          id: "project-111",
-          userId: "user-789",
+          id: 'project-111',
+          userId: 'user-789',
         },
       };
 
@@ -430,10 +430,10 @@ describe("ColumnRepository", () => {
       expect(result).toBe(false);
     });
 
-    it("should return false if table not found", async () => {
+    it('should return false if table not found', async () => {
       // Arrange
-      const tableId = "non-existent-table";
-      const userId = "user-789";
+      const tableId = 'non-existent-table';
+      const userId = 'user-789';
 
       prisma.cmsTable.findUnique.mockResolvedValue(null);
 

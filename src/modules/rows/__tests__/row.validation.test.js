@@ -1,14 +1,14 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect } from 'vitest';
 
-import { ERROR_MESSAGES } from "../../../constants/http.js";
-import { rowValidationSchemas } from "../row.validation.js";
+import { ERROR_MESSAGES } from '../../../constants/http.js';
+import { rowValidationSchemas } from '../row.validation.js';
 
-describe("Row Validation Schemas", () => {
-  describe("createRow schema", () => {
-    describe("valid input", () => {
-      it("should validate with valid tableId", () => {
+describe('Row Validation Schemas', () => {
+  describe('createRow schema', () => {
+    describe('valid input', () => {
+      it('should validate with valid tableId', () => {
         const validData = {
-          tableId: "123e4567-e89b-12d3-a456-426614174000",
+          tableId: '123e4567-e89b-12d3-a456-426614174000',
         };
 
         const { error, value } =
@@ -16,13 +16,13 @@ describe("Row Validation Schemas", () => {
 
         expect(error).toBeUndefined();
         expect(value).toEqual({
-          tableId: "123e4567-e89b-12d3-a456-426614174000",
+          tableId: '123e4567-e89b-12d3-a456-426614174000',
         });
       });
 
-      it("should validate with different valid UUID formats", () => {
+      it('should validate with different valid UUID formats', () => {
         const validData = {
-          tableId: "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+          tableId: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
         };
 
         const { error } = rowValidationSchemas.createRow.validate(validData);
@@ -31,8 +31,8 @@ describe("Row Validation Schemas", () => {
       });
     });
 
-    describe("invalid tableId", () => {
-      it("should fail when tableId is missing", () => {
+    describe('invalid tableId', () => {
+      it('should fail when tableId is missing', () => {
         const invalidData = {};
 
         const { error } = rowValidationSchemas.createRow.validate(invalidData);
@@ -41,9 +41,9 @@ describe("Row Validation Schemas", () => {
         expect(error.details[0].message).toBe(ERROR_MESSAGES.TABLE_ID_REQUIRED);
       });
 
-      it("should fail when tableId is empty string", () => {
+      it('should fail when tableId is empty string', () => {
         const invalidData = {
-          tableId: "",
+          tableId: '',
         };
 
         const { error } = rowValidationSchemas.createRow.validate(invalidData);
@@ -52,9 +52,9 @@ describe("Row Validation Schemas", () => {
         expect(error.details[0].message).toBe(ERROR_MESSAGES.TABLE_ID_REQUIRED);
       });
 
-      it("should fail when tableId is not a valid UUID", () => {
+      it('should fail when tableId is not a valid UUID', () => {
         const invalidData = {
-          tableId: "not-a-uuid",
+          tableId: 'not-a-uuid',
         };
 
         const { error } = rowValidationSchemas.createRow.validate(invalidData);
@@ -63,9 +63,9 @@ describe("Row Validation Schemas", () => {
         expect(error.details[0].message).toBe(ERROR_MESSAGES.INVALID_TABLE_ID);
       });
 
-      it("should fail when tableId is invalid UUID format (missing parts)", () => {
+      it('should fail when tableId is invalid UUID format (missing parts)', () => {
         const invalidData = {
-          tableId: "123e4567-e89b-12d3-a456",
+          tableId: '123e4567-e89b-12d3-a456',
         };
 
         const { error } = rowValidationSchemas.createRow.validate(invalidData);
@@ -74,7 +74,7 @@ describe("Row Validation Schemas", () => {
         expect(error.details[0].message).toBe(ERROR_MESSAGES.INVALID_TABLE_ID);
       });
 
-      it("should fail when tableId is numeric value", () => {
+      it('should fail when tableId is numeric value', () => {
         const invalidData = {
           tableId: 123456,
         };
@@ -86,11 +86,11 @@ describe("Row Validation Schemas", () => {
     });
   });
 
-  describe("getRowsByTable schema", () => {
-    describe("valid input", () => {
-      it("should validate with valid tableId", () => {
+  describe('getRowsByTable schema', () => {
+    describe('valid input', () => {
+      it('should validate with valid tableId', () => {
         const validData = {
-          tableId: "123e4567-e89b-12d3-a456-426614174000",
+          tableId: '123e4567-e89b-12d3-a456-426614174000',
         };
 
         const { error, value } =
@@ -98,13 +98,13 @@ describe("Row Validation Schemas", () => {
 
         expect(error).toBeUndefined();
         expect(value).toEqual({
-          tableId: "123e4567-e89b-12d3-a456-426614174000",
+          tableId: '123e4567-e89b-12d3-a456-426614174000',
         });
       });
     });
 
-    describe("invalid tableId", () => {
-      it("should fail when tableId is missing", () => {
+    describe('invalid tableId', () => {
+      it('should fail when tableId is missing', () => {
         const invalidData = {};
 
         const { error } =
@@ -114,9 +114,9 @@ describe("Row Validation Schemas", () => {
         expect(error.details[0].message).toBe(ERROR_MESSAGES.TABLE_ID_REQUIRED);
       });
 
-      it("should fail when tableId is not a valid UUID", () => {
+      it('should fail when tableId is not a valid UUID', () => {
         const invalidData = {
-          tableId: "invalid-uuid",
+          tableId: 'invalid-uuid',
         };
 
         const { error } =
@@ -128,11 +128,11 @@ describe("Row Validation Schemas", () => {
     });
   });
 
-  describe("getRowById schema", () => {
-    describe("valid input", () => {
-      it("should validate with valid rowId", () => {
+  describe('getRowById schema', () => {
+    describe('valid input', () => {
+      it('should validate with valid rowId', () => {
         const validData = {
-          rowId: "123e4567-e89b-12d3-a456-426614174000",
+          rowId: '123e4567-e89b-12d3-a456-426614174000',
         };
 
         const { error, value } =
@@ -140,13 +140,13 @@ describe("Row Validation Schemas", () => {
 
         expect(error).toBeUndefined();
         expect(value).toEqual({
-          rowId: "123e4567-e89b-12d3-a456-426614174000",
+          rowId: '123e4567-e89b-12d3-a456-426614174000',
         });
       });
 
-      it("should validate with different valid UUID formats", () => {
+      it('should validate with different valid UUID formats', () => {
         const validData = {
-          rowId: "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+          rowId: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
         };
 
         const { error } = rowValidationSchemas.getRowById.validate(validData);
@@ -155,8 +155,8 @@ describe("Row Validation Schemas", () => {
       });
     });
 
-    describe("invalid rowId", () => {
-      it("should fail when rowId is missing", () => {
+    describe('invalid rowId', () => {
+      it('should fail when rowId is missing', () => {
         const invalidData = {};
 
         const { error } = rowValidationSchemas.getRowById.validate(invalidData);
@@ -165,9 +165,9 @@ describe("Row Validation Schemas", () => {
         expect(error.details[0].message).toBe(ERROR_MESSAGES.ROW_ID_REQUIRED);
       });
 
-      it("should fail when rowId is empty string", () => {
+      it('should fail when rowId is empty string', () => {
         const invalidData = {
-          rowId: "",
+          rowId: '',
         };
 
         const { error } = rowValidationSchemas.getRowById.validate(invalidData);
@@ -176,9 +176,9 @@ describe("Row Validation Schemas", () => {
         expect(error.details[0].message).toBe(ERROR_MESSAGES.ROW_ID_REQUIRED);
       });
 
-      it("should fail when rowId is not a valid UUID", () => {
+      it('should fail when rowId is not a valid UUID', () => {
         const invalidData = {
-          rowId: "not-a-uuid",
+          rowId: 'not-a-uuid',
         };
 
         const { error } = rowValidationSchemas.getRowById.validate(invalidData);
@@ -187,9 +187,9 @@ describe("Row Validation Schemas", () => {
         expect(error.details[0].message).toBe(ERROR_MESSAGES.INVALID_ROW_ID);
       });
 
-      it("should fail when rowId is invalid UUID format (missing parts)", () => {
+      it('should fail when rowId is invalid UUID format (missing parts)', () => {
         const invalidData = {
-          rowId: "123e4567-e89b-12d3-a456",
+          rowId: '123e4567-e89b-12d3-a456',
         };
 
         const { error } = rowValidationSchemas.getRowById.validate(invalidData);
@@ -198,7 +198,7 @@ describe("Row Validation Schemas", () => {
         expect(error.details[0].message).toBe(ERROR_MESSAGES.INVALID_ROW_ID);
       });
 
-      it("should fail when rowId is numeric value", () => {
+      it('should fail when rowId is numeric value', () => {
         const invalidData = {
           rowId: 123456,
         };
@@ -210,11 +210,11 @@ describe("Row Validation Schemas", () => {
     });
   });
 
-  describe("updateRow schema", () => {
-    describe("valid input", () => {
-      it("should validate with valid rowId", () => {
+  describe('updateRow schema', () => {
+    describe('valid input', () => {
+      it('should validate with valid rowId', () => {
         const validData = {
-          rowId: "123e4567-e89b-12d3-a456-426614174000",
+          rowId: '123e4567-e89b-12d3-a456-426614174000',
         };
 
         const { error, value } =
@@ -222,13 +222,13 @@ describe("Row Validation Schemas", () => {
 
         expect(error).toBeUndefined();
         expect(value).toEqual({
-          rowId: "123e4567-e89b-12d3-a456-426614174000",
+          rowId: '123e4567-e89b-12d3-a456-426614174000',
         });
       });
     });
 
-    describe("invalid rowId", () => {
-      it("should fail when rowId is missing", () => {
+    describe('invalid rowId', () => {
+      it('should fail when rowId is missing', () => {
         const invalidData = {};
 
         const { error } = rowValidationSchemas.updateRow.validate(invalidData);
@@ -237,9 +237,9 @@ describe("Row Validation Schemas", () => {
         expect(error.details[0].message).toBe(ERROR_MESSAGES.ROW_ID_REQUIRED);
       });
 
-      it("should fail when rowId is empty string", () => {
+      it('should fail when rowId is empty string', () => {
         const invalidData = {
-          rowId: "",
+          rowId: '',
         };
 
         const { error } = rowValidationSchemas.updateRow.validate(invalidData);
@@ -248,9 +248,9 @@ describe("Row Validation Schemas", () => {
         expect(error.details[0].message).toBe(ERROR_MESSAGES.ROW_ID_REQUIRED);
       });
 
-      it("should fail when rowId is not a valid UUID", () => {
+      it('should fail when rowId is not a valid UUID', () => {
         const invalidData = {
-          rowId: "invalid-uuid",
+          rowId: 'invalid-uuid',
         };
 
         const { error } = rowValidationSchemas.updateRow.validate(invalidData);
@@ -261,11 +261,11 @@ describe("Row Validation Schemas", () => {
     });
   });
 
-  describe("deleteRow schema", () => {
-    describe("valid input", () => {
-      it("should validate with valid rowId", () => {
+  describe('deleteRow schema', () => {
+    describe('valid input', () => {
+      it('should validate with valid rowId', () => {
         const validData = {
-          rowId: "123e4567-e89b-12d3-a456-426614174000",
+          rowId: '123e4567-e89b-12d3-a456-426614174000',
         };
 
         const { error, value } =
@@ -273,13 +273,13 @@ describe("Row Validation Schemas", () => {
 
         expect(error).toBeUndefined();
         expect(value).toEqual({
-          rowId: "123e4567-e89b-12d3-a456-426614174000",
+          rowId: '123e4567-e89b-12d3-a456-426614174000',
         });
       });
     });
 
-    describe("invalid rowId", () => {
-      it("should fail when rowId is missing", () => {
+    describe('invalid rowId', () => {
+      it('should fail when rowId is missing', () => {
         const invalidData = {};
 
         const { error } = rowValidationSchemas.deleteRow.validate(invalidData);
@@ -288,9 +288,9 @@ describe("Row Validation Schemas", () => {
         expect(error.details[0].message).toBe(ERROR_MESSAGES.ROW_ID_REQUIRED);
       });
 
-      it("should fail when rowId is empty string", () => {
+      it('should fail when rowId is empty string', () => {
         const invalidData = {
-          rowId: "",
+          rowId: '',
         };
 
         const { error } = rowValidationSchemas.deleteRow.validate(invalidData);
@@ -299,9 +299,9 @@ describe("Row Validation Schemas", () => {
         expect(error.details[0].message).toBe(ERROR_MESSAGES.ROW_ID_REQUIRED);
       });
 
-      it("should fail when rowId is not a valid UUID", () => {
+      it('should fail when rowId is not a valid UUID', () => {
         const invalidData = {
-          rowId: "not-valid-uuid",
+          rowId: 'not-valid-uuid',
         };
 
         const { error } = rowValidationSchemas.deleteRow.validate(invalidData);
@@ -310,9 +310,9 @@ describe("Row Validation Schemas", () => {
         expect(error.details[0].message).toBe(ERROR_MESSAGES.INVALID_ROW_ID);
       });
 
-      it("should fail when rowId is invalid UUID format (missing parts)", () => {
+      it('should fail when rowId is invalid UUID format (missing parts)', () => {
         const invalidData = {
-          rowId: "123e4567-e89b-12d3",
+          rowId: '123e4567-e89b-12d3',
         };
 
         const { error } = rowValidationSchemas.deleteRow.validate(invalidData);
@@ -321,7 +321,7 @@ describe("Row Validation Schemas", () => {
         expect(error.details[0].message).toBe(ERROR_MESSAGES.INVALID_ROW_ID);
       });
 
-      it("should fail when rowId is numeric value", () => {
+      it('should fail when rowId is numeric value', () => {
         const invalidData = {
           rowId: 12345,
         };

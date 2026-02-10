@@ -1,20 +1,20 @@
-import { describe, it, expect, beforeEach, vi } from "vitest";
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 
-import { NotFoundError, ValidationError } from "../../../utils/errors.js";
+import { NotFoundError, ValidationError } from '../../../utils/errors.js';
 
 // Mock dependencies
-vi.mock("../../../utils/cloudinary.js", () => ({
+vi.mock('../../../utils/cloudinary.js', () => ({
   default: {
     deleteImage: vi.fn(),
     uploadImage: vi.fn(),
   },
 }));
 
-vi.mock("../../../utils/imageCleanupService.js", () => ({
+vi.mock('../../../utils/imageCleanupService.js', () => ({
   default: class MockImageCleanupService {},
 }));
 
-vi.mock("../cell.repository.js", () => ({
+vi.mock('../cell.repository.js', () => ({
   default: class MockCellRepository {
     checkRowOwnership = vi.fn();
     findCellsByRowId = vi.fn();
@@ -24,11 +24,11 @@ vi.mock("../cell.repository.js", () => ({
 }));
 
 // Import after mocks
-import CloudinaryService from "../../../utils/cloudinary.js";
-import CellRepository from "../cell.repository.js";
-import { CellService } from "../cell.service.js";
+import CloudinaryService from '../../../utils/cloudinary.js';
+import CellRepository from '../cell.repository.js';
+import { CellService } from '../cell.service.js';
 
-describe("CellService", () => {
+describe('CellService', () => {
   let service;
   let mockRepository;
 
@@ -46,22 +46,22 @@ describe("CellService", () => {
     service.repository = mockRepository;
   });
 
-  describe("getCellsByRow", () => {
-    it("should return formatted cells if user owns the row", async () => {
-      const rowId = "row-123";
-      const userId = "user-123";
+  describe('getCellsByRow', () => {
+    it('should return formatted cells if user owns the row', async () => {
+      const rowId = 'row-123';
+      const userId = 'user-123';
 
       const mockCells = [
         {
-          id: "cell-1",
+          id: 'cell-1',
           rowId,
-          columnId: "col-1",
-          value: "Test Value",
+          columnId: 'col-1',
+          value: 'Test Value',
           imageUrl: null,
           cloudinaryPublicId: null,
-          createdAt: new Date("2025-01-15"),
-          updatedAt: new Date("2025-01-15"),
-          column: { name: "Column 1" },
+          createdAt: new Date('2025-01-15'),
+          updatedAt: new Date('2025-01-15'),
+          column: { name: 'Column 1' },
         },
       ];
 
@@ -77,22 +77,22 @@ describe("CellService", () => {
       expect(mockRepository.findCellsByRowId).toHaveBeenCalledWith(rowId);
       expect(result).toEqual([
         {
-          id: "cell-1",
+          id: 'cell-1',
           rowId,
-          columnId: "col-1",
-          columnName: "Column 1",
-          value: "Test Value",
+          columnId: 'col-1',
+          columnName: 'Column 1',
+          value: 'Test Value',
           imageUrl: null,
           cloudinaryPublicId: null,
-          createdAt: new Date("2025-01-15"),
-          updatedAt: new Date("2025-01-15"),
+          createdAt: new Date('2025-01-15'),
+          updatedAt: new Date('2025-01-15'),
         },
       ]);
     });
 
-    it("should throw NotFoundError if user does not own the row", async () => {
-      const rowId = "row-123";
-      const userId = "user-123";
+    it('should throw NotFoundError if user does not own the row', async () => {
+      const rowId = 'row-123';
+      const userId = 'user-123';
 
       mockRepository.checkRowOwnership.mockResolvedValue(false);
 
@@ -108,30 +108,30 @@ describe("CellService", () => {
     });
   });
 
-  describe("upsertCell", () => {
-    const rowId = "row-123";
-    const columnId = "col-1";
-    const userId = "user-123";
+  describe('upsertCell', () => {
+    const rowId = 'row-123';
+    const columnId = 'col-1';
+    const userId = 'user-123';
 
-    it("should upsert cell with image upload", async () => {
-      const imageFile = { path: "/tmp/upload.jpg" };
+    it('should upsert cell with image upload', async () => {
+      const imageFile = { path: '/tmp/upload.jpg' };
       const existingCell = null;
 
       const mockUploadResult = {
-        imageUrl: "https://cloudinary.com/image.jpg",
-        publicId: "public_id_123",
+        imageUrl: 'https://cloudinary.com/image.jpg',
+        publicId: 'public_id_123',
       };
 
       const mockUpsertedCell = {
-        id: "cell-1",
+        id: 'cell-1',
         rowId,
         columnId,
         value: null,
-        imageUrl: "https://cloudinary.com/image.jpg",
-        cloudinaryPublicId: "public_id_123",
-        createdAt: new Date("2025-01-15"),
-        updatedAt: new Date("2025-01-15"),
-        column: { name: "Column 1" },
+        imageUrl: 'https://cloudinary.com/image.jpg',
+        cloudinaryPublicId: 'public_id_123',
+        createdAt: new Date('2025-01-15'),
+        updatedAt: new Date('2025-01-15'),
+        column: { name: 'Column 1' },
       };
 
       mockRepository.checkRowOwnership.mockResolvedValue(true);
@@ -156,45 +156,45 @@ describe("CellService", () => {
         columnId,
       );
       expect(CloudinaryService.uploadImage).toHaveBeenCalledWith(
-        "/tmp/upload.jpg",
+        '/tmp/upload.jpg',
       );
       expect(mockRepository.upsertCell).toHaveBeenCalledWith(
         rowId,
         columnId,
         null,
-        "https://cloudinary.com/image.jpg",
-        "public_id_123",
+        'https://cloudinary.com/image.jpg',
+        'public_id_123',
       );
       expect(result).toEqual({
-        id: "cell-1",
+        id: 'cell-1',
         rowId,
         columnId,
-        columnName: "Column 1",
+        columnName: 'Column 1',
         value: null,
-        imageUrl: "https://cloudinary.com/image.jpg",
-        cloudinaryPublicId: "public_id_123",
-        createdAt: new Date("2025-01-15"),
-        updatedAt: new Date("2025-01-15"),
+        imageUrl: 'https://cloudinary.com/image.jpg',
+        cloudinaryPublicId: 'public_id_123',
+        createdAt: new Date('2025-01-15'),
+        updatedAt: new Date('2025-01-15'),
       });
     });
 
-    it("should upsert cell with text value and delete existing image", async () => {
-      const value = "New Text Value";
+    it('should upsert cell with text value and delete existing image', async () => {
+      const value = 'New Text Value';
       const imageFile = null;
       const existingCell = {
-        cloudinaryPublicId: "old_public_id",
+        cloudinaryPublicId: 'old_public_id',
       };
 
       const mockUpsertedCell = {
-        id: "cell-1",
+        id: 'cell-1',
         rowId,
         columnId,
-        value: "New Text Value",
+        value: 'New Text Value',
         imageUrl: null,
         cloudinaryPublicId: null,
-        createdAt: new Date("2025-01-15"),
-        updatedAt: new Date("2025-01-15"),
-        column: { name: "Column 1" },
+        createdAt: new Date('2025-01-15'),
+        updatedAt: new Date('2025-01-15'),
+        column: { name: 'Column 1' },
       };
 
       mockRepository.checkRowOwnership.mockResolvedValue(true);
@@ -211,45 +211,45 @@ describe("CellService", () => {
       );
 
       expect(CloudinaryService.deleteImage).toHaveBeenCalledWith(
-        "old_public_id",
+        'old_public_id',
       );
       expect(mockRepository.upsertCell).toHaveBeenCalledWith(
         rowId,
         columnId,
-        "New Text Value",
+        'New Text Value',
         null,
         null,
       );
       expect(result).toEqual({
-        id: "cell-1",
+        id: 'cell-1',
         rowId,
         columnId,
-        columnName: "Column 1",
-        value: "New Text Value",
+        columnName: 'Column 1',
+        value: 'New Text Value',
         imageUrl: null,
         cloudinaryPublicId: null,
-        createdAt: new Date("2025-01-15"),
-        updatedAt: new Date("2025-01-15"),
+        createdAt: new Date('2025-01-15'),
+        updatedAt: new Date('2025-01-15'),
       });
     });
 
-    it("should upsert cell clearing the cell", async () => {
-      const value = "";
+    it('should upsert cell clearing the cell', async () => {
+      const value = '';
       const imageFile = null;
       const existingCell = {
-        cloudinaryPublicId: "old_public_id",
+        cloudinaryPublicId: 'old_public_id',
       };
 
       const mockUpsertedCell = {
-        id: "cell-1",
+        id: 'cell-1',
         rowId,
         columnId,
         value: null,
         imageUrl: null,
         cloudinaryPublicId: null,
-        createdAt: new Date("2025-01-15"),
-        updatedAt: new Date("2025-01-15"),
-        column: { name: "Column 1" },
+        createdAt: new Date('2025-01-15'),
+        updatedAt: new Date('2025-01-15'),
+        column: { name: 'Column 1' },
       };
 
       mockRepository.checkRowOwnership.mockResolvedValue(true);
@@ -266,7 +266,7 @@ describe("CellService", () => {
       );
 
       expect(CloudinaryService.deleteImage).toHaveBeenCalledWith(
-        "old_public_id",
+        'old_public_id',
       );
       expect(mockRepository.upsertCell).toHaveBeenCalledWith(
         rowId,
@@ -276,23 +276,23 @@ describe("CellService", () => {
         null,
       );
       expect(result).toEqual({
-        id: "cell-1",
+        id: 'cell-1',
         rowId,
         columnId,
-        columnName: "Column 1",
+        columnName: 'Column 1',
         value: null,
         imageUrl: null,
         cloudinaryPublicId: null,
-        createdAt: new Date("2025-01-15"),
-        updatedAt: new Date("2025-01-15"),
+        createdAt: new Date('2025-01-15'),
+        updatedAt: new Date('2025-01-15'),
       });
     });
 
-    it("should throw NotFoundError if user does not own the row", async () => {
+    it('should throw NotFoundError if user does not own the row', async () => {
       mockRepository.checkRowOwnership.mockResolvedValue(false);
 
       await expect(
-        service.upsertCell(rowId, columnId, userId, "value", null),
+        service.upsertCell(rowId, columnId, userId, 'value', null),
       ).rejects.toThrow(NotFoundError);
 
       expect(mockRepository.checkRowOwnership).toHaveBeenCalledWith(
@@ -302,27 +302,27 @@ describe("CellService", () => {
       expect(mockRepository.findCellByRowAndColumn).not.toHaveBeenCalled();
     });
 
-    it("should throw error on image upload failure", async () => {
-      const imageFile = { path: "/tmp/upload.jpg" };
+    it('should throw error on image upload failure', async () => {
+      const imageFile = { path: '/tmp/upload.jpg' };
 
       mockRepository.checkRowOwnership.mockResolvedValue(true);
       mockRepository.findCellByRowAndColumn.mockResolvedValue(null);
       CloudinaryService.uploadImage.mockRejectedValue(
-        new Error("Upload failed"),
+        new Error('Upload failed'),
       );
 
       await expect(
         service.upsertCell(rowId, columnId, userId, null, imageFile),
-      ).rejects.toThrow("Failed to upload image: Upload failed");
+      ).rejects.toThrow('Failed to upload image: Upload failed');
     });
 
-    it("should throw NotFoundError if upsert returns null", async () => {
+    it('should throw NotFoundError if upsert returns null', async () => {
       mockRepository.checkRowOwnership.mockResolvedValue(true);
       mockRepository.findCellByRowAndColumn.mockResolvedValue(null);
       mockRepository.upsertCell.mockResolvedValue(null);
 
       await expect(
-        service.upsertCell(rowId, columnId, userId, "value", null),
+        service.upsertCell(rowId, columnId, userId, 'value', null),
       ).rejects.toThrow(NotFoundError);
     });
   });
