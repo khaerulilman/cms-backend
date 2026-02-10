@@ -1,13 +1,13 @@
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 
 import {
   NotFoundError,
   ValidationError,
   TableNotFoundError,
-} from '../../utils/errors.js';
-import ImageCleanupService from '../../utils/imageCleanupService.js';
+} from "../../utils/errors.js";
+import ImageCleanupService from "../../utils/imageCleanupService.js";
 
-import TableRepository from './table.repository.js';
+import TableRepository from "./table.repository.js";
 
 export class TableService {
   constructor() {
@@ -16,8 +16,8 @@ export class TableService {
 
   async createTable(projectId, userId, data) {
     // Validate input
-    if (!data.name || data.name.trim() === '') {
-      throw new ValidationError('Table name is required');
+    if (!data.name || data.name.trim() === "") {
+      throw new ValidationError("Table name is required");
     }
 
     // Check project ownership
@@ -27,7 +27,7 @@ export class TableService {
     );
 
     if (!isProjectOwner) {
-      throw new TableNotFoundError('Project not found');
+      throw new TableNotFoundError("Project not found");
     }
 
     const table = await this.repository.createTable({
@@ -48,7 +48,7 @@ export class TableService {
     );
 
     if (!isProjectOwner) {
-      throw new TableNotFoundError('Project not found');
+      throw new TableNotFoundError("Project not found");
     }
 
     const tables = await this.repository.findTablesByProjectId(projectId);
@@ -60,12 +60,12 @@ export class TableService {
     const table = await this.repository.findTableById(tableId);
 
     if (!table) {
-      throw new TableNotFoundError('Table not found');
+      throw new TableNotFoundError("Table not found");
     }
 
     // Check ownership
     if (table.project.userId !== userId) {
-      throw new TableNotFoundError('Table not found');
+      throw new TableNotFoundError("Table not found");
     }
 
     return this._formatTableWithFullData(table);
@@ -75,12 +75,12 @@ export class TableService {
     // Check ownership
     const isOwner = await this.repository.checkTableOwnership(tableId, userId);
     if (!isOwner) {
-      throw new TableNotFoundError('Table not found');
+      throw new TableNotFoundError("Table not found");
     }
 
     // Validate input
-    if (data.name && data.name.trim() === '') {
-      throw new ValidationError('Table name cannot be empty');
+    if (data.name && data.name.trim() === "") {
+      throw new ValidationError("Table name cannot be empty");
     }
 
     const updateData = {};
@@ -95,7 +95,7 @@ export class TableService {
     // Check ownership
     const isOwner = await this.repository.checkTableOwnership(tableId, userId);
     if (!isOwner) {
-      throw new TableNotFoundError('Table not found');
+      throw new TableNotFoundError("Table not found");
     }
 
     // Cleanup images from Cloudinary before deleting table
@@ -151,12 +151,12 @@ export class TableService {
     const table = await this.repository.findTableById(tableId);
 
     if (!table) {
-      throw new TableNotFoundError('Table not found');
+      throw new TableNotFoundError("Table not found");
     }
 
     // Check ownership
     if (table.project.userId !== userId) {
-      throw new TableNotFoundError('Table not found');
+      throw new TableNotFoundError("Table not found");
     }
 
     // Pass empty Set for tracking visited tables (prevent infinite loops)
@@ -166,7 +166,7 @@ export class TableService {
   _isValidUUID(value) {
     const uuidRegex =
       /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-    return typeof value === 'string' && uuidRegex.test(value);
+    return typeof value === "string" && uuidRegex.test(value);
   }
 
   async _resolveTableReference(value, userId, visitedTableIds = new Set()) {
@@ -210,7 +210,7 @@ export class TableService {
 
   _formatTableSimplified(table) {
     const normalizeKey = (name) =>
-      name.trim().toLowerCase().replace(/\s+/g, '_'); // spasi jadi underscore
+      name.trim().toLowerCase().replace(/\s+/g, "_"); // spasi jadi underscore
 
     const cellsByRow = table.rows.map((row) => {
       const rowData = {};
@@ -219,7 +219,7 @@ export class TableService {
         const column = table.columns.find((col) => col.id === cell.columnId);
         if (column) {
           const key = normalizeKey(column.name);
-          rowData[key] = cell.value;
+          rowData[key] = cell.imageUrl || cell.value;
         }
       });
 
@@ -238,7 +238,7 @@ export class TableService {
     visitedTableIds = new Set(),
   ) {
     const normalizeKey = (name) =>
-      name.trim().toLowerCase().replace(/\s+/g, '_'); // spasi jadi underscore
+      name.trim().toLowerCase().replace(/\s+/g, "_"); // spasi jadi underscore
 
     const cellsByRow = await Promise.all(
       table.rows.map(async (row) => {
@@ -251,9 +251,10 @@ export class TableService {
             );
             if (column) {
               const key = normalizeKey(column.name);
+              const cellValue = cell.imageUrl || cell.value;
               // Resolve table references recursively with visited tracking
               rowData[key] = await this._resolveTableReference(
-                cell.value,
+                cellValue,
                 userId,
                 visitedTableIds,
               );
