@@ -35,6 +35,19 @@ const getCookieOptions = (maxAge) => ({
   path: "/",
 });
 
+// clearCookie must use the SAME options (secure, sameSite, path) as setCookie
+// otherwise the browser will NOT delete the cookie
+const getClearCookieOptions = () => ({
+  httpOnly: true,
+  secure: isCrossSite || config.NODE_ENV === "production",
+  sameSite: isCrossSite
+    ? "none"
+    : config.NODE_ENV === "production"
+      ? "strict"
+      : "lax",
+  path: "/",
+});
+
 export class AuthController {
   constructor() {
     this.service = new AuthService();
@@ -210,9 +223,9 @@ export class AuthController {
         await this.service.logout(refreshToken);
       }
 
-      // Clear cookies
-      res.clearCookie("accessToken", { path: "/" });
-      res.clearCookie("refreshToken", { path: "/" });
+      // Clear cookies (must match secure/sameSite/path used when setting) ss
+      res.clearCookie("accessToken", getClearCookieOptions());
+      res.clearCookie("refreshToken", getClearCookieOptions());
 
       return res.status(HTTP_STATUS.OK).json({
         success: true,
@@ -245,9 +258,9 @@ export class AuthController {
 
       await this.service.logoutAllDevices(userId);
 
-      // Clear cookies
-      res.clearCookie("accessToken", { path: "/" });
-      res.clearCookie("refreshToken", { path: "/" });
+      // Clear cookies (must match secure/sameSite/path used when setting)
+      res.clearCookie("accessToken", getClearCookieOptions());
+      res.clearCookie("refreshToken", getClearCookieOptions());
 
       return res.status(HTTP_STATUS.OK).json({
         success: true,
