@@ -1,19 +1,20 @@
-import { Router } from 'express';
+import { Router } from "express";
+import cors from "cors";
 
-import { apiKeyMiddleware } from './middlewares/apiKey.middleware.js';
-import apiKeyRoutes from './modules/apikey/apikey.routes.js';
-import authRoutes from './modules/auth/auth.routes.js';
-import cellRoutes from './modules/cells/cell.routes.js';
-import columnRoutes from './modules/columns/column.routes.js';
-import projectRoutes from './modules/project/project.routes.js';
-import rowRoutes from './modules/rows/row.routes.js';
-import TableController from './modules/table/table.controller.js';
-import tableRoutes from './modules/table/table.routes.js';
+import { apiKeyMiddleware } from "./middlewares/apiKey.middleware.js";
+import apiKeyRoutes from "./modules/apikey/apikey.routes.js";
+import authRoutes from "./modules/auth/auth.routes.js";
+import cellRoutes from "./modules/cells/cell.routes.js";
+import columnRoutes from "./modules/columns/column.routes.js";
+import projectRoutes from "./modules/project/project.routes.js";
+import rowRoutes from "./modules/rows/row.routes.js";
+import TableController from "./modules/table/table.controller.js";
+import tableRoutes from "./modules/table/table.routes.js";
 
 const router = Router();
 const tableController = new TableController();
 
-const v1 = '/api/v1';
+const v1 = "/api/v1";
 
 // Auth routes
 router.use(`${v1}/auth`, authRoutes);
@@ -44,9 +45,10 @@ router.get(
   (req, res, next) => tableController.getTableById(req, res, next),
 );
 
-// Get simplified table by ID with API Key
+// Get simplified table by ID with API Key (allows all origins for public implementation)
 router.get(
   `${v1}/project/:projectId/table/:tableId/simplify`,
+  cors({ origin: "*", credentials: false }),
   apiKeyMiddleware,
   (req, res, next) => tableController.getTableSimplified(req, res, next),
 );
