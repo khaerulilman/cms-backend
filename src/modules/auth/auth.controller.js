@@ -138,7 +138,7 @@ export class AuthController {
         this.getClientMetadata(req),
       );
 
-      // Set HTTP-only cookies
+      // Set HTTP-only cookies (works when frontend & backend share same domain)
       res.cookie("accessToken", accessToken, getCookieOptions(15 * 60 * 1000)); // 15 minutes
       res.cookie(
         "refreshToken",
@@ -146,7 +146,11 @@ export class AuthController {
         getCookieOptions(7 * 24 * 60 * 60 * 1000),
       ); // 7 days
 
-      // Encode user data sebagai base64
+      // Generate a short-lived setup token (60s) for cross-origin session establishment
+      // Frontend can exchange this via proxy to set cookies on its own domain
+      const setupToken = JwtUtil.generateSetupToken(user.id, user.email);
+
+      // Encode user data as base64
       const userData = Buffer.from(
         JSON.stringify({
           id: user.id,
@@ -156,10 +160,11 @@ export class AuthController {
         }),
       ).toString("base64");
 
-      // Redirect dengan user data (tanpa token di URL)
+      // Redirect with user data and setup token
       const frontendUrl = new URL(`${config.FRONTEND_URL}/login`);
       frontendUrl.searchParams.append("user", userData);
       frontendUrl.searchParams.append("oauth", "success");
+      frontendUrl.searchParams.append("setup_token", setupToken);
 
       return res.redirect(frontendUrl.toString());
     } catch (error) {
@@ -267,6 +272,58 @@ export class AuthController {
         success: true,
         message: SUCCESS_MESSAGES.SESSIONS_RETRIEVED,
         data: { sessions },
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  // Exchange a short-lived setup token for HTTP-only session cookies
+  // Used after OAuth when frontend and backend are on different domains
+  // Frontend calls this via Next.js proxy so cookies are set on frontend domain
+  async establishSession(req, res, next) {
+    try {
+      const { setupToken } = req.body;
+
+      if (!setupToken) {
+        return res.status(HTTP_STATUS.BAD_REQUEST).json({
+          success: false,
+          message: "Setup token is required",
+        });
+      }
+
+      // Verify the setup token
+      const decoded = JwtUtil.verifyToken(setupToken);
+
+      if (!decoded || decoded.type !== "setup") {
+        return res.status(HTTP_STATUS.UNAUTHORIZED).json({
+          success: false,
+          message: "Invalid or expired setup token",
+        });
+      }
+
+      // Generate real session tokens
+      const accessToken = JwtUtil.generateAccessToken(decoded.id, decoded.email);
+      const refreshToken = JwtUtil.generateRefreshToken(decoded.id, decoded.email);
+
+      // Store refresh token in database
+      await this.service.storeRefreshToken(
+        decoded.id,
+        refreshToken,
+        this.getClientMetadata(req),
+      );
+
+      // Set HTTP-only cookies (via proxy, these will be on frontend domain)
+      res.cookie("accessToken", accessToken, getCookieOptions(15 * 60 * 1000));
+      res.cookie(
+        "refreshToken",
+        refreshToken,
+        getCookieOptions(7 * 24 * 60 * 60 * 1000),
+      );
+
+      return res.status(HTTP_STATUS.OK).json({
+        success: true,
+        message: "Session established successfully",
       });
     } catch (error) {
       next(error);

@@ -31,6 +31,11 @@ router.post("/refresh-token", sanitizeInput, (req, res, next) =>
 // Logout route
 router.post("/logout", (req, res, next) => controller.logout(req, res, next));
 
+// Establish session via proxy (exchanges setup token for cookies)
+router.post("/establish-session", sanitizeInput, (req, res, next) =>
+  controller.establishSession(req, res, next),
+);
+
 // Google OAuth routes
 router.get(
   "/google",
