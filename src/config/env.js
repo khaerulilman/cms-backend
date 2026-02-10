@@ -1,4 +1,4 @@
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
 
 dotenv.config();
 
@@ -11,13 +11,13 @@ export const config = {
     const origins = new Set();
     if (process.env.FRONTEND_URL) origins.add(process.env.FRONTEND_URL.trim());
     if (process.env.ALLOWED_ORIGINS) {
-      process.env.ALLOWED_ORIGINS.split(',').forEach((o) =>
+      process.env.ALLOWED_ORIGINS.split(",").forEach((o) =>
         origins.add(o.trim()),
       );
     }
     return [...origins];
   })(),
-  NODE_ENV: process.env.NODE_ENV || 'development',
+  NODE_ENV: process.env.NODE_ENV || "development",
   PORT: process.env.PORT || 4000,
   GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
   GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
@@ -28,8 +28,11 @@ export const config = {
   COOKIE_CROSS_SITE: process.env.COOKIE_CROSS_SITE,
 };
 
+// Debug: log CORS origins on startup
+console.log("ALLOWED_ORIGINS:", config.ALLOWED_ORIGINS);
+
 // Validate required env variables
-const requiredEnvVars = ['DATABASE_URL', 'JWT_SECRET', 'FRONTEND_URL'];
+const requiredEnvVars = ["DATABASE_URL", "JWT_SECRET", "FRONTEND_URL"];
 for (const envVar of requiredEnvVars) {
   if (!process.env[envVar]) {
     throw new Error(`Missing required environment variable: ${envVar}`);
