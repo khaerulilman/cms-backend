@@ -1,28 +1,38 @@
 import app from "./app.js";
 import { config } from "./config/env.js";
+import logger from "./utils/logger.js";
 
 const PORT = config.PORT;
 
 const server = app.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
-  console.log(`Environment: ${config.NODE_ENV}`);
+  logger.info({ port: PORT, env: config.NODE_ENV }, "Server started");
 });
 
 // Graceful shutdown
 process.on("SIGTERM", () => {
-  console.log("SIGTERM received, shutting down gracefully");
+  logger.info("SIGTERM received, shutting down gracefully");
   server.close(() => {
-    console.log("Server closed");
+    logger.info("Server closed");
     process.exit(0);
   });
 });
 
 process.on("SIGINT", () => {
-  console.log("SIGINT received, shutting down gracefully");
+  logger.info("SIGINT received, shutting down gracefully");
   server.close(() => {
-    console.log("Server closed");
+    logger.info("Server closed");
     process.exit(0);
   });
+});
+
+process.on("unhandledRejection", (err) => {
+  logger.fatal(err, "Unhandled promise rejection");
+  server.close(() => process.exit(1));
+});
+
+process.on("uncaughtException", (err) => {
+  logger.fatal(err, "Uncaught exception");
+  process.exit(1);
 });
 
 export default server;

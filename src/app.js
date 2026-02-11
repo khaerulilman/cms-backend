@@ -6,7 +6,9 @@ import session from "express-session";
 import { config } from "./config/env.js";
 import passport from "./config/google-oauth.js";
 import errorMiddleware from "./middlewares/error.middleware.js";
+import requestLogger from "./middlewares/requestLogger.middleware.js";
 import routes from "./routes.js";
+import logger from "./utils/logger.js";
 
 const app = express();
 
@@ -36,6 +38,9 @@ app.use((req, res, next) => {
     })(req, res, next);
   }
 });
+
+// Request logging
+app.use(requestLogger);
 
 // make express can read json
 app.use(express.json());
@@ -78,5 +83,7 @@ app.use((req, res) => {
 
 // Error handler
 app.use(errorMiddleware);
+
+logger.info({ env: config.NODE_ENV }, "App initialized");
 
 export default app;

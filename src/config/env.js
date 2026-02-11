@@ -1,5 +1,7 @@
 import dotenv from "dotenv";
 
+import logger from "../utils/logger.js";
+
 dotenv.config();
 
 export const config = {
@@ -29,7 +31,7 @@ export const config = {
 };
 
 // Debug: log CORS origins on startup
-console.log("ALLOWED_ORIGINS:", config.ALLOWED_ORIGINS);
+logger.debug({ allowedOrigins: config.ALLOWED_ORIGINS }, "CORS origins loaded");
 
 // Validate required env variables
 const requiredEnvVars = ["DATABASE_URL", "JWT_SECRET", "FRONTEND_URL"];

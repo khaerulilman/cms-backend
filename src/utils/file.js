@@ -1,18 +1,20 @@
-import fs from 'fs/promises';
-import path from 'path';
+import fs from "fs/promises";
+import path from "path";
+
+import logger from "./logger.js";
 
 export class FileUtils {
   static async deleteFile(filePath) {
     try {
       await fs.unlink(filePath);
-      console.log(`File deleted: ${filePath}`);
+      logger.debug({ filePath }, "File deleted");
     } catch (error) {
-      console.error(`Failed to delete file: ${filePath}`, error);
+      logger.error({ filePath, err: error }, "Failed to delete file");
     }
   }
 
   static async ensureUploadsDir() {
-    const uploadsDir = path.resolve('uploads');
+    const uploadsDir = path.resolve("uploads");
     try {
       await fs.access(uploadsDir);
     } catch {
@@ -35,7 +37,7 @@ export class FileUtils {
         }
       }
     } catch (error) {
-      console.error('Failed to clean old files:', error);
+      logger.error({ dirPath, err: error }, "Failed to clean old files");
     }
   }
 }

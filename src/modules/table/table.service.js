@@ -6,6 +6,7 @@ import {
   TableNotFoundError,
 } from "../../utils/errors.js";
 import ImageCleanupService from "../../utils/imageCleanupService.js";
+import logger from "../../utils/logger.js";
 
 import TableRepository from "./table.repository.js";
 
@@ -36,6 +37,8 @@ export class TableService {
       name: data.name.trim(),
       isSubTable: data.isSubTable ?? false,
     });
+
+    logger.info({ tableId: table.id, projectId }, "Table created");
 
     return this._formatTable(table);
   }
@@ -103,6 +106,8 @@ export class TableService {
 
     // Delete the table from database
     await this.repository.deleteTable(tableId);
+
+    logger.info({ tableId, userId }, "Table deleted");
   }
 
   _formatTable(table) {

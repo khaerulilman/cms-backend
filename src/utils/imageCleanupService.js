@@ -1,6 +1,7 @@
-import prisma from '../prisma/client.js';
+import prisma from "../prisma/client.js";
 
-import CloudinaryService from './cloudinary.js';
+import CloudinaryService from "./cloudinary.js";
+import logger from "./logger.js";
 
 /**
  * ImageCleanupService - Centralized service untuk semua image deletion operations
@@ -33,7 +34,7 @@ export class ImageCleanupService {
 
       await this._deleteFromCloudinary(cells);
     } catch (error) {
-      console.error(`Failed to cleanup images for user ${userId}:`, error.message);
+      logger.error({ userId, err: error }, "Failed to cleanup images for user");
       throw error;
     }
   }
@@ -59,9 +60,9 @@ export class ImageCleanupService {
 
       await this._deleteFromCloudinary(cells);
     } catch (error) {
-      console.error(
-        `Failed to cleanup images for project ${projectId}:`,
-        error.message,
+      logger.error(
+        { projectId, err: error },
+        "Failed to cleanup images for project",
       );
       throw error;
     }
@@ -86,7 +87,10 @@ export class ImageCleanupService {
 
       await this._deleteFromCloudinary(cells);
     } catch (error) {
-      console.error(`Failed to cleanup images for table ${tableId}:`, error.message);
+      logger.error(
+        { tableId, err: error },
+        "Failed to cleanup images for table",
+      );
       throw error;
     }
   }
@@ -108,9 +112,9 @@ export class ImageCleanupService {
 
       await this._deleteFromCloudinary(cells);
     } catch (error) {
-      console.error(
-        `Failed to cleanup images for column ${columnId}:`,
-        error.message,
+      logger.error(
+        { columnId, err: error },
+        "Failed to cleanup images for column",
       );
       throw error;
     }
@@ -133,7 +137,7 @@ export class ImageCleanupService {
 
       await this._deleteFromCloudinary(cells);
     } catch (error) {
-      console.error(`Failed to cleanup images for row ${rowId}:`, error.message);
+      logger.error({ rowId, err: error }, "Failed to cleanup images for row");
       throw error;
     }
   }
@@ -155,7 +159,7 @@ export class ImageCleanupService {
         await CloudinaryService.deleteImage(cell.cloudinaryPublicId);
       }
     } catch (error) {
-      console.error(`Failed to cleanup image for cell ${cellId}:`, error.message);
+      logger.error({ cellId, err: error }, "Failed to cleanup image for cell");
       throw error;
     }
   }
@@ -180,9 +184,9 @@ export class ImageCleanupService {
     try {
       await CloudinaryService.deleteImages(publicIds);
     } catch (error) {
-      console.error(
-        `Failed to delete ${publicIds.length} images from Cloudinary:`,
-        error.message,
+      logger.error(
+        { count: publicIds.length, err: error },
+        "Failed to delete images from Cloudinary",
       );
       // Non-blocking: jangan throw error, biar database deletion tetap jalan
     }
