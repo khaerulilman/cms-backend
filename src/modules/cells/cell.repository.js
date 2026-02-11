@@ -1,6 +1,7 @@
 import crypto from 'crypto';
 
 import prisma from '../../prisma/client.js';
+import logger from '../../utils/logger.js';
 
 export class CellRepository {
   // Check if user owns the row (indirectly through project -> table -> row)
@@ -77,6 +78,7 @@ export class CellRepository {
     imageUrl = null,
     cloudinaryPublicId = null,
   ) {
+    logger.debug({ rowId, columnId }, 'Upserting cell in database');
     const cell = await prisma.cmsCell.upsert({
       where: {
         rowId_columnId: {

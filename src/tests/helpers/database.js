@@ -44,13 +44,6 @@ export async function cleanDatabase() {
   await prisma.user.deleteMany();
 }
 
-export async function disconnectPrisma() {
-  if (prisma) {
-    await prisma.$disconnect();
-    prisma = null;
-  }
-}
-
 export async function createTestUser(data = {}) {
   const prisma = getPrismaTestClient();
   return await prisma.user.create({
@@ -70,18 +63,6 @@ export async function createTestProject(userId, data = {}) {
       userId,
       name: data.name || 'Test Project',
       description: data.description || 'Test Description',
-      ...data,
-    },
-  });
-}
-
-export async function createTestTable(projectId, data = {}) {
-  const prisma = getPrismaTestClient();
-  return await prisma.cmsTable.create({
-    data: {
-      projectId,
-      name: data.name || 'Test Table',
-      isSubTable: data.isSubTable || false,
       ...data,
     },
   });

@@ -1,9 +1,10 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from "vitest";
 
-import prisma from '../../../prisma/client.js';
+import prisma from "../../../prisma/client.js";
+import { ProjectRepository } from "../project.repository.js";
 
 // Mock prisma client
-vi.mock('../../../prisma/client.js', () => ({
+vi.mock("../../../prisma/client.js", () => ({
   default: {
     project: {
       create: vi.fn(),
@@ -15,10 +16,7 @@ vi.mock('../../../prisma/client.js', () => ({
   },
 }));
 
-// Import after mocks
-import { ProjectRepository } from '../project.repository.js';
-
-describe('ProjectRepository', () => {
+describe("ProjectRepository", () => {
   let repository;
 
   beforeEach(() => {
@@ -26,27 +24,27 @@ describe('ProjectRepository', () => {
     repository = new ProjectRepository();
   });
 
-  describe('createProject', () => {
-    it('should create project with user relation', async () => {
+  describe("createProject", () => {
+    it("should create project with user relation", async () => {
       const projectData = {
-        id: 'project-123',
-        userId: 'user-123',
-        name: 'Test Project',
-        description: 'Test description',
+        id: "project-123",
+        userId: "user-123",
+        name: "Test Project",
+        description: "Test description",
       };
 
       // Mock return berbeda dari input (ada extra field dari include)
       const mockCreatedProject = {
-        id: 'project-123',
-        userId: 'user-123',
-        name: 'Test Project',
-        description: 'Test description',
-        createdAt: new Date('2025-01-15'),
-        updatedAt: new Date('2025-01-15'),
+        id: "project-123",
+        userId: "user-123",
+        name: "Test Project",
+        description: "Test description",
+        createdAt: new Date("2025-01-15"),
+        updatedAt: new Date("2025-01-15"),
         user: {
-          id: 'user-123',
-          email: 'user@example.com',
-          name: 'Test User',
+          id: "user-123",
+          email: "user@example.com",
+          name: "Test User",
         },
       };
 
@@ -64,24 +62,24 @@ describe('ProjectRepository', () => {
     });
   });
 
-  describe('findProjectById', () => {
-    it('should find project by id with user and cmsTables', async () => {
-      const projectId = 'project-123';
+  describe("findProjectById", () => {
+    it("should find project by id with user and cmsTables", async () => {
+      const projectId = "project-123";
 
       const mockProject = {
-        id: 'project-123',
-        userId: 'user-123',
-        name: 'Test Project',
-        description: 'Test description',
-        createdAt: new Date('2025-01-15'),
-        updatedAt: new Date('2025-01-15'),
+        id: "project-123",
+        userId: "user-123",
+        name: "Test Project",
+        description: "Test description",
+        createdAt: new Date("2025-01-15"),
+        updatedAt: new Date("2025-01-15"),
         user: {
-          id: 'user-123',
-          email: 'user@example.com',
+          id: "user-123",
+          email: "user@example.com",
         },
         cmsTables: [
-          { id: 'table-1', name: 'Table 1' },
-          { id: 'table-2', name: 'Table 2' },
+          { id: "table-1", name: "Table 1" },
+          { id: "table-2", name: "Table 2" },
         ],
       };
 
@@ -99,8 +97,8 @@ describe('ProjectRepository', () => {
       expect(result).toEqual(mockProject);
     });
 
-    it('should return null if project not found', async () => {
-      const projectId = 'non-existent';
+    it("should return null if project not found", async () => {
+      const projectId = "non-existent";
 
       prisma.project.findUnique.mockResolvedValue(null);
 
@@ -117,30 +115,30 @@ describe('ProjectRepository', () => {
     });
   });
 
-  describe('findProjectsByUserId', () => {
-    it('should find all projects by user id ordered by createdAt desc', async () => {
-      const userId = 'user-123';
+  describe("findProjectsByUserId", () => {
+    it("should find all projects by user id ordered by createdAt desc", async () => {
+      const userId = "user-123";
 
       const mockProjects = [
         {
-          id: 'project-2',
-          userId: 'user-123',
-          name: 'Recent Project',
-          description: 'Recent',
-          createdAt: new Date('2025-01-16'),
-          updatedAt: new Date('2025-01-16'),
-          user: { id: 'user-123', email: 'user@example.com' },
+          id: "project-2",
+          userId: "user-123",
+          name: "Recent Project",
+          description: "Recent",
+          createdAt: new Date("2025-01-16"),
+          updatedAt: new Date("2025-01-16"),
+          user: { id: "user-123", email: "user@example.com" },
           cmsTables: [],
         },
         {
-          id: 'project-1',
-          userId: 'user-123',
-          name: 'Old Project',
-          description: 'Old',
-          createdAt: new Date('2025-01-15'),
-          updatedAt: new Date('2025-01-15'),
-          user: { id: 'user-123', email: 'user@example.com' },
-          cmsTables: [{ id: 'table-1', name: 'Table 1' }],
+          id: "project-1",
+          userId: "user-123",
+          name: "Old Project",
+          description: "Old",
+          createdAt: new Date("2025-01-15"),
+          updatedAt: new Date("2025-01-15"),
+          user: { id: "user-123", email: "user@example.com" },
+          cmsTables: [{ id: "table-1", name: "Table 1" }],
         },
       ];
 
@@ -154,13 +152,13 @@ describe('ProjectRepository', () => {
           user: true,
           cmsTables: true,
         },
-        orderBy: { createdAt: 'desc' },
+        orderBy: { createdAt: "desc" },
       });
       expect(result).toEqual(mockProjects);
     });
 
-    it('should return empty array if user has no projects', async () => {
-      const userId = 'user-123';
+    it("should return empty array if user has no projects", async () => {
+      const userId = "user-123";
 
       prisma.project.findMany.mockResolvedValue([]);
 
@@ -172,30 +170,30 @@ describe('ProjectRepository', () => {
           user: true,
           cmsTables: true,
         },
-        orderBy: { createdAt: 'desc' },
+        orderBy: { createdAt: "desc" },
       });
       expect(result).toEqual([]);
     });
   });
 
-  describe('updateProject', () => {
-    it('should update project with new data', async () => {
-      const projectId = 'project-123';
+  describe("updateProject", () => {
+    it("should update project with new data", async () => {
+      const projectId = "project-123";
       const updateData = {
-        name: 'Updated Name',
-        description: 'Updated description',
+        name: "Updated Name",
+        description: "Updated description",
       };
 
       const mockUpdatedProject = {
-        id: 'project-123',
-        userId: 'user-123',
-        name: 'Updated Name',
-        description: 'Updated description',
-        createdAt: new Date('2025-01-15'),
-        updatedAt: new Date('2025-01-20'),
+        id: "project-123",
+        userId: "user-123",
+        name: "Updated Name",
+        description: "Updated description",
+        createdAt: new Date("2025-01-15"),
+        updatedAt: new Date("2025-01-20"),
         user: {
-          id: 'user-123',
-          email: 'user@example.com',
+          id: "user-123",
+          email: "user@example.com",
         },
       };
 
@@ -214,17 +212,17 @@ describe('ProjectRepository', () => {
     });
   });
 
-  describe('deleteProject', () => {
-    it('should delete project by id', async () => {
-      const projectId = 'project-123';
+  describe("deleteProject", () => {
+    it("should delete project by id", async () => {
+      const projectId = "project-123";
 
       const mockDeletedProject = {
-        id: 'project-123',
-        userId: 'user-123',
-        name: 'Deleted Project',
-        description: 'Description',
-        createdAt: new Date('2025-01-15'),
-        updatedAt: new Date('2025-01-15'),
+        id: "project-123",
+        userId: "user-123",
+        name: "Deleted Project",
+        description: "Description",
+        createdAt: new Date("2025-01-15"),
+        updatedAt: new Date("2025-01-15"),
       };
 
       prisma.project.delete.mockResolvedValue(mockDeletedProject);
@@ -238,13 +236,13 @@ describe('ProjectRepository', () => {
     });
   });
 
-  describe('checkProjectOwnership', () => {
-    it('should return true if user owns the project', async () => {
-      const projectId = 'project-123';
-      const userId = 'user-123';
+  describe("checkProjectOwnership", () => {
+    it("should return true if user owns the project", async () => {
+      const projectId = "project-123";
+      const userId = "user-123";
 
       const mockProject = {
-        userId: 'user-123',
+        userId: "user-123",
       };
 
       prisma.project.findUnique.mockResolvedValue(mockProject);
@@ -258,12 +256,12 @@ describe('ProjectRepository', () => {
       expect(result).toBe(true);
     });
 
-    it('should return false if user does not own the project', async () => {
-      const projectId = 'project-123';
-      const userId = 'user-123';
+    it("should return false if user does not own the project", async () => {
+      const projectId = "project-123";
+      const userId = "user-123";
 
       const mockProject = {
-        userId: 'other-user-456',
+        userId: "other-user-456",
       };
 
       prisma.project.findUnique.mockResolvedValue(mockProject);
@@ -277,9 +275,9 @@ describe('ProjectRepository', () => {
       expect(result).toBe(false);
     });
 
-    it('should return falsy value if project not found', async () => {
-      const projectId = 'non-existent';
-      const userId = 'user-123';
+    it("should return falsy value if project not found", async () => {
+      const projectId = "non-existent";
+      const userId = "user-123";
 
       prisma.project.findUnique.mockResolvedValue(null);
 

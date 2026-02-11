@@ -1,5 +1,4 @@
 import fs from "fs/promises";
-import path from "path";
 
 import { describe, it, expect, beforeEach, vi, afterEach } from "vitest";
 

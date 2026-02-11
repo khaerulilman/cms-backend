@@ -1,9 +1,10 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from "vitest";
 
-import { SUCCESS_MESSAGES } from '../../../constants/http.js';
+import { SUCCESS_MESSAGES } from "../../../constants/http.js";
+import { ProjectController } from "../project.controller.js";
 
 // Mock ProjectService
-vi.mock('../project.service.js', () => ({
+vi.mock("../project.service.js", () => ({
   default: class MockProjectService {
     createProject = vi.fn();
     getProjectById = vi.fn();
@@ -13,11 +14,7 @@ vi.mock('../project.service.js', () => ({
   },
 }));
 
-// Import after mocks
-import { ProjectController } from '../project.controller.js';
-import ProjectService from '../project.service.js';
-
-describe('ProjectController', () => {
+describe("ProjectController", () => {
   let controller;
   let mockService;
   let req;
@@ -40,7 +37,7 @@ describe('ProjectController', () => {
 
     // Mock request
     req = {
-      user: { id: 'user-123' },
+      user: { id: "user-123" },
       params: {},
       body: {},
     };
@@ -55,21 +52,21 @@ describe('ProjectController', () => {
     next = vi.fn();
   });
 
-  describe('createProject', () => {
-    it('should create project and return 201 status', async () => {
+  describe("createProject", () => {
+    it("should create project and return 201 status", async () => {
       req.body = {
-        name: 'Test Project',
-        description: 'Test description',
+        name: "Test Project",
+        description: "Test description",
       };
 
       // Mock service return berbeda dari response (tidak ada success/message)
       const mockServiceResult = {
-        id: 'project-123',
-        userId: 'user-123',
-        name: 'Test Project',
-        description: 'Test description',
-        createdAt: new Date('2025-01-15'),
-        updatedAt: new Date('2025-01-15'),
+        id: "project-123",
+        userId: "user-123",
+        name: "Test Project",
+        description: "Test description",
+        createdAt: new Date("2025-01-15"),
+        updatedAt: new Date("2025-01-15"),
       };
 
       const expectedResponse = {
@@ -82,27 +79,27 @@ describe('ProjectController', () => {
 
       await controller.createProject(req, res, next);
 
-      expect(mockService.createProject).toHaveBeenCalledWith('user-123', {
-        name: 'Test Project',
-        description: 'Test description',
+      expect(mockService.createProject).toHaveBeenCalledWith("user-123", {
+        name: "Test Project",
+        description: "Test description",
       });
       expect(res.status).toHaveBeenCalledWith(201);
       expect(res.json).toHaveBeenCalledWith(expectedResponse);
       expect(next).not.toHaveBeenCalled();
     });
 
-    it('should call next with error if service throws', async () => {
+    it("should call next with error if service throws", async () => {
       req.body = {
-        name: 'Test Project',
+        name: "Test Project",
       };
 
-      const mockError = new Error('Service error');
+      const mockError = new Error("Service error");
       mockService.createProject.mockRejectedValue(mockError);
 
       await controller.createProject(req, res, next);
 
-      expect(mockService.createProject).toHaveBeenCalledWith('user-123', {
-        name: 'Test Project',
+      expect(mockService.createProject).toHaveBeenCalledWith("user-123", {
+        name: "Test Project",
         description: undefined,
       });
       expect(next).toHaveBeenCalledWith(mockError);
@@ -111,17 +108,17 @@ describe('ProjectController', () => {
     });
   });
 
-  describe('getProject', () => {
-    it('should get project by id and return 200 status', async () => {
-      req.params = { projectId: 'project-123' };
+  describe("getProject", () => {
+    it("should get project by id and return 200 status", async () => {
+      req.params = { projectId: "project-123" };
 
       const mockServiceResult = {
-        id: 'project-123',
-        userId: 'user-123',
-        name: 'Test Project',
-        description: 'Test description',
-        createdAt: new Date('2025-01-15'),
-        updatedAt: new Date('2025-01-15'),
+        id: "project-123",
+        userId: "user-123",
+        name: "Test Project",
+        description: "Test description",
+        createdAt: new Date("2025-01-15"),
+        updatedAt: new Date("2025-01-15"),
         cmsTables: [],
       };
 
@@ -136,49 +133,49 @@ describe('ProjectController', () => {
       await controller.getProject(req, res, next);
 
       expect(mockService.getProjectById).toHaveBeenCalledWith(
-        'project-123',
-        'user-123',
+        "project-123",
+        "user-123",
       );
       expect(res.status).toHaveBeenCalledWith(200);
       expect(res.json).toHaveBeenCalledWith(expectedResponse);
       expect(next).not.toHaveBeenCalled();
     });
 
-    it('should call next with error if service throws', async () => {
-      req.params = { projectId: 'project-123' };
+    it("should call next with error if service throws", async () => {
+      req.params = { projectId: "project-123" };
 
-      const mockError = new Error('Not found');
+      const mockError = new Error("Not found");
       mockService.getProjectById.mockRejectedValue(mockError);
 
       await controller.getProject(req, res, next);
 
       expect(mockService.getProjectById).toHaveBeenCalledWith(
-        'project-123',
-        'user-123',
+        "project-123",
+        "user-123",
       );
       expect(next).toHaveBeenCalledWith(mockError);
       expect(res.status).not.toHaveBeenCalled();
     });
   });
 
-  describe('getUserProjects', () => {
-    it('should get all user projects and return 200 status', async () => {
+  describe("getUserProjects", () => {
+    it("should get all user projects and return 200 status", async () => {
       const mockServiceResult = [
         {
-          id: 'project-1',
-          userId: 'user-123',
-          name: 'Project 1',
-          description: 'Description 1',
-          createdAt: new Date('2025-01-15'),
-          updatedAt: new Date('2025-01-15'),
+          id: "project-1",
+          userId: "user-123",
+          name: "Project 1",
+          description: "Description 1",
+          createdAt: new Date("2025-01-15"),
+          updatedAt: new Date("2025-01-15"),
         },
         {
-          id: 'project-2',
-          userId: 'user-123',
-          name: 'Project 2',
+          id: "project-2",
+          userId: "user-123",
+          name: "Project 2",
           description: null,
-          createdAt: new Date('2025-01-16'),
-          updatedAt: new Date('2025-01-16'),
+          createdAt: new Date("2025-01-16"),
+          updatedAt: new Date("2025-01-16"),
         },
       ];
 
@@ -192,18 +189,18 @@ describe('ProjectController', () => {
 
       await controller.getUserProjects(req, res, next);
 
-      expect(mockService.getUserProjects).toHaveBeenCalledWith('user-123');
+      expect(mockService.getUserProjects).toHaveBeenCalledWith("user-123");
       expect(res.status).toHaveBeenCalledWith(200);
       expect(res.json).toHaveBeenCalledWith(expectedResponse);
       expect(next).not.toHaveBeenCalled();
     });
 
-    it('should return empty array if user has no projects', async () => {
+    it("should return empty array if user has no projects", async () => {
       mockService.getUserProjects.mockResolvedValue([]);
 
       await controller.getUserProjects(req, res, next);
 
-      expect(mockService.getUserProjects).toHaveBeenCalledWith('user-123');
+      expect(mockService.getUserProjects).toHaveBeenCalledWith("user-123");
       expect(res.status).toHaveBeenCalledWith(200);
       expect(res.json).toHaveBeenCalledWith({
         success: true,
@@ -212,33 +209,33 @@ describe('ProjectController', () => {
       });
     });
 
-    it('should call next with error if service throws', async () => {
-      const mockError = new Error('Service error');
+    it("should call next with error if service throws", async () => {
+      const mockError = new Error("Service error");
       mockService.getUserProjects.mockRejectedValue(mockError);
 
       await controller.getUserProjects(req, res, next);
 
-      expect(mockService.getUserProjects).toHaveBeenCalledWith('user-123');
+      expect(mockService.getUserProjects).toHaveBeenCalledWith("user-123");
       expect(next).toHaveBeenCalledWith(mockError);
       expect(res.status).not.toHaveBeenCalled();
     });
   });
 
-  describe('updateProject', () => {
-    it('should update project and return 200 status', async () => {
-      req.params = { projectId: 'project-123' };
+  describe("updateProject", () => {
+    it("should update project and return 200 status", async () => {
+      req.params = { projectId: "project-123" };
       req.body = {
-        name: 'Updated Name',
-        description: 'Updated description',
+        name: "Updated Name",
+        description: "Updated description",
       };
 
       const mockServiceResult = {
-        id: 'project-123',
-        userId: 'user-123',
-        name: 'Updated Name',
-        description: 'Updated description',
-        createdAt: new Date('2025-01-15'),
-        updatedAt: new Date('2025-01-20'),
+        id: "project-123",
+        userId: "user-123",
+        name: "Updated Name",
+        description: "Updated description",
+        createdAt: new Date("2025-01-15"),
+        updatedAt: new Date("2025-01-20"),
       };
 
       const expectedResponse = {
@@ -252,11 +249,11 @@ describe('ProjectController', () => {
       await controller.updateProject(req, res, next);
 
       expect(mockService.updateProject).toHaveBeenCalledWith(
-        'project-123',
-        'user-123',
+        "project-123",
+        "user-123",
         {
-          name: 'Updated Name',
-          description: 'Updated description',
+          name: "Updated Name",
+          description: "Updated description",
         },
       );
       expect(res.status).toHaveBeenCalledWith(200);
@@ -264,20 +261,20 @@ describe('ProjectController', () => {
       expect(next).not.toHaveBeenCalled();
     });
 
-    it('should call next with error if service throws', async () => {
-      req.params = { projectId: 'project-123' };
-      req.body = { name: 'Updated Name' };
+    it("should call next with error if service throws", async () => {
+      req.params = { projectId: "project-123" };
+      req.body = { name: "Updated Name" };
 
-      const mockError = new Error('Validation error');
+      const mockError = new Error("Validation error");
       mockService.updateProject.mockRejectedValue(mockError);
 
       await controller.updateProject(req, res, next);
 
       expect(mockService.updateProject).toHaveBeenCalledWith(
-        'project-123',
-        'user-123',
+        "project-123",
+        "user-123",
         {
-          name: 'Updated Name',
+          name: "Updated Name",
           description: undefined,
         },
       );
@@ -286,12 +283,12 @@ describe('ProjectController', () => {
     });
   });
 
-  describe('deleteProject', () => {
-    it('should delete project and return 200 status', async () => {
-      req.params = { projectId: 'project-123' };
+  describe("deleteProject", () => {
+    it("should delete project and return 200 status", async () => {
+      req.params = { projectId: "project-123" };
 
       const mockServiceResult = {
-        message: 'Project deleted successfully',
+        message: "Project deleted successfully",
       };
 
       const expectedResponse = {
@@ -304,25 +301,25 @@ describe('ProjectController', () => {
       await controller.deleteProject(req, res, next);
 
       expect(mockService.deleteProject).toHaveBeenCalledWith(
-        'project-123',
-        'user-123',
+        "project-123",
+        "user-123",
       );
       expect(res.status).toHaveBeenCalledWith(200);
       expect(res.json).toHaveBeenCalledWith(expectedResponse);
       expect(next).not.toHaveBeenCalled();
     });
 
-    it('should call next with error if service throws', async () => {
-      req.params = { projectId: 'project-123' };
+    it("should call next with error if service throws", async () => {
+      req.params = { projectId: "project-123" };
 
-      const mockError = new Error('Not found');
+      const mockError = new Error("Not found");
       mockService.deleteProject.mockRejectedValue(mockError);
 
       await controller.deleteProject(req, res, next);
 
       expect(mockService.deleteProject).toHaveBeenCalledWith(
-        'project-123',
-        'user-123',
+        "project-123",
+        "user-123",
       );
       expect(next).toHaveBeenCalledWith(mockError);
       expect(res.status).not.toHaveBeenCalled();

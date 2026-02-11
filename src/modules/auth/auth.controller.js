@@ -5,6 +5,7 @@ import {
   ERROR_MESSAGES,
 } from "../../constants/http.js";
 import JwtUtil from "../../utils/jwt.js";
+import logger from "../../utils/logger.js";
 
 import AuthService from "./auth.service.js";
 
@@ -30,7 +31,7 @@ const getCookieOptions = (maxAge) => ({
 // clearCookie must use the SAME options (secure, sameSite, path) as setCookie
 // otherwise the browser will NOT delete the cookie
 const getClearCookieOptions = () => {
-  const { maxAge, ...options } = getCookieOptions(0);
+  const { maxAge: _maxAge, ...options } = getCookieOptions(0);
   return options;
 };
 
@@ -51,6 +52,7 @@ export class AuthController {
     try {
       const { email, password, name } = req.body;
 
+      logger.debug({ email }, "Register request received");
       const result = await this.service.register(
         email,
         password,
@@ -70,6 +72,10 @@ export class AuthController {
         getCookieOptions(7 * 24 * 60 * 60 * 1000),
       ); // 7 days
 
+      logger.info(
+        { userId: result.user.id, email },
+        "User registered successfully",
+      );
       return res.status(HTTP_STATUS.CREATED).json({
         success: true,
         message: SUCCESS_MESSAGES.USER_REGISTERED,
@@ -86,6 +92,7 @@ export class AuthController {
     try {
       const { email, password } = req.body;
 
+      logger.debug({ email }, "Login request received");
       const result = await this.service.login(
         email,
         password,
@@ -104,6 +111,10 @@ export class AuthController {
         getCookieOptions(7 * 24 * 60 * 60 * 1000),
       ); // 7 days
 
+      logger.info(
+        { userId: result.user.id, email },
+        "User logged in successfully",
+      );
       return res.status(HTTP_STATUS.OK).json({
         success: true,
         message: SUCCESS_MESSAGES.LOGIN_SUCCESS,
@@ -120,7 +131,9 @@ export class AuthController {
     try {
       const user = req.user;
 
+      logger.debug({ userId: user?.id }, "Google OAuth callback received");
       if (!user) {
+        logger.warn({}, "Google OAuth callback without user data");
         return res.status(HTTP_STATUS.UNAUTHORIZED).json({
           success: false,
           message: ERROR_MESSAGES.UNAUTHORIZED,
@@ -166,6 +179,10 @@ export class AuthController {
       frontendUrl.searchParams.append("oauth", "success");
       frontendUrl.searchParams.append("setup_token", setupToken);
 
+      logger.info(
+        { userId: user.id, email: user.email },
+        "Google OAuth callback processed successfully",
+      );
       return res.redirect(frontendUrl.toString());
     } catch (error) {
       next(error);
@@ -178,6 +195,7 @@ export class AuthController {
       const refreshTokenValue =
         req.cookies?.refreshToken || req.body.refreshToken;
 
+      logger.debug({}, "Token refresh request received");
       const result = await this.service.refreshToken(
         refreshTokenValue,
         this.getClientMetadata(req),
@@ -195,6 +213,7 @@ export class AuthController {
         getCookieOptions(7 * 24 * 60 * 60 * 1000),
       ); // 7 days
 
+      logger.info({}, "Token refreshed successfully");
       return res.status(HTTP_STATUS.OK).json({
         success: true,
         message: SUCCESS_MESSAGES.TOKEN_REFRESHED,
@@ -209,6 +228,7 @@ export class AuthController {
       // Get refresh token from cookie
       const refreshToken = req.cookies?.refreshToken;
 
+      logger.debug({ hasToken: !!refreshToken }, "Logout request received");
       // Revoke refresh token in database if exists
       if (refreshToken) {
         await this.service.logout(refreshToken);
@@ -218,6 +238,7 @@ export class AuthController {
       res.clearCookie("accessToken", getClearCookieOptions());
       res.clearCookie("refreshToken", getClearCookieOptions());
 
+      logger.info({}, "User logged out successfully");
       return res.status(HTTP_STATUS.OK).json({
         success: true,
         message: SUCCESS_MESSAGES.LOGOUT_SUCCESS,
@@ -231,8 +252,10 @@ export class AuthController {
     try {
       const userId = req.user.id;
 
+      logger.debug({ userId }, "Get profile request received");
       const profile = await this.service.getProfile(userId);
 
+      logger.info({ userId }, "Profile retrieved successfully");
       return res.status(HTTP_STATUS.OK).json({
         success: true,
         message: SUCCESS_MESSAGES.PROFILE_RETRIEVED,
@@ -247,12 +270,14 @@ export class AuthController {
     try {
       const userId = req.user.id;
 
+      logger.debug({ userId }, "Logout all devices request received");
       await this.service.logoutAllDevices(userId);
 
       // Clear cookies (must match secure/sameSite/path used when setting)
       res.clearCookie("accessToken", getClearCookieOptions());
       res.clearCookie("refreshToken", getClearCookieOptions());
 
+      logger.info({ userId }, "User logged out from all devices");
       return res.status(HTTP_STATUS.OK).json({
         success: true,
         message: SUCCESS_MESSAGES.LOGOUT_ALL_SUCCESS,
@@ -266,8 +291,13 @@ export class AuthController {
     try {
       const userId = req.user.id;
 
+      logger.debug({ userId }, "Get active sessions request received");
       const sessions = await this.service.getActiveSessions(userId);
 
+      logger.info(
+        { userId, sessionCount: sessions.length },
+        "Active sessions retrieved",
+      );
       return res.status(HTTP_STATUS.OK).json({
         success: true,
         message: SUCCESS_MESSAGES.SESSIONS_RETRIEVED,
@@ -285,7 +315,9 @@ export class AuthController {
     try {
       const { setupToken } = req.body;
 
+      logger.debug({}, "Establish session request received");
       if (!setupToken) {
+        logger.warn({}, "Establish session called without setup token");
         return res.status(HTTP_STATUS.BAD_REQUEST).json({
           success: false,
           message: "Setup token is required",
@@ -296,6 +328,7 @@ export class AuthController {
       const decoded = JwtUtil.verifyToken(setupToken);
 
       if (!decoded || decoded.type !== "setup") {
+        logger.warn({}, "Invalid or expired setup token");
         return res.status(HTTP_STATUS.UNAUTHORIZED).json({
           success: false,
           message: "Invalid or expired setup token",
@@ -339,6 +372,7 @@ export class AuthController {
         getCookieOptions(7 * 24 * 60 * 60 * 1000),
       );
 
+      logger.info({ userId: decoded.id }, "Session established successfully");
       return res.status(HTTP_STATUS.OK).json({
         success: true,
         message: "Session established successfully",

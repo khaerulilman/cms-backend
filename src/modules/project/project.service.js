@@ -1,27 +1,32 @@
-import { v4 as uuidv4 } from "uuid";
+import { v4 as uuidv4 } from 'uuid';
 
-import { NotFoundError, ValidationError } from "../../utils/errors.js";
-import ImageCleanupService from "../../utils/imageCleanupService.js";
-import logger from "../../utils/logger.js";
-import { Validator } from "../../utils/validator.js";
+import { NotFoundError, ValidationError } from '../../utils/errors.js';
+import ImageCleanupService from '../../utils/imageCleanupService.js';
+import logger from '../../utils/logger.js';
+import { Validator } from '../../utils/validator.js';
 
-import ProjectRepository from "./project.repository.js";
+import ProjectRepository from './project.repository.js';
 
 export class ProjectService {
   constructor() {
     this.repository = new ProjectRepository();
   }
 
-  validateUUID(id, fieldName = "ID") {
+  validateUUID(id, fieldName = 'ID') {
     if (!id || !Validator.isValidUUID(id)) {
       throw new NotFoundError(`${fieldName} not found`);
     }
   }
 
   async createProject(userId, data) {
+    logger.debug(
+      { userId, projectName: data.name },
+      'Create project service called',
+    );
     // Validate input
-    if (!data.name || data.name.trim() === "") {
-      throw new ValidationError("Project name is required");
+    if (!data.name || data.name.trim() === '') {
+      logger.warn({ userId }, 'Project name is required');
+      throw new ValidationError('Project name is required');
     }
 
     const project = await this.repository.createProject({
@@ -31,7 +36,7 @@ export class ProjectService {
       description: data.description ? data.description.trim() : null,
     });
 
-    logger.info({ projectId: project.id, userId }, "Project created");
+    logger.info({ projectId: project.id, userId }, 'Project created');
 
     return {
       id: project.id,
@@ -44,20 +49,27 @@ export class ProjectService {
   }
 
   async getProjectById(projectId, userId) {
+    logger.debug({ projectId, userId }, 'Get project by ID service called');
     // Validate UUID format
-    this.validateUUID(projectId, "Project");
+    this.validateUUID(projectId, 'Project');
 
     const project = await this.repository.findProjectById(projectId);
 
     if (!project) {
-      throw new NotFoundError("Project not found");
+      logger.warn({ projectId }, 'Project not found in database');
+      throw new NotFoundError('Project not found');
     }
 
     // Check ownership
     if (project.userId !== userId) {
-      throw new NotFoundError("Project not found");
+      logger.warn(
+        { projectId, userId, ownerId: project.userId },
+        'Project ownership check failed',
+      );
+      throw new NotFoundError('Project not found');
     }
 
+    logger.info({ projectId, userId }, 'Project retrieved by ID');
     return {
       id: project.id,
       userId: project.userId,
@@ -70,8 +82,13 @@ export class ProjectService {
   }
 
   async getUserProjects(userId) {
+    logger.debug({ userId }, 'Get user projects service called');
     const projects = await this.repository.findProjectsByUserId(userId);
 
+    logger.info(
+      { userId, projectCount: projects.length },
+      'User projects retrieved',
+    );
     return projects.map((project) => ({
       id: project.id,
       userId: project.userId,
@@ -83,12 +100,17 @@ export class ProjectService {
   }
 
   async updateProject(projectId, userId, data) {
+    logger.debug(
+      { projectId, userId, newName: data.name },
+      'Update project service called',
+    );
     // Validate UUID format
-    this.validateUUID(projectId, "Project");
+    this.validateUUID(projectId, 'Project');
 
     // Validate input before checking ownership
-    if (data.name !== undefined && (!data.name || data.name.trim() === "")) {
-      throw new ValidationError("Project name cannot be empty");
+    if (data.name !== undefined && (!data.name || data.name.trim() === '')) {
+      logger.warn({ projectId, userId }, 'Project name is empty for update');
+      throw new ValidationError('Project name cannot be empty');
     }
 
     if (
@@ -96,8 +118,12 @@ export class ProjectService {
       data.description &&
       data.description.length > 500
     ) {
+      logger.warn(
+        { projectId, userId, descriptionLength: data.description.length },
+        'Project description exceeds limit',
+      );
       throw new ValidationError(
-        "Project description must not exceed 500 characters",
+        'Project description must not exceed 500 characters',
       );
     }
 
@@ -107,7 +133,8 @@ export class ProjectService {
       userId,
     );
     if (!isOwner) {
-      throw new NotFoundError("Project not found");
+      logger.warn({ projectId, userId }, 'Project ownership check failed');
+      throw new NotFoundError('Project not found');
     }
 
     const updateData = {};
@@ -119,6 +146,10 @@ export class ProjectService {
 
     const project = await this.repository.updateProject(projectId, updateData);
 
+    logger.info(
+      { projectId, userId, newName: project.name },
+      'Project updated',
+    );
     return {
       id: project.id,
       userId: project.userId,
@@ -130,8 +161,9 @@ export class ProjectService {
   }
 
   async deleteProject(projectId, userId) {
+    logger.debug({ projectId, userId }, 'Delete project service called');
     // Validate UUID format
-    this.validateUUID(projectId, "Project");
+    this.validateUUID(projectId, 'Project');
 
     // Check ownership
     const isOwner = await this.repository.checkProjectOwnership(
@@ -139,17 +171,19 @@ export class ProjectService {
       userId,
     );
     if (!isOwner) {
-      throw new NotFoundError("Project not found");
+      logger.warn({ projectId, userId }, 'Project ownership check failed');
+      throw new NotFoundError('Project not found');
     }
 
     // Cleanup all images in this project
+    logger.debug({ projectId }, 'Cleaning up images from project');
     await ImageCleanupService.deleteImagesByProjectId(projectId);
 
     await this.repository.deleteProject(projectId);
 
-    logger.info({ projectId, userId }, "Project deleted");
+    logger.info({ projectId, userId }, 'Project deleted');
 
-    return { message: "Project deleted successfully" };
+    return { message: 'Project deleted successfully' };
   }
 }
 

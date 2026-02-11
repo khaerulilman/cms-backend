@@ -1,6 +1,6 @@
-import { HTTP_STATUS, ERROR_MESSAGES } from "../constants/http.js";
-import * as ErrorClasses from "../utils/errors.js";
-import logger from "../utils/logger.js";
+import { HTTP_STATUS, ERROR_MESSAGES } from '../constants/http.js';
+import * as ErrorClasses from '../utils/errors.js';
+import logger from '../utils/logger.js';
 
 export const errorMiddleware = (err, req, res, next) => {
   // Prevent sending response if already sent
@@ -15,13 +15,13 @@ export const errorMiddleware = (err, req, res, next) => {
   if (err instanceof ErrorClasses.AppError) {
     statusCode = err.statusCode;
     message = err.message;
-  } else if (err.name === "JsonWebTokenError") {
+  } else if (err.name === 'JsonWebTokenError') {
     statusCode = HTTP_STATUS.UNAUTHORIZED;
     message = ERROR_MESSAGES.INVALID_TOKEN;
-  } else if (err.name === "TokenExpiredError") {
+  } else if (err.name === 'TokenExpiredError') {
     statusCode = HTTP_STATUS.UNAUTHORIZED;
     message = ERROR_MESSAGES.INVALID_TOKEN;
-  } else if (err.name === "ValidationError") {
+  } else if (err.name === 'ValidationError') {
     statusCode = HTTP_STATUS.BAD_REQUEST;
     message = err.message;
   } else if (err.message) {
@@ -37,7 +37,7 @@ export const errorMiddleware = (err, req, res, next) => {
         method: req.method,
         statusCode,
       },
-      "Unhandled server error",
+      'Unhandled server error',
     );
   } else {
     logger.warn(
@@ -47,7 +47,7 @@ export const errorMiddleware = (err, req, res, next) => {
         method: req.method,
         statusCode,
       },
-      "Client error",
+      'Client error',
     );
   }
 
@@ -57,7 +57,7 @@ export const errorMiddleware = (err, req, res, next) => {
   };
 
   // Only include stack trace in development mode, but in a cleaner format
-  if (process.env.NODE_ENV === "development" && err.details) {
+  if (process.env.NODE_ENV === 'development' && err.details) {
     response.details = err.details;
   }
 
