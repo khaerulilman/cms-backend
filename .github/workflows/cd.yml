@@ -49,13 +49,10 @@ jobs:
             echo "Running database migrations..."
             npx prisma migrate deploy
 
-            echo "Restarting application..."
+            echo "Starting / Reloading application with PM2 ecosystem..."
 
-            if pm2 describe portfolio-cms > /dev/null 2>&1; then
-              pm2 restart portfolio-cms
-            else
-              pm2 start src/server.js --name portfolio-cms
-            fi
+            pm2 start ecosystem.config.cjs --env production || \
+            pm2 reload ecosystem.config.cjs --env production
 
             pm2 save
 
