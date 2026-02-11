@@ -1,15 +1,16 @@
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 
-import { ERROR_MESSAGES } from '../../constants/http.js';
+import { ERROR_MESSAGES } from "../../constants/http.js";
 import {
   ConflictError,
   AuthenticationError,
   NotFoundError,
-} from '../../utils/errors.js';
-import HashUtil from '../../utils/hash.js';
-import JwtUtil from '../../utils/jwt.js';
+} from "../../utils/errors.js";
+import HashUtil from "../../utils/hash.js";
+import JwtUtil from "../../utils/jwt.js";
+import logger from "../../utils/logger.js";
 
-import AuthRepository from './auth.repository.js';
+import AuthRepository from "./auth.repository.js";
 
 export class AuthService {
   constructor() {
@@ -40,6 +41,8 @@ export class AuthService {
 
     // Store refresh token in database
     await this.storeRefreshToken(user.id, refreshToken, metadata);
+
+    logger.info({ userId: user.id, email: user.email }, "User registered");
 
     return {
       user: {
@@ -76,6 +79,8 @@ export class AuthService {
     // Store refresh token in database
     await this.storeRefreshToken(user.id, refreshToken, metadata);
 
+    logger.info({ userId: user.id, email: user.email }, "User logged in");
+
     return {
       user: {
         id: user.id,
@@ -95,7 +100,7 @@ export class AuthService {
 
     // Verify JWT
     const decoded = JwtUtil.verifyToken(refreshToken);
-    if (!decoded || decoded.type !== 'refresh') {
+    if (!decoded || decoded.type !== "refresh") {
       throw new AuthenticationError(ERROR_MESSAGES.INVALID_REFRESH_TOKEN);
     }
 
@@ -171,6 +176,7 @@ export class AuthService {
       const storedToken = await this.repository.findRefreshToken(refreshToken);
       if (storedToken && !storedToken.isRevoked) {
         await this.repository.revokeRefreshToken(refreshToken);
+        logger.info({ userId: storedToken.userId }, "User logged out");
       }
     }
   }
@@ -178,6 +184,7 @@ export class AuthService {
   // Logout from all devices
   async logoutAllDevices(userId) {
     await this.repository.revokeAllUserTokens(userId);
+    logger.info({ userId }, "User logged out from all devices");
   }
 
   // Get user's active sessions
