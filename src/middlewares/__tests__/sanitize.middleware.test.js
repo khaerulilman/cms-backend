@@ -1,18 +1,17 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from "vitest";
+import xss from "xss";
 
-import { sanitizeInput } from '../sanitize.middleware.js';
+import { sanitizeInput } from "../sanitize.middleware.js";
 
 // Mock xss
-vi.mock('xss', () => ({
+vi.mock("xss", () => ({
   default: vi.fn((input) => {
     // Simple mock: remove script tags for testing
-    return input.replace(/<script.*?>.*?<\/script>/gi, '');
+    return input.replace(/<script.*?>.*?<\/script>/gi, "");
   }),
 }));
 
-import xss from 'xss';
-
-describe('Sanitize Middleware', () => {
+describe("Sanitize Middleware", () => {
   let mockReq;
   let mockRes;
   let mockNext;
@@ -30,23 +29,23 @@ describe('Sanitize Middleware', () => {
     vi.clearAllMocks();
   });
 
-  describe('sanitizeInput', () => {
-    it('should sanitize string values in request body', () => {
+  describe("sanitizeInput", () => {
+    it("should sanitize string values in request body", () => {
       mockReq.body = {
         name: "John<script>alert('xss')</script>",
-        email: 'test@example.com',
+        email: "test@example.com",
       };
 
       sanitizeInput(mockReq, mockRes, mockNext);
 
       expect(xss).toHaveBeenCalledWith("John<script>alert('xss')</script>");
-      expect(xss).toHaveBeenCalledWith('test@example.com');
-      expect(mockReq.body.name).toBe('John');
+      expect(xss).toHaveBeenCalledWith("test@example.com");
+      expect(mockReq.body.name).toBe("John");
       expect(mockNext).toHaveBeenCalledTimes(1);
       expect(mockNext).toHaveBeenCalledWith();
     });
 
-    it('should sanitize string values in query params', () => {
+    it("should sanitize string values in query params", () => {
       mockReq.query = {
         search: "test<script>alert('xss')</script>",
       };
@@ -54,11 +53,11 @@ describe('Sanitize Middleware', () => {
       sanitizeInput(mockReq, mockRes, mockNext);
 
       expect(xss).toHaveBeenCalledWith("test<script>alert('xss')</script>");
-      expect(mockReq.query.search).toBe('test');
+      expect(mockReq.query.search).toBe("test");
       expect(mockNext).toHaveBeenCalledTimes(1);
     });
 
-    it('should sanitize string values in route params', () => {
+    it("should sanitize string values in route params", () => {
       mockReq.params = {
         id: "123<script>alert('xss')</script>",
       };
@@ -66,13 +65,13 @@ describe('Sanitize Middleware', () => {
       sanitizeInput(mockReq, mockRes, mockNext);
 
       expect(xss).toHaveBeenCalledWith("123<script>alert('xss')</script>");
-      expect(mockReq.params.id).toBe('123');
+      expect(mockReq.params.id).toBe("123");
       expect(mockNext).toHaveBeenCalledTimes(1);
     });
 
-    it('should keep non-string values unchanged in body', () => {
+    it("should keep non-string values unchanged in body", () => {
       mockReq.body = {
-        name: 'John',
+        name: "John",
         age: 25,
         isActive: true,
         score: 98.5,
@@ -88,7 +87,7 @@ describe('Sanitize Middleware', () => {
       expect(mockNext).toHaveBeenCalledTimes(1);
     });
 
-    it('should sanitize nested objects', () => {
+    it("should sanitize nested objects", () => {
       mockReq.body = {
         user: {
           name: "John<script>alert('xss')</script>",
@@ -102,16 +101,16 @@ describe('Sanitize Middleware', () => {
 
       expect(xss).toHaveBeenCalledWith("John<script>alert('xss')</script>");
       expect(xss).toHaveBeenCalledWith("Hello<script>alert('xss')</script>");
-      expect(mockReq.body.user.name).toBe('John');
-      expect(mockReq.body.user.profile.bio).toBe('Hello');
+      expect(mockReq.body.user.name).toBe("John");
+      expect(mockReq.body.user.profile.bio).toBe("Hello");
       expect(mockNext).toHaveBeenCalledTimes(1);
     });
 
-    it('should sanitize array of strings', () => {
+    it("should sanitize array of strings", () => {
       mockReq.body = {
         tags: [
           "tag1<script>alert('xss')</script>",
-          'tag2',
+          "tag2",
           "tag3<script>alert('xss')</script>",
         ],
       };
@@ -119,47 +118,47 @@ describe('Sanitize Middleware', () => {
       sanitizeInput(mockReq, mockRes, mockNext);
 
       expect(xss).toHaveBeenCalledWith("tag1<script>alert('xss')</script>");
-      expect(xss).toHaveBeenCalledWith('tag2');
+      expect(xss).toHaveBeenCalledWith("tag2");
       expect(xss).toHaveBeenCalledWith("tag3<script>alert('xss')</script>");
-      expect(mockReq.body.tags).toEqual(['tag1', 'tag2', 'tag3']);
+      expect(mockReq.body.tags).toEqual(["tag1", "tag2", "tag3"]);
       expect(mockNext).toHaveBeenCalledTimes(1);
     });
 
-    it('should sanitize array of objects', () => {
+    it("should sanitize array of objects", () => {
       mockReq.body = {
         items: [
           { name: "Item1<script>alert('xss')</script>" },
-          { name: 'Item2' },
+          { name: "Item2" },
         ],
       };
 
       sanitizeInput(mockReq, mockRes, mockNext);
 
       expect(xss).toHaveBeenCalledWith("Item1<script>alert('xss')</script>");
-      expect(xss).toHaveBeenCalledWith('Item2');
-      expect(mockReq.body.items[0].name).toBe('Item1');
-      expect(mockReq.body.items[1].name).toBe('Item2');
+      expect(xss).toHaveBeenCalledWith("Item2");
+      expect(mockReq.body.items[0].name).toBe("Item1");
+      expect(mockReq.body.items[1].name).toBe("Item2");
       expect(mockNext).toHaveBeenCalledTimes(1);
     });
 
-    it('should keep non-string array elements unchanged', () => {
+    it("should keep non-string array elements unchanged", () => {
       mockReq.body = {
         numbers: [1, 2, 3],
         booleans: [true, false],
-        mixed: ['text', 123, true],
+        mixed: ["text", 123, true],
       };
 
       sanitizeInput(mockReq, mockRes, mockNext);
 
       expect(mockReq.body.numbers).toEqual([1, 2, 3]);
       expect(mockReq.body.booleans).toEqual([true, false]);
-      expect(mockReq.body.mixed[0]).toBe('text');
+      expect(mockReq.body.mixed[0]).toBe("text");
       expect(mockReq.body.mixed[1]).toBe(123);
       expect(mockReq.body.mixed[2]).toBe(true);
       expect(mockNext).toHaveBeenCalledTimes(1);
     });
 
-    it('should handle empty objects', () => {
+    it("should handle empty objects", () => {
       mockReq.body = {};
       mockReq.query = {};
       mockReq.params = {};
@@ -172,7 +171,7 @@ describe('Sanitize Middleware', () => {
       expect(mockNext).toHaveBeenCalledTimes(1);
     });
 
-    it('should handle undefined body, query, and params', () => {
+    it("should handle undefined body, query, and params", () => {
       mockReq = {};
 
       sanitizeInput(mockReq, mockRes, mockNext);
@@ -181,7 +180,7 @@ describe('Sanitize Middleware', () => {
       expect(mockNext).toHaveBeenCalledWith();
     });
 
-    it('should sanitize deeply nested objects', () => {
+    it("should sanitize deeply nested objects", () => {
       mockReq.body = {
         level1: {
           level2: {
@@ -195,20 +194,20 @@ describe('Sanitize Middleware', () => {
       sanitizeInput(mockReq, mockRes, mockNext);
 
       expect(xss).toHaveBeenCalledWith("Deep<script>alert('xss')</script>");
-      expect(mockReq.body.level1.level2.level3.name).toBe('Deep');
+      expect(mockReq.body.level1.level2.level3.name).toBe("Deep");
       expect(mockNext).toHaveBeenCalledTimes(1);
     });
 
-    it('should sanitize complex nested structure with arrays and objects', () => {
+    it("should sanitize complex nested structure with arrays and objects", () => {
       mockReq.body = {
         users: [
           {
             name: "User1<script>alert('xss')</script>",
-            tags: ["tag1<script>alert('xss')</script>", 'tag2'],
+            tags: ["tag1<script>alert('xss')</script>", "tag2"],
           },
           {
-            name: 'User2',
-            tags: ['tag3'],
+            name: "User2",
+            tags: ["tag3"],
           },
         ],
       };
@@ -217,15 +216,15 @@ describe('Sanitize Middleware', () => {
 
       expect(xss).toHaveBeenCalledWith("User1<script>alert('xss')</script>");
       expect(xss).toHaveBeenCalledWith("tag1<script>alert('xss')</script>");
-      expect(mockReq.body.users[0].name).toBe('User1');
-      expect(mockReq.body.users[0].tags[0]).toBe('tag1');
+      expect(mockReq.body.users[0].name).toBe("User1");
+      expect(mockReq.body.users[0].tags[0]).toBe("tag1");
       expect(mockNext).toHaveBeenCalledTimes(1);
     });
 
-    it('should handle null values in nested objects', () => {
+    it("should handle null values in nested objects", () => {
       mockReq.body = {
         user: {
-          name: 'John',
+          name: "John",
           middleName: null,
           profile: null,
         },
@@ -238,7 +237,7 @@ describe('Sanitize Middleware', () => {
       expect(mockNext).toHaveBeenCalledTimes(1);
     });
 
-    it('should sanitize all request parts simultaneously', () => {
+    it("should sanitize all request parts simultaneously", () => {
       mockReq.body = {
         name: "Body<script>alert('xss')</script>",
       };
@@ -251,14 +250,14 @@ describe('Sanitize Middleware', () => {
 
       sanitizeInput(mockReq, mockRes, mockNext);
 
-      expect(mockReq.body.name).toBe('Body');
-      expect(mockReq.query.search).toBe('Query');
-      expect(mockReq.params.id).toBe('Param');
+      expect(mockReq.body.name).toBe("Body");
+      expect(mockReq.query.search).toBe("Query");
+      expect(mockReq.params.id).toBe("Param");
       expect(mockNext).toHaveBeenCalledTimes(1);
     });
 
-    it('should call next exactly once', () => {
-      mockReq.body = { name: 'Test' };
+    it("should call next exactly once", () => {
+      mockReq.body = { name: "Test" };
 
       sanitizeInput(mockReq, mockRes, mockNext);
 
@@ -266,7 +265,7 @@ describe('Sanitize Middleware', () => {
       expect(mockNext).toHaveBeenCalledWith();
     });
 
-    it('should handle empty arrays', () => {
+    it("should handle empty arrays", () => {
       mockReq.body = {
         tags: [],
         items: [],
@@ -279,15 +278,17 @@ describe('Sanitize Middleware', () => {
       expect(mockNext).toHaveBeenCalledTimes(1);
     });
 
-    it('should handle objects with prototype properties correctly', () => {
+    it("should handle objects with prototype properties correctly", () => {
       mockReq.body = {
         name: "Test<script>alert('xss')</script>",
       };
 
       sanitizeInput(mockReq, mockRes, mockNext);
 
-      expect(mockReq.body.hasOwnProperty('name')).toBe(true);
-      expect(mockReq.body.name).toBe('Test');
+      expect(Object.prototype.hasOwnProperty.call(mockReq.body, "name")).toBe(
+        true,
+      );
+      expect(mockReq.body.name).toBe("Test");
       expect(mockNext).toHaveBeenCalledTimes(1);
     });
   });

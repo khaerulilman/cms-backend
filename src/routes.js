@@ -1,5 +1,4 @@
 import { Router } from "express";
-import cors from "cors";
 
 import { apiKeyMiddleware } from "./middlewares/apiKey.middleware.js";
 import apiKeyRoutes from "./modules/apikey/apikey.routes.js";

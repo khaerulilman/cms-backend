@@ -1,7 +1,9 @@
 import prisma from '../../prisma/client.js';
+import logger from '../../utils/logger.js';
 
 export class RowRepository {
   async createRow(data) {
+    logger.debug({ tableId: data.tableId }, 'Creating row in database');
     return prisma.cmsRow.create({
       data,
       include: {
@@ -16,6 +18,7 @@ export class RowRepository {
   }
 
   async findRowById(rowId) {
+    logger.debug({ rowId }, 'Finding row by ID in database');
     return prisma.cmsRow.findUnique({
       where: { id: rowId },
       include: {
@@ -30,6 +33,7 @@ export class RowRepository {
   }
 
   async findRowsByTableId(tableId) {
+    logger.debug({ tableId }, 'Finding rows by table ID in database');
     return prisma.cmsRow.findMany({
       where: { tableId },
       include: {
@@ -47,6 +51,7 @@ export class RowRepository {
   }
 
   async updateRow(rowId, data) {
+    logger.debug({ rowId, updatingData: data }, 'Updating row in database');
     return prisma.cmsRow.update({
       where: { id: rowId },
       data,
@@ -62,6 +67,7 @@ export class RowRepository {
   }
 
   async deleteRow(rowId) {
+    logger.debug({ rowId }, 'Deleting row from database');
     return prisma.cmsRow.delete({
       where: { id: rowId },
     });
@@ -69,6 +75,7 @@ export class RowRepository {
 
   // Find all cells for a specific row (for cleanup purposes)
   async findCellsByRowId(rowId) {
+    logger.debug({ rowId }, 'Finding cells by row ID in database');
     return prisma.cmsCell.findMany({
       where: { rowId },
       select: {
@@ -80,6 +87,7 @@ export class RowRepository {
   }
 
   async checkRowOwnership(rowId, userId) {
+    logger.debug({ rowId, userId }, 'Checking row ownership');
     const row = await prisma.cmsRow.findUnique({
       where: { id: rowId },
       include: {
@@ -91,11 +99,15 @@ export class RowRepository {
       },
     });
 
-    if (!row) return false;
+    if (!row) {
+      logger.warn({ rowId }, 'Row not found for ownership check');
+      return false;
+    }
     return row.table.project.userId === userId;
   }
 
   async checkTableOwnership(tableId, userId) {
+    logger.debug({ tableId, userId }, 'Checking table ownership');
     const table = await prisma.cmsTable.findUnique({
       where: { id: tableId },
       include: {
@@ -103,7 +115,10 @@ export class RowRepository {
       },
     });
 
-    if (!table) return false;
+    if (!table) {
+      logger.warn({ tableId }, 'Table not found for ownership check');
+      return false;
+    }
     return table.project.userId === userId;
   }
 }

@@ -1,5 +1,7 @@
 import xss from 'xss';
 
+import logger from '../utils/logger.js';
+
 /**
  * Recursively sanitize object properties
  * @param {Object} obj - Object to sanitize
@@ -50,6 +52,10 @@ export const sanitizeInput = (req, res, next) => {
   if (req.params) {
     req.params = sanitizeObject(req.params);
   }
+  logger.debug(
+    { method: req.method, path: req.originalUrl },
+    'Input sanitized',
+  );
   next();
 };
 

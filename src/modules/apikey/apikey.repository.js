@@ -1,7 +1,9 @@
 import prisma from '../../prisma/client.js';
+import logger from '../../utils/logger.js';
 
 export class ApiKeyRepository {
   async findApiKeysByUserId(userId) {
+    logger.debug({ userId }, 'Querying API keys by user ID');
     return prisma.apiKey.findMany({
       where: { userId },
       orderBy: { createdAt: 'desc' },
@@ -21,6 +23,7 @@ export class ApiKeyRepository {
   }
 
   async createApiKey(data) {
+    logger.debug({ userId: data.userId }, 'Creating new API key in database');
     return prisma.apiKey.create({
       data,
     });

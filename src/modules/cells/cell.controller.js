@@ -1,11 +1,8 @@
-import {
-  HTTP_STATUS,
-  SUCCESS_MESSAGES,
-  ERROR_MESSAGES,
-} from '../../constants/http.js';
-import FileUtils from '../../utils/file.js';
+import { HTTP_STATUS, SUCCESS_MESSAGES } from "../../constants/http.js";
+import FileUtils from "../../utils/file.js";
+import logger from "../../utils/logger.js";
 
-import CellService from './cell.service.js';
+import CellService from "./cell.service.js";
 
 export class CellController {
   constructor() {
@@ -19,6 +16,10 @@ export class CellController {
 
       const cells = await this.service.getCellsByRow(rowId, userId);
 
+      logger.debug(
+        { rowId, cellCount: cells.length },
+        "Cells retrieved for row",
+      );
       return res.status(HTTP_STATUS.OK).json({
         success: true,
         message: SUCCESS_MESSAGES.CELLS_RETRIEVED,
@@ -50,6 +51,10 @@ export class CellController {
           await FileUtils.deleteFile(imageFile.path);
         }
 
+        logger.info(
+          { rowId, columnId, hasImage: !!imageFile },
+          "Cell upserted",
+        );
         return res.status(HTTP_STATUS.OK).json({
           success: true,
           message: SUCCESS_MESSAGES.CELL_UPSERTED,

@@ -1,7 +1,10 @@
 import JwtConfig from '../config/jwt.js';
 
+import logger from './logger.js';
+
 export class JwtUtil {
   static generateAccessToken(userId, email) {
+    logger.debug({ userId }, 'Generating access token');
     return JwtConfig.generateToken(
       {
         id: userId,
@@ -13,6 +16,7 @@ export class JwtUtil {
   }
 
   static generateRefreshToken(userId, email) {
+    logger.debug({ userId }, 'Generating refresh token');
     return JwtConfig.generateToken(
       {
         id: userId,
@@ -25,6 +29,7 @@ export class JwtUtil {
 
   // Short-lived token for establishing session via proxy after OAuth
   static generateSetupToken(userId, email) {
+    logger.debug({ userId }, 'Generating setup token');
     return JwtConfig.generateToken(
       {
         id: userId,

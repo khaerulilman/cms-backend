@@ -1,5 +1,7 @@
 import jwt from 'jsonwebtoken';
 
+import logger from '../utils/logger.js';
+
 import { config } from './env.js';
 
 export class JwtConfig {
@@ -16,6 +18,7 @@ export class JwtConfig {
         algorithms: ['HS256'],
       });
     } catch (error) {
+      logger.debug({ errorName: error.name }, 'JWT verification failed');
       return null;
     }
   }

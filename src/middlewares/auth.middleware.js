@@ -1,5 +1,6 @@
 import { HTTP_STATUS, ERROR_MESSAGES } from '../constants/http.js';
 import JwtUtil from '../utils/jwt.js';
+import logger from '../utils/logger.js';
 
 export const authMiddleware = (req, res, next) => {
   try {
@@ -14,6 +15,7 @@ export const authMiddleware = (req, res, next) => {
     }
 
     if (!token) {
+      logger.debug({ path: req.originalUrl }, 'No auth token provided');
       return res.status(HTTP_STATUS.UNAUTHORIZED).json({
         success: false,
         message: ERROR_MESSAGES.NO_TOKEN_PROVIDED,
@@ -22,6 +24,7 @@ export const authMiddleware = (req, res, next) => {
     const decoded = JwtUtil.verifyToken(token);
 
     if (!decoded || decoded.type !== 'access') {
+      logger.warn({ path: req.originalUrl }, 'Invalid or expired auth token');
       return res.status(HTTP_STATUS.UNAUTHORIZED).json({
         success: false,
         message: ERROR_MESSAGES.INVALID_TOKEN,
@@ -33,8 +36,16 @@ export const authMiddleware = (req, res, next) => {
       email: decoded.email,
     };
 
+    logger.debug(
+      { userId: decoded.id, path: req.originalUrl },
+      'User authenticated',
+    );
     next();
   } catch (error) {
+    logger.error(
+      { err: error, path: req.originalUrl },
+      'Auth middleware error',
+    );
     return res.status(HTTP_STATUS.UNAUTHORIZED).json({
       success: false,
       message: ERROR_MESSAGES.UNAUTHORIZED,

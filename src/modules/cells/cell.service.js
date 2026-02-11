@@ -1,8 +1,8 @@
-import CloudinaryService from "../../utils/cloudinary.js";
-import { NotFoundError } from "../../utils/errors.js";
-import logger from "../../utils/logger.js";
+import CloudinaryService from '../../utils/cloudinary.js';
+import { NotFoundError } from '../../utils/errors.js';
+import logger from '../../utils/logger.js';
 
-import CellRepository from "./cell.repository.js";
+import CellRepository from './cell.repository.js';
 
 export class CellService {
   constructor() {
@@ -13,10 +13,12 @@ export class CellService {
     // Check row ownership
     const isRowOwner = await this.repository.checkRowOwnership(rowId, userId);
     if (!isRowOwner) {
-      throw new NotFoundError("Row not found");
+      logger.warn({ rowId, userId }, 'Row ownership check failed');
+      throw new NotFoundError('Row not found');
     }
 
     const cells = await this.repository.findCellsByRowId(rowId);
+    logger.debug({ rowId, cellCount: cells.length }, 'Cells fetched by row');
     return cells.map((cell) => this._formatCell(cell));
   }
 
@@ -25,7 +27,7 @@ export class CellService {
     // Check row ownership
     const isRowOwner = await this.repository.checkRowOwnership(rowId, userId);
     if (!isRowOwner) {
-      throw new NotFoundError("Row not found");
+      throw new NotFoundError('Row not found');
     }
 
     // Check if cell already exists
@@ -44,6 +46,10 @@ export class CellService {
         // Delete existing image if any
         if (existingCell && existingCell.cloudinaryPublicId) {
           await CloudinaryService.deleteImage(existingCell.cloudinaryPublicId);
+          logger.debug(
+            { publicId: existingCell.cloudinaryPublicId },
+            'Old cell image deleted',
+          );
         }
 
         // Upload new image to Cloudinary
@@ -52,10 +58,18 @@ export class CellService {
         );
         imageUrl = uploadResult.imageUrl;
         cloudinaryPublicId = uploadResult.publicId;
+        logger.info(
+          { rowId, columnId, publicId: cloudinaryPublicId },
+          'Cell image uploaded',
+        );
 
         // Set value to null (mutually exclusive)
         finalValue = null;
       } catch (error) {
+        logger.error(
+          { err: error, rowId, columnId },
+          'Cell image upload failed',
+        );
         throw new Error(`Failed to upload image: ${error.message}`);
       }
     }
@@ -70,7 +84,7 @@ export class CellService {
         } catch (error) {
           logger.error(
             { cloudinaryPublicId: existingCell.cloudinaryPublicId, err: error },
-            "Failed to delete image from Cloudinary",
+            'Failed to delete image from Cloudinary',
           );
         }
       }
@@ -90,7 +104,7 @@ export class CellService {
         } catch (error) {
           logger.error(
             { cloudinaryPublicId: existingCell.cloudinaryPublicId, err: error },
-            "Failed to delete image from Cloudinary",
+            'Failed to delete image from Cloudinary',
           );
         }
       }
@@ -108,7 +122,7 @@ export class CellService {
     );
 
     if (!cell) {
-      throw new NotFoundError("Cell not found");
+      throw new NotFoundError('Cell not found');
     }
 
     return this._formatCell(cell);

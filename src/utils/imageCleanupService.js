@@ -1,15 +1,8 @@
-import prisma from "../prisma/client.js";
+import prisma from '../prisma/client.js';
 
-import CloudinaryService from "./cloudinary.js";
-import logger from "./logger.js";
+import CloudinaryService from './cloudinary.js';
+import logger from './logger.js';
 
-/**
- * ImageCleanupService - Centralized service untuk semua image deletion operations
- * Handles cascade image deletion untuk semua entities yang memiliki relasi
- *
- * Hierarchy:
- * User → Projects → Tables → Rows → Cells → Images
- */
 export class ImageCleanupService {
   /**
    * Delete semua images yang related dengan User
@@ -32,9 +25,13 @@ export class ImageCleanupService {
         },
       });
 
+      logger.info(
+        { userId, imageCount: cells.length },
+        'Deleting images for user',
+      );
       await this._deleteFromCloudinary(cells);
     } catch (error) {
-      logger.error({ userId, err: error }, "Failed to cleanup images for user");
+      logger.error({ err: error, userId }, 'Failed to cleanup images for user');
       throw error;
     }
   }
@@ -58,11 +55,15 @@ export class ImageCleanupService {
         },
       });
 
+      logger.info(
+        { projectId, imageCount: cells.length },
+        'Deleting images for project',
+      );
       await this._deleteFromCloudinary(cells);
     } catch (error) {
       logger.error(
-        { projectId, err: error },
-        "Failed to cleanup images for project",
+        { err: error, projectId },
+        'Failed to cleanup images for project',
       );
       throw error;
     }
@@ -85,11 +86,15 @@ export class ImageCleanupService {
         },
       });
 
+      logger.info(
+        { tableId, imageCount: cells.length },
+        'Deleting images for table',
+      );
       await this._deleteFromCloudinary(cells);
     } catch (error) {
       logger.error(
-        { tableId, err: error },
-        "Failed to cleanup images for table",
+        { err: error, tableId },
+        'Failed to cleanup images for table',
       );
       throw error;
     }
@@ -110,11 +115,15 @@ export class ImageCleanupService {
         },
       });
 
+      logger.info(
+        { columnId, imageCount: cells.length },
+        'Deleting images for column',
+      );
       await this._deleteFromCloudinary(cells);
     } catch (error) {
       logger.error(
-        { columnId, err: error },
-        "Failed to cleanup images for column",
+        { err: error, columnId },
+        'Failed to cleanup images for column',
       );
       throw error;
     }
@@ -135,9 +144,13 @@ export class ImageCleanupService {
         },
       });
 
+      logger.info(
+        { rowId, imageCount: cells.length },
+        'Deleting images for row',
+      );
       await this._deleteFromCloudinary(cells);
     } catch (error) {
-      logger.error({ rowId, err: error }, "Failed to cleanup images for row");
+      logger.error({ err: error, rowId }, 'Failed to cleanup images for row');
       throw error;
     }
   }
@@ -157,9 +170,13 @@ export class ImageCleanupService {
 
       if (cell && cell.cloudinaryPublicId) {
         await CloudinaryService.deleteImage(cell.cloudinaryPublicId);
+        logger.info(
+          { cellId, publicId: cell.cloudinaryPublicId },
+          'Image deleted for cell',
+        );
       }
     } catch (error) {
-      logger.error({ cellId, err: error }, "Failed to cleanup image for cell");
+      logger.error({ err: error, cellId }, 'Failed to cleanup image for cell');
       throw error;
     }
   }
@@ -183,10 +200,14 @@ export class ImageCleanupService {
 
     try {
       await CloudinaryService.deleteImages(publicIds);
+      logger.info(
+        { count: publicIds.length },
+        'Batch Cloudinary cleanup completed',
+      );
     } catch (error) {
       logger.error(
-        { count: publicIds.length, err: error },
-        "Failed to delete images from Cloudinary",
+        { err: error, count: publicIds.length },
+        'Failed to batch delete images from Cloudinary',
       );
       // Non-blocking: jangan throw error, biar database deletion tetap jalan
     }

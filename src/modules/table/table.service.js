@@ -1,10 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
 
-import {
-  NotFoundError,
-  ValidationError,
-  TableNotFoundError,
-} from "../../utils/errors.js";
+import { ValidationError, TableNotFoundError } from "../../utils/errors.js";
 import ImageCleanupService from "../../utils/imageCleanupService.js";
 import logger from "../../utils/logger.js";
 
@@ -16,8 +12,13 @@ export class TableService {
   }
 
   async createTable(projectId, userId, data) {
+    logger.debug(
+      { projectId, userId, tableName: data.name },
+      "Create table service called",
+    );
     // Validate input
     if (!data.name || data.name.trim() === "") {
+      logger.warn({ projectId, userId }, "Table name is required");
       throw new ValidationError("Table name is required");
     }
 
@@ -28,6 +29,7 @@ export class TableService {
     );
 
     if (!isProjectOwner) {
+      logger.warn({ projectId, userId }, "Project ownership check failed");
       throw new TableNotFoundError("Project not found");
     }
 
@@ -38,12 +40,16 @@ export class TableService {
       isSubTable: data.isSubTable ?? false,
     });
 
-    logger.info({ tableId: table.id, projectId }, "Table created");
+    logger.info({ tableId: table.id, projectId }, "Table created in service");
 
     return this._formatTable(table);
   }
 
   async getUserTablesByProject(projectId, userId) {
+    logger.debug(
+      { projectId, userId },
+      "Get user tables by project service called",
+    );
     // Check project ownership
     const isProjectOwner = await this.repository.checkProjectOwnership(
       projectId,
@@ -51,38 +57,59 @@ export class TableService {
     );
 
     if (!isProjectOwner) {
+      logger.warn({ projectId, userId }, "Project ownership check failed");
       throw new TableNotFoundError("Project not found");
     }
 
     const tables = await this.repository.findTablesByProjectId(projectId);
 
+    logger.info(
+      { projectId, tableCount: tables.length },
+      "Tables retrieved from project",
+    );
     return tables.map((table) => this._formatTable(table));
   }
 
   async getTableById(tableId, userId) {
+    logger.debug({ tableId, userId }, "Get table by ID service called");
     const table = await this.repository.findTableById(tableId);
 
     if (!table) {
+      logger.warn({ tableId }, "Table not found in database");
       throw new TableNotFoundError("Table not found");
     }
 
     // Check ownership
     if (table.project.userId !== userId) {
+      logger.warn(
+        { tableId, userId, ownerId: table.project.userId },
+        "Table ownership check failed",
+      );
       throw new TableNotFoundError("Table not found");
     }
 
+    logger.info(
+      { tableId, userId, tableName: table.name },
+      "Table retrieved by ID",
+    );
     return this._formatTableWithFullData(table);
   }
 
   async updateTable(tableId, userId, data) {
+    logger.debug(
+      { tableId, userId, newName: data.name },
+      "Update table service called",
+    );
     // Check ownership
     const isOwner = await this.repository.checkTableOwnership(tableId, userId);
     if (!isOwner) {
+      logger.warn({ tableId, userId }, "Table ownership check failed");
       throw new TableNotFoundError("Table not found");
     }
 
     // Validate input
     if (data.name && data.name.trim() === "") {
+      logger.warn({ tableId, userId }, "Table name is empty for update");
       throw new ValidationError("Table name cannot be empty");
     }
 
@@ -91,23 +118,30 @@ export class TableService {
 
     const table = await this.repository.updateTable(tableId, updateData);
 
+    logger.info(
+      { tableId, userId, newName: table.name },
+      "Table updated in service",
+    );
     return this._formatTable(table);
   }
 
   async deleteTable(tableId, userId) {
+    logger.debug({ tableId, userId }, "Delete table service called");
     // Check ownership
     const isOwner = await this.repository.checkTableOwnership(tableId, userId);
     if (!isOwner) {
+      logger.warn({ tableId, userId }, "Table ownership check failed");
       throw new TableNotFoundError("Table not found");
     }
 
     // Cleanup images from Cloudinary before deleting table
+    logger.debug({ tableId }, "Cleaning up images from table");
     await ImageCleanupService.deleteImagesByTableId(tableId);
 
     // Delete the table from database
     await this.repository.deleteTable(tableId);
 
-    logger.info({ tableId, userId }, "Table deleted");
+    logger.info({ tableId, userId }, "Table deleted with image cleanup");
   }
 
   _formatTable(table) {
@@ -153,17 +187,24 @@ export class TableService {
   }
 
   async getTableSimplified(tableId, userId) {
+    logger.debug({ tableId, userId }, "Get table simplified service called");
     const table = await this.repository.findTableById(tableId);
 
     if (!table) {
+      logger.warn({ tableId }, "Table not found in database");
       throw new TableNotFoundError("Table not found");
     }
 
     // Check ownership
     if (table.project.userId !== userId) {
+      logger.warn(
+        { tableId, userId, ownerId: table.project.userId },
+        "Table ownership check failed",
+      );
       throw new TableNotFoundError("Table not found");
     }
 
+    logger.debug({ tableId }, "Resolving table references");
     // Pass empty Set for tracking visited tables (prevent infinite loops)
     return this._formatTableSimplifiedWithResolution(table, userId, new Set());
   }
@@ -182,25 +223,39 @@ export class TableService {
 
     // Prevent infinite loops with circular references
     if (visitedTableIds.has(value)) {
+      logger.debug(
+        { tableId: value },
+        "Circular reference detected, returning original value",
+      );
       return value;
     }
 
     try {
+      logger.debug({ tableId: value }, "Attempting to resolve table reference");
       // Try to get the referenced table
       const referencedTable = await this.repository.findTableById(value);
 
       if (!referencedTable) {
+        logger.debug(
+          { tableId: value },
+          "Referenced table not found, returning original value",
+        );
         return value;
       }
 
       // Check ownership
       if (referencedTable.project.userId !== userId) {
+        logger.warn(
+          { tableId: value, userId },
+          "User does not own referenced table, returning original value",
+        );
         return value;
       }
 
       // Add to visited set before resolving
       visitedTableIds.add(value);
 
+      logger.debug({ tableId: value }, "Resolving nested table reference");
       // Return simplified format of referenced table with nested resolution
       return this._formatTableSimplifiedWithResolution(
         referencedTable,
@@ -208,6 +263,10 @@ export class TableService {
         visitedTableIds,
       );
     } catch (error) {
+      logger.error(
+        { tableId: value, error: error.message },
+        "Error resolving table reference",
+      );
       // If error, return original value
       return value;
     }
@@ -242,6 +301,10 @@ export class TableService {
     userId,
     visitedTableIds = new Set(),
   ) {
+    logger.debug(
+      { tableId: table.id, rowCount: table.rows.length },
+      "Formatting table with reference resolution",
+    );
     const normalizeKey = (name) =>
       name.trim().toLowerCase().replace(/\s+/g, "_"); // spasi jadi underscore
 
@@ -271,6 +334,14 @@ export class TableService {
       }),
     );
 
+    logger.info(
+      {
+        tableId: table.id,
+        rowCount: cellsByRow.length,
+        columnCount: table.columns.length,
+      },
+      "Table formatted successfully",
+    );
     return {
       name: table.name,
       cells: cellsByRow,

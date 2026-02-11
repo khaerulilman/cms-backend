@@ -3,6 +3,7 @@ import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import { v4 as uuidv4 } from 'uuid';
 
 import AuthRepository from '../modules/auth/auth.repository.js';
+import logger from '../utils/logger.js';
 
 import { config } from './env.js';
 
@@ -31,15 +32,21 @@ passport.use(
             name,
             password: uuidv4(), // Random password for OAuth users
           });
+          logger.info({ email }, 'New user created via Google OAuth');
+        } else {
+          logger.debug({ email }, 'Existing user logged in via Google OAuth');
         }
 
         return done(null, user);
       } catch (error) {
+        logger.error({ err: error }, 'Google OAuth authentication failed');
         return done(error, null);
       }
     },
   ),
 );
+
+logger.info('Google OAuth strategy initialized');
 
 passport.serializeUser((user, done) => {
   done(null, user.id);

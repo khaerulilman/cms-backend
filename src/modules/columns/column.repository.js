@@ -1,7 +1,9 @@
 import prisma from '../../prisma/client.js';
+import logger from '../../utils/logger.js';
 
 export class ColumnRepository {
   async createColumns(data) {
+    logger.debug({ columnCount: data.length }, 'Creating columns in database');
     // Create multiple columns at once
     const columns = await Promise.all(
       data.map((column) =>
@@ -15,10 +17,15 @@ export class ColumnRepository {
         }),
       ),
     );
+    logger.debug(
+      { createdCount: columns.length },
+      'Columns created in database',
+    );
     return columns;
   }
 
   async findColumnById(columnId) {
+    logger.debug({ columnId }, 'Finding column by ID in database');
     return prisma.cmsColumn.findUnique({
       where: { id: columnId },
       include: {
@@ -29,6 +36,7 @@ export class ColumnRepository {
   }
 
   async findColumnsByTableId(tableId) {
+    logger.debug({ tableId }, 'Finding columns by table ID in database');
     return prisma.cmsColumn.findMany({
       where: { tableId },
       include: {
@@ -41,6 +49,10 @@ export class ColumnRepository {
   }
 
   async updateColumn(columnId, data) {
+    logger.debug(
+      { columnId, updatingData: data },
+      'Updating column in database',
+    );
     return prisma.cmsColumn.update({
       where: { id: columnId },
       data,
@@ -52,12 +64,14 @@ export class ColumnRepository {
   }
 
   async deleteColumn(columnId) {
+    logger.debug({ columnId }, 'Deleting column from database');
     return prisma.cmsColumn.delete({
       where: { id: columnId },
     });
   }
 
   async checkColumnOwnership(columnId, userId) {
+    logger.debug({ columnId, userId }, 'Checking column ownership');
     const column = await prisma.cmsColumn.findUnique({
       where: { id: columnId },
       include: {
@@ -69,11 +83,15 @@ export class ColumnRepository {
       },
     });
 
-    if (!column) return false;
+    if (!column) {
+      logger.warn({ columnId }, 'Column not found for ownership check');
+      return false;
+    }
     return column.table.project.userId === userId;
   }
 
   async checkTableOwnership(tableId, userId) {
+    logger.debug({ tableId, userId }, 'Checking table ownership');
     const table = await prisma.cmsTable.findUnique({
       where: { id: tableId },
       include: {
@@ -81,7 +99,10 @@ export class ColumnRepository {
       },
     });
 
-    if (!table) return false;
+    if (!table) {
+      logger.warn({ tableId }, 'Table not found for ownership check');
+      return false;
+    }
     return table.project.userId === userId;
   }
 }

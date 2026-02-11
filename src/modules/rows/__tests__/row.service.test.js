@@ -1,21 +1,23 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from "vitest";
 
-import { NotFoundError } from '../../../utils/errors.js';
+import { NotFoundError } from "../../../utils/errors.js";
+import ImageCleanupService from "../../../utils/imageCleanupService.js";
+import { RowService } from "../row.service.js";
 
 // Mock uuid - return value berbeda dari expected untuk menghindari mock issue
-vi.mock('uuid', () => ({
-  v4: vi.fn(() => 'generated-uuid-123'),
+vi.mock("uuid", () => ({
+  v4: vi.fn(() => "generated-uuid-123"),
 }));
 
 // Mock ImageCleanupService
-vi.mock('../../../utils/imageCleanupService.js', () => ({
+vi.mock("../../../utils/imageCleanupService.js", () => ({
   default: {
     deleteImagesByRowId: vi.fn(),
   },
 }));
 
 // Mock repository
-vi.mock('../row.repository.js', () => ({
+vi.mock("../row.repository.js", () => ({
   default: class MockRowRepository {
     checkTableOwnership = vi.fn();
     checkRowOwnership = vi.fn();
@@ -28,11 +30,7 @@ vi.mock('../row.repository.js', () => ({
   },
 }));
 
-// Import after mocks
-import ImageCleanupService from '../../../utils/imageCleanupService.js';
-import { RowService } from '../row.service.js';
-
-describe('RowService', () => {
+describe("RowService", () => {
   let service;
   let mockRepository;
 
@@ -54,19 +52,19 @@ describe('RowService', () => {
     service.repository = mockRepository;
   });
 
-  describe('createRow', () => {
-    it('should successfully create a row for owned table', async () => {
+  describe("createRow", () => {
+    it("should successfully create a row for owned table", async () => {
       // Arrange - return value berbeda dari expected (sesuai kriteria mock issue)
-      const tableId = 'table-456';
-      const userId = 'user-789';
+      const tableId = "table-456";
+      const userId = "user-789";
 
       // Mock return raw data (bukan expected result)
       const mockCreatedRow = {
-        id: 'generated-uuid-123',
-        tableId: 'table-456',
+        id: "generated-uuid-123",
+        tableId: "table-456",
         cells: [],
-        createdAt: new Date('2026-01-15'),
-        updatedAt: new Date('2026-01-15'),
+        createdAt: new Date("2026-01-15"),
+        updatedAt: new Date("2026-01-15"),
       };
 
       mockRepository.checkTableOwnership.mockResolvedValue(true);
@@ -87,18 +85,18 @@ describe('RowService', () => {
 
       // Expected result setelah formatting
       expect(result).toEqual({
-        id: 'generated-uuid-123',
-        tableId: 'table-456',
+        id: "generated-uuid-123",
+        tableId: "table-456",
         cells: [],
-        createdAt: new Date('2026-01-15'),
-        updatedAt: new Date('2026-01-15'),
+        createdAt: new Date("2026-01-15"),
+        updatedAt: new Date("2026-01-15"),
       });
     });
 
-    it('should throw NotFoundError if user does not own table', async () => {
+    it("should throw NotFoundError if user does not own table", async () => {
       // Arrange
-      const tableId = 'table-456';
-      const userId = 'other-user';
+      const tableId = "table-456";
+      const userId = "other-user";
 
       mockRepository.checkTableOwnership.mockResolvedValue(false);
 
@@ -115,32 +113,32 @@ describe('RowService', () => {
     });
   });
 
-  describe('getRowsByTable', () => {
-    it('should return formatted rows for owned table', async () => {
+  describe("getRowsByTable", () => {
+    it("should return formatted rows for owned table", async () => {
       // Arrange
-      const tableId = 'table-456';
-      const userId = 'user-789';
+      const tableId = "table-456";
+      const userId = "user-789";
 
       // Mock raw data dari repository
       const mockRows = [
         {
-          id: 'row-1',
-          tableId: 'table-456',
+          id: "row-1",
+          tableId: "table-456",
           cells: [
             {
-              id: 'cell-1',
-              rowId: 'row-1',
-              columnId: 'col-1',
-              column: { name: 'Name' },
-              value: 'John',
+              id: "cell-1",
+              rowId: "row-1",
+              columnId: "col-1",
+              column: { name: "Name" },
+              value: "John",
               imageUrl: null,
               cloudinaryPublicId: null,
-              createdAt: new Date('2026-01-15'),
-              updatedAt: new Date('2026-01-15'),
+              createdAt: new Date("2026-01-15"),
+              updatedAt: new Date("2026-01-15"),
             },
           ],
-          createdAt: new Date('2026-01-15'),
-          updatedAt: new Date('2026-01-15'),
+          createdAt: new Date("2026-01-15"),
+          updatedAt: new Date("2026-01-15"),
         },
       ];
 
@@ -160,30 +158,30 @@ describe('RowService', () => {
       // Verify formatted result
       expect(result).toHaveLength(1);
       expect(result[0]).toEqual({
-        id: 'row-1',
-        tableId: 'table-456',
+        id: "row-1",
+        tableId: "table-456",
         cells: [
           {
-            id: 'cell-1',
-            rowId: 'row-1',
-            columnId: 'col-1',
-            columnName: 'Name',
-            value: 'John',
+            id: "cell-1",
+            rowId: "row-1",
+            columnId: "col-1",
+            columnName: "Name",
+            value: "John",
             imageUrl: null,
             cloudinaryPublicId: null,
-            createdAt: new Date('2026-01-15'),
-            updatedAt: new Date('2026-01-15'),
+            createdAt: new Date("2026-01-15"),
+            updatedAt: new Date("2026-01-15"),
           },
         ],
-        createdAt: new Date('2026-01-15'),
-        updatedAt: new Date('2026-01-15'),
+        createdAt: new Date("2026-01-15"),
+        updatedAt: new Date("2026-01-15"),
       });
     });
 
-    it('should throw NotFoundError if user does not own table', async () => {
+    it("should throw NotFoundError if user does not own table", async () => {
       // Arrange
-      const tableId = 'table-456';
-      const userId = 'other-user';
+      const tableId = "table-456";
+      const userId = "other-user";
 
       mockRepository.checkTableOwnership.mockResolvedValue(false);
 
@@ -200,30 +198,30 @@ describe('RowService', () => {
     });
   });
 
-  describe('getRowById', () => {
-    it('should return formatted row for owned row', async () => {
+  describe("getRowById", () => {
+    it("should return formatted row for owned row", async () => {
       // Arrange
-      const rowId = 'row-123';
-      const userId = 'user-789';
+      const rowId = "row-123";
+      const userId = "user-789";
 
       const mockRow = {
-        id: 'row-123',
-        tableId: 'table-456',
+        id: "row-123",
+        tableId: "table-456",
         cells: [
           {
-            id: 'cell-1',
-            rowId: 'row-123',
-            columnId: 'col-1',
-            column: { name: 'Email' },
-            value: 'test@example.com',
-            imageUrl: 'https://cloudinary.com/image.jpg',
-            cloudinaryPublicId: 'public-id-1',
-            createdAt: new Date('2026-01-15'),
-            updatedAt: new Date('2026-01-15'),
+            id: "cell-1",
+            rowId: "row-123",
+            columnId: "col-1",
+            column: { name: "Email" },
+            value: "test@example.com",
+            imageUrl: "https://cloudinary.com/image.jpg",
+            cloudinaryPublicId: "public-id-1",
+            createdAt: new Date("2026-01-15"),
+            updatedAt: new Date("2026-01-15"),
           },
         ],
-        createdAt: new Date('2026-01-15'),
-        updatedAt: new Date('2026-01-15'),
+        createdAt: new Date("2026-01-15"),
+        updatedAt: new Date("2026-01-15"),
       };
 
       mockRepository.checkRowOwnership.mockResolvedValue(true);
@@ -240,30 +238,30 @@ describe('RowService', () => {
       expect(mockRepository.findRowById).toHaveBeenCalledWith(rowId);
 
       expect(result).toEqual({
-        id: 'row-123',
-        tableId: 'table-456',
+        id: "row-123",
+        tableId: "table-456",
         cells: [
           {
-            id: 'cell-1',
-            rowId: 'row-123',
-            columnId: 'col-1',
-            columnName: 'Email',
-            value: 'test@example.com',
-            imageUrl: 'https://cloudinary.com/image.jpg',
-            cloudinaryPublicId: 'public-id-1',
-            createdAt: new Date('2026-01-15'),
-            updatedAt: new Date('2026-01-15'),
+            id: "cell-1",
+            rowId: "row-123",
+            columnId: "col-1",
+            columnName: "Email",
+            value: "test@example.com",
+            imageUrl: "https://cloudinary.com/image.jpg",
+            cloudinaryPublicId: "public-id-1",
+            createdAt: new Date("2026-01-15"),
+            updatedAt: new Date("2026-01-15"),
           },
         ],
-        createdAt: new Date('2026-01-15'),
-        updatedAt: new Date('2026-01-15'),
+        createdAt: new Date("2026-01-15"),
+        updatedAt: new Date("2026-01-15"),
       });
     });
 
-    it('should throw NotFoundError if user does not own row', async () => {
+    it("should throw NotFoundError if user does not own row", async () => {
       // Arrange
-      const rowId = 'row-123';
-      const userId = 'other-user';
+      const rowId = "row-123";
+      const userId = "other-user";
 
       mockRepository.checkRowOwnership.mockResolvedValue(false);
 
@@ -279,10 +277,10 @@ describe('RowService', () => {
       expect(mockRepository.findRowById).not.toHaveBeenCalled();
     });
 
-    it('should throw NotFoundError if row not found after ownership check', async () => {
+    it("should throw NotFoundError if row not found after ownership check", async () => {
       // Arrange
-      const rowId = 'row-123';
-      const userId = 'user-789';
+      const rowId = "row-123";
+      const userId = "user-789";
 
       mockRepository.checkRowOwnership.mockResolvedValue(true);
       mockRepository.findRowById.mockResolvedValue(null);
@@ -300,19 +298,19 @@ describe('RowService', () => {
     });
   });
 
-  describe('updateRow', () => {
-    it('should return row when ownership is valid', async () => {
+  describe("updateRow", () => {
+    it("should return row when ownership is valid", async () => {
       // Arrange
-      const rowId = 'row-123';
-      const userId = 'user-789';
+      const rowId = "row-123";
+      const userId = "user-789";
       const data = {};
 
       const mockRow = {
-        id: 'row-123',
-        tableId: 'table-456',
+        id: "row-123",
+        tableId: "table-456",
         cells: [],
-        createdAt: new Date('2026-01-15'),
-        updatedAt: new Date('2026-01-15'),
+        createdAt: new Date("2026-01-15"),
+        updatedAt: new Date("2026-01-15"),
       };
 
       mockRepository.checkRowOwnership.mockResolvedValue(true);
@@ -328,18 +326,18 @@ describe('RowService', () => {
       );
       expect(mockRepository.findRowById).toHaveBeenCalledWith(rowId);
       expect(result).toEqual({
-        id: 'row-123',
-        tableId: 'table-456',
+        id: "row-123",
+        tableId: "table-456",
         cells: [],
-        createdAt: new Date('2026-01-15'),
-        updatedAt: new Date('2026-01-15'),
+        createdAt: new Date("2026-01-15"),
+        updatedAt: new Date("2026-01-15"),
       });
     });
 
-    it('should throw NotFoundError if user does not own row', async () => {
+    it("should throw NotFoundError if user does not own row", async () => {
       // Arrange
-      const rowId = 'row-123';
-      const userId = 'other-user';
+      const rowId = "row-123";
+      const userId = "other-user";
       const data = {};
 
       mockRepository.checkRowOwnership.mockResolvedValue(false);
@@ -356,10 +354,10 @@ describe('RowService', () => {
       expect(mockRepository.findRowById).not.toHaveBeenCalled();
     });
 
-    it('should throw NotFoundError if row not found', async () => {
+    it("should throw NotFoundError if row not found", async () => {
       // Arrange
-      const rowId = 'row-123';
-      const userId = 'user-789';
+      const rowId = "row-123";
+      const userId = "user-789";
       const data = {};
 
       mockRepository.checkRowOwnership.mockResolvedValue(true);
@@ -378,18 +376,18 @@ describe('RowService', () => {
     });
   });
 
-  describe('deleteRow', () => {
-    it('should delete row and cleanup images', async () => {
+  describe("deleteRow", () => {
+    it("should delete row and cleanup images", async () => {
       // Arrange
-      const rowId = 'row-123';
-      const userId = 'user-789';
+      const rowId = "row-123";
+      const userId = "user-789";
 
       const mockDeletedRow = {
-        id: 'row-123',
-        tableId: 'table-456',
+        id: "row-123",
+        tableId: "table-456",
         cells: [],
-        createdAt: new Date('2026-01-15'),
-        updatedAt: new Date('2026-01-15'),
+        createdAt: new Date("2026-01-15"),
+        updatedAt: new Date("2026-01-15"),
       };
 
       mockRepository.checkRowOwnership.mockResolvedValue(true);
@@ -410,18 +408,18 @@ describe('RowService', () => {
       expect(mockRepository.deleteRow).toHaveBeenCalledWith(rowId);
 
       expect(result).toEqual({
-        id: 'row-123',
-        tableId: 'table-456',
+        id: "row-123",
+        tableId: "table-456",
         cells: [],
-        createdAt: new Date('2026-01-15'),
-        updatedAt: new Date('2026-01-15'),
+        createdAt: new Date("2026-01-15"),
+        updatedAt: new Date("2026-01-15"),
       });
     });
 
-    it('should throw NotFoundError if user does not own row', async () => {
+    it("should throw NotFoundError if user does not own row", async () => {
       // Arrange
-      const rowId = 'row-123';
-      const userId = 'other-user';
+      const rowId = "row-123";
+      const userId = "other-user";
 
       mockRepository.checkRowOwnership.mockResolvedValue(false);
 
@@ -438,10 +436,10 @@ describe('RowService', () => {
       expect(mockRepository.deleteRow).not.toHaveBeenCalled();
     });
 
-    it('should throw NotFoundError if delete returns null', async () => {
+    it("should throw NotFoundError if delete returns null", async () => {
       // Arrange
-      const rowId = 'row-123';
-      const userId = 'user-789';
+      const rowId = "row-123";
+      const userId = "user-789";
 
       mockRepository.checkRowOwnership.mockResolvedValue(true);
       ImageCleanupService.deleteImagesByRowId.mockResolvedValue();
@@ -463,27 +461,27 @@ describe('RowService', () => {
     });
   });
 
-  describe('_formatRow', () => {
-    it('should format row with cells correctly', () => {
+  describe("_formatRow", () => {
+    it("should format row with cells correctly", () => {
       // Arrange - raw data
       const rawRow = {
-        id: 'row-123',
-        tableId: 'table-456',
+        id: "row-123",
+        tableId: "table-456",
         cells: [
           {
-            id: 'cell-1',
-            rowId: 'row-123',
-            columnId: 'col-1',
-            column: { name: 'Title' },
-            value: 'Test Title',
+            id: "cell-1",
+            rowId: "row-123",
+            columnId: "col-1",
+            column: { name: "Title" },
+            value: "Test Title",
             imageUrl: null,
             cloudinaryPublicId: null,
-            createdAt: new Date('2026-01-15'),
-            updatedAt: new Date('2026-01-15'),
+            createdAt: new Date("2026-01-15"),
+            updatedAt: new Date("2026-01-15"),
           },
         ],
-        createdAt: new Date('2026-01-15'),
-        updatedAt: new Date('2026-01-15'),
+        createdAt: new Date("2026-01-15"),
+        updatedAt: new Date("2026-01-15"),
       };
 
       // Act
@@ -491,34 +489,34 @@ describe('RowService', () => {
 
       // Assert
       expect(result).toEqual({
-        id: 'row-123',
-        tableId: 'table-456',
+        id: "row-123",
+        tableId: "table-456",
         cells: [
           {
-            id: 'cell-1',
-            rowId: 'row-123',
-            columnId: 'col-1',
-            columnName: 'Title',
-            value: 'Test Title',
+            id: "cell-1",
+            rowId: "row-123",
+            columnId: "col-1",
+            columnName: "Title",
+            value: "Test Title",
             imageUrl: null,
             cloudinaryPublicId: null,
-            createdAt: new Date('2026-01-15'),
-            updatedAt: new Date('2026-01-15'),
+            createdAt: new Date("2026-01-15"),
+            updatedAt: new Date("2026-01-15"),
           },
         ],
-        createdAt: new Date('2026-01-15'),
-        updatedAt: new Date('2026-01-15'),
+        createdAt: new Date("2026-01-15"),
+        updatedAt: new Date("2026-01-15"),
       });
     });
 
-    it('should return empty cells array if no cells', () => {
+    it("should return empty cells array if no cells", () => {
       // Arrange
       const rawRow = {
-        id: 'row-123',
-        tableId: 'table-456',
+        id: "row-123",
+        tableId: "table-456",
         cells: null,
-        createdAt: new Date('2026-01-15'),
-        updatedAt: new Date('2026-01-15'),
+        createdAt: new Date("2026-01-15"),
+        updatedAt: new Date("2026-01-15"),
       };
 
       // Act

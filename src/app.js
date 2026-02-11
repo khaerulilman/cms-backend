@@ -1,26 +1,26 @@
-import cookieParser from "cookie-parser";
-import cors from "cors";
-import express from "express";
-import session from "express-session";
+import cookieParser from 'cookie-parser';
+import cors from 'cors';
+import express from 'express';
+import session from 'express-session';
 
-import { config } from "./config/env.js";
-import passport from "./config/google-oauth.js";
-import errorMiddleware from "./middlewares/error.middleware.js";
-import requestLogger from "./middlewares/requestLogger.middleware.js";
-import routes from "./routes.js";
-import logger from "./utils/logger.js";
+import { config } from './config/env.js';
+import passport from './config/google-oauth.js';
+import errorMiddleware from './middlewares/error.middleware.js';
+import requestLogger from './middlewares/requestLogger.middleware.js';
+import routes from './routes.js';
+import logger from './utils/logger.js';
 
 const app = express();
 
 // Dynamic CORS middleware
 app.use((req, res, next) => {
   // Allow all origins for public simplify endpoint
-  if (req.path.includes("/simplify")) {
+  if (req.path.includes('/simplify')) {
     cors({
-      origin: "*",
+      origin: '*',
       credentials: false,
-      methods: ["GET", "OPTIONS"],
-      allowedHeaders: ["x-api-key", "Content-Type"],
+      methods: ['GET', 'OPTIONS'],
+      allowedHeaders: ['x-api-key', 'Content-Type'],
     })(req, res, next);
   } else {
     // Standard CORS for other routes
@@ -69,21 +69,21 @@ app.use(passport.session());
 app.use(routes);
 
 // Health check
-app.get("/health", (req, res) => {
-  res.json({ status: "ok" });
+app.get('/health', (req, res) => {
+  res.json({ status: 'ok' });
 });
 
 // 404 handler
 app.use((req, res) => {
   res.status(404).json({
     success: false,
-    message: "Route not found",
+    message: 'Route not found',
   });
 });
 
 // Error handler
 app.use(errorMiddleware);
 
-logger.info({ env: config.NODE_ENV }, "App initialized");
+logger.info({ env: config.NODE_ENV }, 'App initialized');
 
 export default app;
