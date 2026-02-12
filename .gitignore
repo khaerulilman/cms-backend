@@ -9,3 +9,8 @@ uploads/
 coverage/
 web-server-test-ec2.pem
 coverage/
+.vscode/
+prompt/
+scripts/
+
+
