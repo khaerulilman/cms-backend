@@ -1,0 +1,66 @@
+name: CD - Deploy to Staging EC2
+
+# Trigger workflow ketika ada push ke branch 'test' atau bisa trigger manual
+on:
+  push:
+    branches: [test]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Deploy Staging to EC2
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout kode dari repo
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Deploy ke EC2 via SSH
+      - name: Deploy to EC2 via SSH
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          port: 22
+          script_stop: true
+          script: |
+            echo "========== Starting Staging Deployment =========="
+
+            cd ~ || exit 1
+
+            # Clone repository jika folder belum ada
+            if [ ! -d "backend-test/.git" ]; then
+              echo "Cloning repository for staging..."
+              git clone git@github.com:khaerulilman/cms-backend.git backend-test
+            fi
+
+            cd ~/backend-test || exit 1
+
+            # Pastikan branch staging yang di-pull
+            echo "Checking out branch test..."
+            git fetch origin
+            git reset --hard origin/test
+
+            # Install dependencies
+            echo "Installing dependencies..."
+            npm install --omit=dev
+
+            # Generate Prisma Client
+            echo "Generating Prisma Client..."
+            npx prisma generate
+
+            # Run database migrations
+            echo "Running database migrations..."
+            npx prisma migrate deploy
+
+            # Start/reload app via PM2 (staging environment)
+            echo "Starting / Reloading application with PM2 ecosystem..."
+            pm2 start ecosystem.config.cjs --env staging || \
+            pm2 reload ecosystem.config.cjs --env staging
+
+            # Save PM2 process list
+            pm2 save
+
+            echo "========== Staging Deployment Complete =========="
