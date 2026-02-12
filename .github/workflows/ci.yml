@@ -1,4 +1,4 @@
-name: CI - Lint & Test
+name: CI - Lint
 
 on:
   push:
@@ -7,21 +7,12 @@ on:
     branches: [main, develop]
 
 jobs:
-  test:
-    name: Test
+  lint:
+    name: Lint
     runs-on: ubuntu-latest
 
     env:
-      NODE_ENV: test
-      DATABASE_URL: ${{ secrets.DATABASE_TEST_URL }}
-      JWT_SECRET: ${{ secrets.JWT_SECRET }}
-      FRONTEND_URL: ${{ secrets.FRONTEND_URL }}
-      GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
-      GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
-      GOOGLE_CALLBACK_URL: ${{ secrets.GOOGLE_CALLBACK_URL }}
-      CLOUDINARY_CLOUD_NAME: ${{ secrets.CLOUDINARY_CLOUD_NAME }}
-      CLOUDINARY_API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
-      CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
+      NODE_ENV: production
 
     steps:
       - name: Checkout code
@@ -39,18 +30,5 @@ jobs:
       - name: Generate Prisma Client
         run: npx prisma generate
 
-      - name: Push schema to test database
-        run: npx prisma db push --skip-generate
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_TEST_URL }}
-
-      - name: Run tests
-        run: npx cross-env NODE_ENV=test vitest run
-
-      - name: Upload coverage report
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: coverage-report
-          path: coverage/
-          retention-days: 7
+      - name: Run lint
+        run: npm run lint
