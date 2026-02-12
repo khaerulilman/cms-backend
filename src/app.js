@@ -69,7 +69,7 @@ app.use(passport.session());
 app.get("/", (req, res) => {
   res.json({
     success: true,
-    message: "Portfolio CMS API v1.0.0",
+    message: "Portfolio CMS API v1.1.1",
     version: "1.0.0",
     environment: config.NODE_ENV,
     endpoints: {

@@ -1,5 +1,5 @@
-import { exec } from 'child_process';
-import { promisify } from 'util';
+import { exec } from "child_process";
+import { promisify } from "util";
 
 const execAsync = promisify(exec);
 
@@ -8,5 +8,5 @@ const execAsync = promisify(exec);
  * DATABASE_URL is already overridden by .env.test via dotenv-cli in npm scripts.
  */
 export async function setupTestDatabase() {
-  await execAsync('npx prisma db push --skip-generate');
+  await execAsync("npx prisma db push --skip-generate");
 }
