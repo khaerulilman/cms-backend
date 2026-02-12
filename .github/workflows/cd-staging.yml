@@ -53,8 +53,8 @@ jobs:
             pm2 stop portfolio-cms-staging 2>/dev/null || true
             pm2 delete portfolio-cms-staging 2>/dev/null || true
 
-            echo "Starting staging application with PM2..."
-            pm2 start ecosystem.config.cjs --env staging --name portfolio-cms-staging
+            echo "Starting staging application with PM2 on port 4001..."
+            pm2 start ecosystem.config.cjs --only portfolio-cms-staging --env staging
 
             echo "Saving PM2 configuration..."
             pm2 save
