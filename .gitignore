@@ -13,4 +13,7 @@ coverage/
 prompt/
 scripts/
 
+# Newman test reports (generated in CI)
+newman-reports/
+
 
