@@ -1,2 +1,0 @@
-- nah coba cek mana diantara file ini yang perlu di test apakah semua nya 
-atau beberapa ada yang tidak perlu (sudah mature di library)
