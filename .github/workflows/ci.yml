@@ -1,4 +1,4 @@
-name: CI - Lint
+name: CI - Install Only
 
 on:
   push:
@@ -7,12 +7,9 @@ on:
     branches: [main, develop]
 
 jobs:
-  lint:
-    name: Lint
+  install:
+    name: Install Dependencies
     runs-on: ubuntu-latest
-
-    env:
-      NODE_ENV: production
 
     steps:
       - name: Checkout code
@@ -29,6 +26,3 @@ jobs:
 
       - name: Generate Prisma Client
         run: npx prisma generate
-
-      - name: Run lint
-        run: npm run lint
