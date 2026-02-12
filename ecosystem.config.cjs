@@ -1,7 +1,7 @@
 module.exports = {
   apps: [
     {
-      name: "portfolio-cms", // nama app tetap sama
+      name: "portfolio-cms",
       script: "src/server.js",
       exec_mode: "fork",
       instances: 1,
@@ -13,12 +13,12 @@ module.exports = {
 
       env_production: {
         NODE_ENV: "production",
-        PORT: 4000, // production tetap di 4000
+        PORT: 4000,
       },
 
       env_staging: {
         NODE_ENV: "staging",
-        PORT: 4001, // staging di 4001
+        PORT: 4001,
       },
     },
   ],

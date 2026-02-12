@@ -1,23 +1,20 @@
-name: CD - Deploy to Staging EC2
+name: CD - Deploy to EC2 (Staging)
 
-# Trigger workflow ketika ada push ke branch 'test' atau bisa trigger manual
 on:
   push:
-    branches: [test]
+    branches: [branch-staging]
   workflow_dispatch:
 
 jobs:
   deploy:
-    name: Deploy Staging to EC2
+    name: Deploy to EC2 (Staging)
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout kode dari repo
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # Deploy ke EC2 via SSH
-      - name: Deploy to EC2 via SSH
+      - name: Deploy to EC2 via SSH (Staging)
         uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.EC2_HOST }}
@@ -26,41 +23,36 @@ jobs:
           port: 22
           script_stop: true
           script: |
-            echo "========== Starting Staging Deployment =========="
+            echo "========== Starting staging deployment =========="
 
-            cd ~ || exit 1
+            cd ~
 
-            # Clone repository jika folder belum ada
-            if [ ! -d "backend-test/.git" ]; then
+            # Clone once if not exists
+            if [ ! -d "cms-backend-staging/.git" ]; then
               echo "Cloning repository for staging..."
-              git clone git@github.com:khaerulilman/cms-backend.git backend-test
+              git clone git@github.com:khaerulilman/cms-backend.git cms-backend-staging
             fi
 
-            cd ~/backend-test || exit 1
+            cd ~/cms-backend-staging || exit 1
 
-            # Pastikan branch staging yang di-pull
-            echo "Checking out branch test..."
+            echo "Pulling latest changes from staging branch..."
             git fetch origin
-            git reset --hard origin/test
+            git reset --hard origin/branch-staging
 
-            # Install dependencies
             echo "Installing dependencies..."
             npm install --omit=dev
 
-            # Generate Prisma Client
             echo "Generating Prisma Client..."
             npx prisma generate
 
-            # Run database migrations
             echo "Running database migrations..."
             npx prisma migrate deploy
 
-            # Start/reload app via PM2 (staging environment)
-            echo "Starting / Reloading application with PM2 ecosystem..."
+            echo "Starting / Reloading staging application with PM2 ecosystem..."
+
             pm2 start ecosystem.config.cjs --env staging || \
             pm2 reload ecosystem.config.cjs --env staging
 
-            # Save PM2 process list
             pm2 save
 
-            echo "========== Staging Deployment Complete =========="
+            echo "========== Staging deployment complete =========="
