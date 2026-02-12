@@ -8,3 +8,4 @@ node_modules
 uploads/
 coverage/
 web-server-test-ec2.pem
+coverage/
