@@ -40,8 +40,8 @@ jobs:
             git checkout branch-staging
             git reset --hard origin/branch-staging
 
-            echo "Installing dependencies..."
-            npm install --omit=dev
+            echo "Installing all dependencies (including dev)..."
+            npm install
 
             echo "Generating Prisma Client..."
             npx prisma generate
@@ -54,8 +54,12 @@ jobs:
             pm2 delete portfolio-cms-staging 2>/dev/null || true
 
             echo "Starting staging application with PM2..."
-            pm2 start ecosystem.config.cjs --env staging
+            pm2 start ecosystem.config.cjs --env staging --name portfolio-cms-staging
 
+            echo "Saving PM2 configuration..."
             pm2 save
+
+            echo "Checking PM2 status..."
+            pm2 list
 
             echo "========== Staging deployment complete =========="
