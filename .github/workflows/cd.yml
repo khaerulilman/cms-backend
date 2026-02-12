@@ -51,7 +51,7 @@ jobs:
 
             echo "Reloading application with PM2..."
             pm2 reload portfolio-cms --update-env || \
-            pm2 start ecosystem.config.cjs --env production --name portfolio-cms
+            pm2 start ecosystem.config.cjs --only portfolio-cms --env production
 
             echo "Saving PM2 configuration..."
             pm2 save
