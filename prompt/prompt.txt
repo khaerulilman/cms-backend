@@ -1,2 +1,0 @@
-yaudah coba terapakan validation joi dan xss validation , kemudian validation 
-tersebut di letakan di route , bisa diikutin contoh di auth routes 
