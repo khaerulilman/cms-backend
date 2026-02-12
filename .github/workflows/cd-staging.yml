@@ -37,6 +37,7 @@ jobs:
 
             echo "Pulling latest changes from staging branch..."
             git fetch origin
+            git checkout branch-staging
             git reset --hard origin/branch-staging
 
             echo "Installing dependencies..."
@@ -48,10 +49,12 @@ jobs:
             echo "Running database migrations..."
             npx prisma migrate deploy
 
-            echo "Starting / Reloading staging application with PM2 ecosystem..."
+            echo "Stopping existing staging PM2 process..."
+            pm2 stop portfolio-cms-staging 2>/dev/null || true
+            pm2 delete portfolio-cms-staging 2>/dev/null || true
 
-            pm2 start ecosystem.config.cjs --env staging || \
-            pm2 reload ecosystem.config.cjs --env staging
+            echo "Starting staging application with PM2..."
+            pm2 start ecosystem.config.cjs --env staging
 
             pm2 save
 
