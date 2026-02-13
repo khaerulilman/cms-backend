@@ -70,18 +70,18 @@ jobs:
             --timeout-request 10000 \
             --verbose
 
-      # - name: "API Test: Projects"
-      #   if: always()
-      #   run: |
-      #     newman run "API Testing Collection CMS Copy.postman_collection.json" \
-      #       --environment "newman-reports/ci-env-state.json" \
-      #       --folder "Projects" \
-      #       --reporters cli,htmlextra \
-      #       --reporter-htmlextra-export "newman-reports/03-projects-report.html" \
-      #       --export-environment "newman-reports/ci-env-state.json" \
-      #       --delay-request 100 \
-      #       --timeout-request 10000 \
-      #       --verbose
+      - name: "API Test: Projects"
+        if: always()
+        run: |
+          newman run "API Testing Collection CMS Copy.postman_collection.json" \
+            --environment "newman-reports/ci-env-state.json" \
+            --folder "Projects" \
+            --reporters cli,htmlextra \
+            --reporter-htmlextra-export "newman-reports/03-projects-report.html" \
+            --export-environment "newman-reports/ci-env-state.json" \
+            --delay-request 100 \
+            --timeout-request 10000 \
+            --verbose
 
       # - name: "API Test: Tables"
       #   if: always()
