@@ -2102,6 +2102,19 @@
               "name": "Create Table - Success",
               "event": [
                 {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      "if (!pm.environment.get('access_token')) {",
+                      "    throw new Error('access_token is not set. Please run Auth folder first.');",
+                      "}"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
+                {
                   "listen": "test",
                   "script": {
                     "exec": [
@@ -2141,7 +2154,8 @@
                       "        url: pm.environment.get('base_url') + '/v1/tables',",
                       "        method: 'POST',",
                       "        header: {",
-                      "            'Content-Type': 'application/json'",
+                      "            'Content-Type': 'application/json',",
+                      "            'Cookie': 'accessToken=' + pm.environment.get('access_token')",
                       "        },",
                       "        body: {",
                       "            mode: 'raw',",
@@ -2174,6 +2188,10 @@
                   {
                     "key": "Content-Type",
                     "value": "application/json"
+                  },
+                  {
+                    "key": "Cookie",
+                    "value": "accessToken={{access_token}}"
                   }
                 ],
                 "body": {
@@ -2191,6 +2209,19 @@
             {
               "name": "Create Table - Empty Name",
               "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      "if (!pm.environment.get('access_token')) {",
+                      "    throw new Error('access_token is not set. Please run Auth folder first.');",
+                      "}"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
                 {
                   "listen": "test",
                   "script": {
@@ -2221,6 +2252,10 @@
                   {
                     "key": "Content-Type",
                     "value": "application/json"
+                  },
+                  {
+                    "key": "Cookie",
+                    "value": "accessToken={{access_token}}"
                   }
                 ],
                 "body": {
@@ -2238,6 +2273,19 @@
             {
               "name": "Create Table - Missing Project ID",
               "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      "if (!pm.environment.get('access_token')) {",
+                      "    throw new Error('access_token is not set. Please run Auth folder first.');",
+                      "}"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
                 {
                   "listen": "test",
                   "script": {
@@ -2263,6 +2311,10 @@
                   {
                     "key": "Content-Type",
                     "value": "application/json"
+                  },
+                  {
+                    "key": "Cookie",
+                    "value": "accessToken={{access_token}}"
                   }
                 ],
                 "body": {
@@ -2285,6 +2337,19 @@
             {
               "name": "Get Tables - Success",
               "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      "if (!pm.environment.get('access_token')) {",
+                      "    throw new Error('access_token is not set. Please run Auth folder first.');",
+                      "}"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
                 {
                   "listen": "test",
                   "script": {
@@ -2317,7 +2382,12 @@
               ],
               "request": {
                 "method": "GET",
-                "header": [],
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "accessToken={{access_token}}"
+                  }
+                ],
                 "url": {
                   "raw": "{{base_url}}/v1/tables/project/{{project_id}}",
                   "host": ["{{base_url}}"],
@@ -2329,6 +2399,19 @@
             {
               "name": "Get Tables - Invalid Project ID",
               "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      "if (!pm.environment.get('access_token')) {",
+                      "    throw new Error('access_token is not set. Please run Auth folder first.');",
+                      "}"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
                 {
                   "listen": "test",
                   "script": {
@@ -2350,7 +2433,12 @@
               ],
               "request": {
                 "method": "GET",
-                "header": [],
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "accessToken={{access_token}}"
+                  }
+                ],
                 "url": {
                   "raw": "{{base_url}}/v1/tables/project/invalid-id",
                   "host": ["{{base_url}}"],
@@ -2367,6 +2455,19 @@
             {
               "name": "Get Table - Success",
               "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      "if (!pm.environment.get('access_token')) {",
+                      "    throw new Error('access_token is not set. Please run Auth folder first.');",
+                      "}"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
                 {
                   "listen": "test",
                   "script": {
@@ -2397,7 +2498,12 @@
               ],
               "request": {
                 "method": "GET",
-                "header": [],
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "accessToken={{access_token}}"
+                  }
+                ],
                 "url": {
                   "raw": "{{base_url}}/v1/tables/{{table_id}}",
                   "host": ["{{base_url}}"],
@@ -2409,6 +2515,19 @@
             {
               "name": "Get Table - Not Found",
               "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      "if (!pm.environment.get('access_token')) {",
+                      "    throw new Error('access_token is not set. Please run Auth folder first.');",
+                      "}"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
                 {
                   "listen": "test",
                   "script": {
@@ -2430,7 +2549,12 @@
               ],
               "request": {
                 "method": "GET",
-                "header": [],
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "accessToken={{access_token}}"
+                  }
+                ],
                 "url": {
                   "raw": "{{base_url}}/v1/tables/invalid-table-id",
                   "host": ["{{base_url}}"],
@@ -2447,6 +2571,19 @@
             {
               "name": "Update Table - Success",
               "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      "if (!pm.environment.get('access_token')) {",
+                      "    throw new Error('access_token is not set. Please run Auth folder first.');",
+                      "}"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
                 {
                   "listen": "test",
                   "script": {
@@ -2479,6 +2616,10 @@
                   {
                     "key": "Content-Type",
                     "value": "application/json"
+                  },
+                  {
+                    "key": "Cookie",
+                    "value": "accessToken={{access_token}}"
                   }
                 ],
                 "body": {
@@ -2496,6 +2637,19 @@
             {
               "name": "Update Table - Empty Name",
               "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      "if (!pm.environment.get('access_token')) {",
+                      "    throw new Error('access_token is not set. Please run Auth folder first.');",
+                      "}"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
                 {
                   "listen": "test",
                   "script": {
@@ -2521,6 +2675,10 @@
                   {
                     "key": "Content-Type",
                     "value": "application/json"
+                  },
+                  {
+                    "key": "Cookie",
+                    "value": "accessToken={{access_token}}"
                   }
                 ],
                 "body": {
@@ -2538,6 +2696,19 @@
             {
               "name": "Update Table - Not Found",
               "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      "if (!pm.environment.get('access_token')) {",
+                      "    throw new Error('access_token is not set. Please run Auth folder first.');",
+                      "}"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
                 {
                   "listen": "test",
                   "script": {
@@ -2563,6 +2734,10 @@
                   {
                     "key": "Content-Type",
                     "value": "application/json"
+                  },
+                  {
+                    "key": "Cookie",
+                    "value": "accessToken={{access_token}}"
                   }
                 ],
                 "body": {
@@ -2585,6 +2760,19 @@
             {
               "name": "Delete Table - Success",
               "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      "if (!pm.environment.get('access_token')) {",
+                      "    throw new Error('access_token is not set. Please run Auth folder first.');",
+                      "}"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
                 {
                   "listen": "test",
                   "script": {
@@ -2613,7 +2801,12 @@
               ],
               "request": {
                 "method": "DELETE",
-                "header": [],
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "accessToken={{access_token}}"
+                  }
+                ],
                 "url": {
                   "raw": "{{base_url}}/v1/tables/{{table_id_for_delete}}",
                   "host": ["{{base_url}}"],
@@ -2625,6 +2818,19 @@
             {
               "name": "Delete Table - Not Found",
               "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      "if (!pm.environment.get('access_token')) {",
+                      "    throw new Error('access_token is not set. Please run Auth folder first.');",
+                      "}"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
                 {
                   "listen": "test",
                   "script": {
@@ -2646,7 +2852,12 @@
               ],
               "request": {
                 "method": "DELETE",
-                "header": [],
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "accessToken={{access_token}}"
+                  }
+                ],
                 "url": {
                   "raw": "{{base_url}}/v1/tables/invalid-table-id",
                   "host": ["{{base_url}}"],
