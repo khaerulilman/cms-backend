@@ -96,44 +96,44 @@ jobs:
             --timeout-request 10000 \
             --verbose
 
-      # - name: "API Test: Columns"
-      #   if: always()
-      #   run: |
-      #     newman run "API Testing Collection CMS Copy.postman_collection.json" \
-      #       --environment "newman-reports/ci-env-state.json" \
-      #       --folder "Columns" \
-      #       --reporters cli,htmlextra \
-      #       --reporter-htmlextra-export "newman-reports/05-columns-report.html" \
-      #       --export-environment "newman-reports/ci-env-state.json" \
-      #       --delay-request 100 \
-      #       --timeout-request 10000 \
-      #       --verbose
+      - name: "API Test: Columns"
+        if: always()
+        run: |
+          newman run "API Testing Collection CMS Copy.postman_collection.json" \
+            --environment "newman-reports/ci-env-state.json" \
+            --folder "Columns" \
+            --reporters cli,htmlextra \
+            --reporter-htmlextra-export "newman-reports/05-columns-report.html" \
+            --export-environment "newman-reports/ci-env-state.json" \
+            --delay-request 100 \
+            --timeout-request 10000 \
+            --verbose
 
-      # - name: "API Test: Rows"
-      #   if: always()
-      #   run: |
-      #     newman run "API Testing Collection CMS Copy.postman_collection.json" \
-      #       --environment "newman-reports/ci-env-state.json" \
-      #       --folder "Rows" \
-      #       --reporters cli,htmlextra \
-      #       --reporter-htmlextra-export "newman-reports/06-rows-report.html" \
-      #       --export-environment "newman-reports/ci-env-state.json" \
-      #       --delay-request 100 \
-      #       --timeout-request 10000 \
-      #       --verbose
+      - name: "API Test: Rows"
+        if: always()
+        run: |
+          newman run "API Testing Collection CMS Copy.postman_collection.json" \
+            --environment "newman-reports/ci-env-state.json" \
+            --folder "Rows" \
+            --reporters cli,htmlextra \
+            --reporter-htmlextra-export "newman-reports/06-rows-report.html" \
+            --export-environment "newman-reports/ci-env-state.json" \
+            --delay-request 100 \
+            --timeout-request 10000 \
+            --verbose
 
-      # - name: "API Test: Cells"
-      #   if: always()
-      #   run: |
-      #     newman run "API Testing Collection CMS Copy.postman_collection.json" \
-      #       --environment "newman-reports/ci-env-state.json" \
-      #       --folder "Cells" \
-      #       --reporters cli,htmlextra \
-      #       --reporter-htmlextra-export "newman-reports/07-cells-report.html" \
-      #       --export-environment "newman-reports/ci-env-state.json" \
-      #       --delay-request 100 \
-      #       --timeout-request 10000 \
-      #       --verbose
+      - name: "API Test: Cells"
+        if: always()
+        run: |
+          newman run "API Testing Collection CMS Copy.postman_collection.json" \
+            --environment "newman-reports/ci-env-state.json" \
+            --folder "Cells" \
+            --reporters cli,htmlextra \
+            --reporter-htmlextra-export "newman-reports/07-cells-report.html" \
+            --export-environment "newman-reports/ci-env-state.json" \
+            --delay-request 100 \
+            --timeout-request 10000 \
+            --verbose
 
       # ============================================================
       # Upload reports & cleanup
