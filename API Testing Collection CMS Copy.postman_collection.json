@@ -1111,7 +1111,17 @@
                       "// Generate unique project name",
                       "const timestamp = Date.now();",
                       "const projectName = `Test Project ${timestamp}`;",
-                      "pm.environment.set('project_name', projectName);"
+                      "pm.environment.set('project_name', projectName);",
+                      "",
+                      "// Verify access_token is available",
+                      "const accessToken = pm.environment.get('access_token');",
+                      "",
+                      "if (!accessToken) {",
+                      "    console.error('ERROR: access_token not found in environment!');",
+                      "    console.log('Available environment variables:', Object.keys(pm.environment.toObject()));",
+                      "} else {",
+                      "    console.log('Using access_token for project creation:', accessToken.substring(0, 30) + '...');",
+                      "}"
                     ],
                     "type": "text/javascript",
                     "packages": {},
@@ -1166,7 +1176,7 @@
                       "        method: 'POST',",
                       "        header: {",
                       "            'Content-Type': 'application/json',",
-                      "            'Authorization': 'Bearer ' + pm.environment.get('access_token')",
+                      "            'Cookie': 'accessToken=' + pm.environment.get('access_token')",
                       "        },",
                       "        body: {",
                       "            mode: 'raw',",
@@ -1198,6 +1208,11 @@
                   {
                     "key": "Content-Type",
                     "value": "application/json"
+                  },
+                  {
+                    "key": "Cookie",
+                    "value": "accessToken={{access_token}}",
+                    "type": "text"
                   }
                 ],
                 "body": {
@@ -1253,6 +1268,11 @@
                   {
                     "key": "Content-Type",
                     "value": "application/json"
+                  },
+                  {
+                    "key": "Cookie",
+                    "value": "accessToken={{access_token}}",
+                    "type": "text"
                   }
                 ],
                 "body": {
@@ -1295,6 +1315,11 @@
                   {
                     "key": "Content-Type",
                     "value": "application/json"
+                  },
+                  {
+                    "key": "Cookie",
+                    "value": "accessToken={{access_token}}",
+                    "type": "text"
                   }
                 ],
                 "body": {
@@ -1338,6 +1363,11 @@
                   {
                     "key": "Content-Type",
                     "value": "application/json"
+                  },
+                  {
+                    "key": "Cookie",
+                    "value": "accessToken={{access_token}}",
+                    "type": "text"
                   }
                 ],
                 "body": {
@@ -1375,6 +1405,11 @@
                   {
                     "key": "Content-Type",
                     "value": "application/json"
+                  },
+                  {
+                    "key": "Cookie",
+                    "value": "accessToken={{access_token}}",
+                    "type": "text"
                   }
                 ],
                 "body": {
@@ -1431,7 +1466,13 @@
               ],
               "request": {
                 "method": "GET",
-                "header": [],
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "accessToken={{access_token}}",
+                    "type": "text"
+                  }
+                ],
                 "url": {
                   "raw": "{{base_url}}/v1/projects",
                   "host": ["{{base_url}}"],
@@ -1484,7 +1525,13 @@
               ],
               "request": {
                 "method": "GET",
-                "header": [],
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "accessToken={{access_token}}",
+                    "type": "text"
+                  }
+                ],
                 "url": {
                   "raw": "{{base_url}}/v1/projects/{{project_id}}",
                   "host": ["{{base_url}}"],
@@ -1517,7 +1564,13 @@
               ],
               "request": {
                 "method": "GET",
-                "header": [],
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "accessToken={{access_token}}",
+                    "type": "text"
+                  }
+                ],
                 "url": {
                   "raw": "{{base_url}}/v1/projects/invalid-project-id-12345",
                   "host": ["{{base_url}}"],
@@ -1550,7 +1603,13 @@
               ],
               "request": {
                 "method": "GET",
-                "header": [],
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "accessToken={{access_token}}",
+                    "type": "text"
+                  }
+                ],
                 "url": {
                   "raw": "{{base_url}}/v1/projects/other-user-project-id",
                   "host": ["{{base_url}}"],
@@ -1615,6 +1674,11 @@
                   {
                     "key": "Content-Type",
                     "value": "application/json"
+                  },
+                  {
+                    "key": "Cookie",
+                    "value": "accessToken={{access_token}}",
+                    "type": "text"
                   }
                 ],
                 "body": {
@@ -1670,6 +1734,11 @@
                   {
                     "key": "Content-Type",
                     "value": "application/json"
+                  },
+                  {
+                    "key": "Cookie",
+                    "value": "accessToken={{access_token}}",
+                    "type": "text"
                   }
                 ],
                 "body": {
@@ -1712,6 +1781,11 @@
                   {
                     "key": "Content-Type",
                     "value": "application/json"
+                  },
+                  {
+                    "key": "Cookie",
+                    "value": "accessToken={{access_token}}",
+                    "type": "text"
                   }
                 ],
                 "body": {
@@ -1755,6 +1829,11 @@
                   {
                     "key": "Content-Type",
                     "value": "application/json"
+                  },
+                  {
+                    "key": "Cookie",
+                    "value": "accessToken={{access_token}}",
+                    "type": "text"
                   }
                 ],
                 "body": {
@@ -1792,6 +1871,11 @@
                   {
                     "key": "Content-Type",
                     "value": "application/json"
+                  },
+                  {
+                    "key": "Cookie",
+                    "value": "accessToken={{access_token}}",
+                    "type": "text"
                   }
                 ],
                 "body": {
@@ -1829,6 +1913,11 @@
                   {
                     "key": "Content-Type",
                     "value": "application/json"
+                  },
+                  {
+                    "key": "Cookie",
+                    "value": "accessToken={{access_token}}",
+                    "type": "text"
                   }
                 ],
                 "body": {
@@ -1877,7 +1966,13 @@
               ],
               "request": {
                 "method": "DELETE",
-                "header": [],
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "accessToken={{access_token}}",
+                    "type": "text"
+                  }
+                ],
                 "url": {
                   "raw": "{{base_url}}/v1/projects/{{project_id_for_delete}}",
                   "host": ["{{base_url}}"],
@@ -1905,7 +2000,13 @@
               ],
               "request": {
                 "method": "DELETE",
-                "header": [],
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "accessToken={{access_token}}",
+                    "type": "text"
+                  }
+                ],
                 "url": {
                   "raw": "{{base_url}}/v1/projects/invalid-id-abc",
                   "host": ["{{base_url}}"],
@@ -1933,7 +2034,13 @@
               ],
               "request": {
                 "method": "DELETE",
-                "header": [],
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "accessToken={{access_token}}",
+                    "type": "text"
+                  }
+                ],
                 "url": {
                   "raw": "{{base_url}}/v1/projects/other-user-project-id",
                   "host": ["{{base_url}}"],
@@ -1968,8 +2075,9 @@
                 "method": "DELETE",
                 "header": [
                   {
-                    "key": "Authorization",
-                    "value": "Bearer {{access_token}}"
+                    "key": "Cookie",
+                    "value": "accessToken={{access_token}}",
+                    "type": "text"
                   }
                 ],
                 "url": {
