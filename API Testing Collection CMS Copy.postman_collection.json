@@ -2880,6 +2880,19 @@
               "name": "Create Column - Success",
               "event": [
                 {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      "if (!pm.environment.get('access_token')) {",
+                      "    throw new Error('access_token is not set. Please run Auth folder first.');",
+                      "}"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
+                {
                   "listen": "test",
                   "script": {
                     "exec": [
@@ -2928,6 +2941,10 @@
                   {
                     "key": "Content-Type",
                     "value": "application/json"
+                  },
+                  {
+                    "key": "Cookie",
+                    "value": "accessToken={{access_token}}"
                   }
                 ],
                 "body": {
@@ -2946,6 +2963,19 @@
               "name": "Create Column - Missing Table ID",
               "event": [
                 {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      "if (!pm.environment.get('access_token')) {",
+                      "    throw new Error('access_token is not set. Please run Auth folder first.');",
+                      "}"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
+                {
                   "listen": "test",
                   "script": {
                     "exec": [
@@ -2970,6 +3000,10 @@
                   {
                     "key": "Content-Type",
                     "value": "application/json"
+                  },
+                  {
+                    "key": "Cookie",
+                    "value": "accessToken={{access_token}}"
                   }
                 ],
                 "body": {
@@ -2988,47 +3022,18 @@
               "name": "Create Column - Empty Columns Array",
               "event": [
                 {
-                  "listen": "test",
+                  "listen": "prerequest",
                   "script": {
                     "exec": [
-                      "pm.test('Status code is 400', function () {",
-                      "    pm.expect(pm.response.code).to.equal(400);",
-                      "});",
-                      "",
-                      "pm.test('Response has success flag set to false', function () {",
-                      "    const jsonData = pm.response.json();",
-                      "    pm.expect(jsonData.success).to.equal(false);",
-                      "});"
+                      "if (!pm.environment.get('access_token')) {",
+                      "    throw new Error('access_token is not set. Please run Auth folder first.');",
+                      "}"
                     ],
                     "type": "text/javascript",
                     "packages": {},
                     "requests": {}
                   }
-                }
-              ],
-              "request": {
-                "method": "POST",
-                "header": [
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n    \"tableId\": \"{{table_id}}\",\n    \"columns\": []\n}"
                 },
-                "url": {
-                  "raw": "{{base_url}}/v1/cms-columns",
-                  "host": ["{{base_url}}"],
-                  "path": ["v1", "cms-columns"]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Create Column - Missing Column Name",
-              "event": [
                 {
                   "listen": "test",
                   "script": {
@@ -3054,6 +3059,69 @@
                   {
                     "key": "Content-Type",
                     "value": "application/json"
+                  },
+                  {
+                    "key": "Cookie",
+                    "value": "accessToken={{access_token}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"tableId\": \"{{table_id}}\",\n    \"columns\": []\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/v1/cms-columns",
+                  "host": ["{{base_url}}"],
+                  "path": ["v1", "cms-columns"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Create Column - Missing Column Name",
+              "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      "if (!pm.environment.get('access_token')) {",
+                      "    throw new Error('access_token is not set. Please run Auth folder first.');",
+                      "}"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test('Status code is 400', function () {",
+                      "    pm.expect(pm.response.code).to.equal(400);",
+                      "});",
+                      "",
+                      "pm.test('Response has success flag set to false', function () {",
+                      "    const jsonData = pm.response.json();",
+                      "    pm.expect(jsonData.success).to.equal(false);",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Cookie",
+                    "value": "accessToken={{access_token}}"
                   }
                 ],
                 "body": {
@@ -3071,6 +3139,19 @@
             {
               "name": "Create Column - Invalid Table ID",
               "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      "if (!pm.environment.get('access_token')) {",
+                      "    throw new Error('access_token is not set. Please run Auth folder first.');",
+                      "}"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
                 {
                   "listen": "test",
                   "script": {
@@ -3096,6 +3177,10 @@
                   {
                     "key": "Content-Type",
                     "value": "application/json"
+                  },
+                  {
+                    "key": "Cookie",
+                    "value": "accessToken={{access_token}}"
                   }
                 ],
                 "body": {
@@ -3118,6 +3203,19 @@
             {
               "name": "Get Columns by Table - Success",
               "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      "if (!pm.environment.get('access_token')) {",
+                      "    throw new Error('access_token is not set. Please run Auth folder first.');",
+                      "}"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
                 {
                   "listen": "test",
                   "script": {
@@ -3148,7 +3246,12 @@
               ],
               "request": {
                 "method": "GET",
-                "header": [],
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "accessToken={{access_token}}"
+                  }
+                ],
                 "url": {
                   "raw": "{{base_url}}/v1/cms-columns/table/{{table_id}}",
                   "host": ["{{base_url}}"],
@@ -3160,6 +3263,19 @@
             {
               "name": "Get Columns by Table - Not Found",
               "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      "if (!pm.environment.get('access_token')) {",
+                      "    throw new Error('access_token is not set. Please run Auth folder first.');",
+                      "}"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
                 {
                   "listen": "test",
                   "script": {
@@ -3181,7 +3297,12 @@
               ],
               "request": {
                 "method": "GET",
-                "header": [],
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "accessToken={{access_token}}"
+                  }
+                ],
                 "url": {
                   "raw": "{{base_url}}/v1/cms-columns/table/invalid-table-id",
                   "host": ["{{base_url}}"],
@@ -3198,6 +3319,19 @@
             {
               "name": "Get Column by ID - Success",
               "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      "if (!pm.environment.get('access_token')) {",
+                      "    throw new Error('access_token is not set. Please run Auth folder first.');",
+                      "}"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
                 {
                   "listen": "test",
                   "script": {
@@ -3230,7 +3364,12 @@
               ],
               "request": {
                 "method": "GET",
-                "header": [],
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "accessToken={{access_token}}"
+                  }
+                ],
                 "url": {
                   "raw": "{{base_url}}/v1/cms-columns/{{column_id}}",
                   "host": ["{{base_url}}"],
@@ -3242,6 +3381,19 @@
             {
               "name": "Get Column by ID - Not Found",
               "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      "if (!pm.environment.get('access_token')) {",
+                      "    throw new Error('access_token is not set. Please run Auth folder first.');",
+                      "}"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
                 {
                   "listen": "test",
                   "script": {
@@ -3263,7 +3415,12 @@
               ],
               "request": {
                 "method": "GET",
-                "header": [],
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "accessToken={{access_token}}"
+                  }
+                ],
                 "url": {
                   "raw": "{{base_url}}/v1/cms-columns/invalid-column-id",
                   "host": ["{{base_url}}"],
@@ -3280,6 +3437,19 @@
             {
               "name": "Update Column - Success",
               "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      "if (!pm.environment.get('access_token')) {",
+                      "    throw new Error('access_token is not set. Please run Auth folder first.');",
+                      "}"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
                 {
                   "listen": "test",
                   "script": {
@@ -3314,6 +3484,10 @@
                   {
                     "key": "Content-Type",
                     "value": "application/json"
+                  },
+                  {
+                    "key": "Cookie",
+                    "value": "accessToken={{access_token}}"
                   }
                 ],
                 "body": {
@@ -3331,6 +3505,19 @@
             {
               "name": "Update Column - Empty Name",
               "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      "if (!pm.environment.get('access_token')) {",
+                      "    throw new Error('access_token is not set. Please run Auth folder first.');",
+                      "}"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
                 {
                   "listen": "test",
                   "script": {
@@ -3356,6 +3543,10 @@
                   {
                     "key": "Content-Type",
                     "value": "application/json"
+                  },
+                  {
+                    "key": "Cookie",
+                    "value": "accessToken={{access_token}}"
                   }
                 ],
                 "body": {
@@ -3373,6 +3564,19 @@
             {
               "name": "Update Column - Not Found",
               "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      "if (!pm.environment.get('access_token')) {",
+                      "    throw new Error('access_token is not set. Please run Auth folder first.');",
+                      "}"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
                 {
                   "listen": "test",
                   "script": {
@@ -3398,6 +3602,10 @@
                   {
                     "key": "Content-Type",
                     "value": "application/json"
+                  },
+                  {
+                    "key": "Cookie",
+                    "value": "accessToken={{access_token}}"
                   }
                 ],
                 "body": {
@@ -3420,6 +3628,19 @@
             {
               "name": "Delete Column - Success",
               "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      "if (!pm.environment.get('access_token')) {",
+                      "    throw new Error('access_token is not set. Please run Auth folder first.');",
+                      "}"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
                 {
                   "listen": "test",
                   "script": {
@@ -3445,7 +3666,12 @@
               ],
               "request": {
                 "method": "DELETE",
-                "header": [],
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "accessToken={{access_token}}"
+                  }
+                ],
                 "url": {
                   "raw": "{{base_url}}/v1/cms-columns/{{column_id_for_delete}}",
                   "host": ["{{base_url}}"],
@@ -3457,6 +3683,19 @@
             {
               "name": "Delete Column - Not Found",
               "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      "if (!pm.environment.get('access_token')) {",
+                      "    throw new Error('access_token is not set. Please run Auth folder first.');",
+                      "}"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
                 {
                   "listen": "test",
                   "script": {
@@ -3478,7 +3717,12 @@
               ],
               "request": {
                 "method": "DELETE",
-                "header": [],
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "accessToken={{access_token}}"
+                  }
+                ],
                 "url": {
                   "raw": "{{base_url}}/v1/cms-columns/invalid-column-id",
                   "host": ["{{base_url}}"],
@@ -3504,7 +3748,9 @@
                   "listen": "prerequest",
                   "script": {
                     "exec": [
-                      "// This request saves row_id for general database operations"
+                      "if (!pm.environment.get('access_token')) {",
+                      "    throw new Error('access_token is not set. Please run Auth folder first.');",
+                      "}"
                     ],
                     "type": "text/javascript",
                     "packages": {},
@@ -3558,6 +3804,10 @@
                   {
                     "key": "Content-Type",
                     "value": "application/json"
+                  },
+                  {
+                    "key": "Cookie",
+                    "value": "accessToken={{access_token}}"
                   }
                 ],
                 "body": {
@@ -3579,8 +3829,9 @@
                   "listen": "prerequest",
                   "script": {
                     "exec": [
-                      "// This request creates another row specifically for delete testing",
-                      "// The row ID will be saved to row_id_for_delete variable"
+                      "if (!pm.environment.get('access_token')) {",
+                      "    throw new Error('access_token is not set. Please run Auth folder first.');",
+                      "}"
                     ],
                     "type": "text/javascript",
                     "packages": {},
@@ -3634,6 +3885,10 @@
                   {
                     "key": "Content-Type",
                     "value": "application/json"
+                  },
+                  {
+                    "key": "Cookie",
+                    "value": "accessToken={{access_token}}"
                   }
                 ],
                 "body": {
@@ -3651,6 +3906,19 @@
             {
               "name": "Create Row - Missing Table ID",
               "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      "if (!pm.environment.get('access_token')) {",
+                      "    throw new Error('access_token is not set. Please run Auth folder first.');",
+                      "}"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
                 {
                   "listen": "test",
                   "script": {
@@ -3677,7 +3945,16 @@
               ],
               "request": {
                 "method": "POST",
-                "header": [],
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Cookie",
+                    "value": "accessToken={{access_token}}"
+                  }
+                ],
                 "body": {
                   "mode": "raw",
                   "raw": "{}"
@@ -3698,6 +3975,19 @@
             {
               "name": "Get All Rows by Table - Success",
               "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      "if (!pm.environment.get('access_token')) {",
+                      "    throw new Error('access_token is not set. Please run Auth folder first.');",
+                      "}"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
                 {
                   "listen": "test",
                   "script": {
@@ -3733,7 +4023,12 @@
               ],
               "request": {
                 "method": "GET",
-                "header": [],
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "accessToken={{access_token}}"
+                  }
+                ],
                 "url": {
                   "raw": "{{base_url}}/v1/cms-rows/table/{{table_id}}",
                   "host": ["{{base_url}}"],
@@ -3745,6 +4040,19 @@
             {
               "name": "Get All Rows by Table - Table Not Found",
               "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      "if (!pm.environment.get('access_token')) {",
+                      "    throw new Error('access_token is not set. Please run Auth folder first.');",
+                      "}"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
                 {
                   "listen": "test",
                   "script": {
@@ -3766,7 +4074,12 @@
               ],
               "request": {
                 "method": "GET",
-                "header": [],
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "accessToken={{access_token}}"
+                  }
+                ],
                 "url": {
                   "raw": "{{base_url}}/v1/cms-rows/table/invalid-table-id",
                   "host": ["{{base_url}}"],
@@ -3783,6 +4096,19 @@
             {
               "name": "Get Row by ID - Success",
               "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      "if (!pm.environment.get('access_token')) {",
+                      "    throw new Error('access_token is not set. Please run Auth folder first.');",
+                      "}"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
                 {
                   "listen": "test",
                   "script": {
@@ -3824,7 +4150,12 @@
               ],
               "request": {
                 "method": "GET",
-                "header": [],
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "accessToken={{access_token}}"
+                  }
+                ],
                 "url": {
                   "raw": "{{base_url}}/v1/cms-rows/{{row_id}}",
                   "host": ["{{base_url}}"],
@@ -3836,6 +4167,19 @@
             {
               "name": "Get Row by ID - Not Found",
               "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      "if (!pm.environment.get('access_token')) {",
+                      "    throw new Error('access_token is not set. Please run Auth folder first.');",
+                      "}"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
                 {
                   "listen": "test",
                   "script": {
@@ -3857,7 +4201,12 @@
               ],
               "request": {
                 "method": "GET",
-                "header": [],
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "accessToken={{access_token}}"
+                  }
+                ],
                 "url": {
                   "raw": "{{base_url}}/v1/cms-rows/invalid-row-id",
                   "host": ["{{base_url}}"],
@@ -3874,6 +4223,19 @@
             {
               "name": "Update Row - Success",
               "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      "if (!pm.environment.get('access_token')) {",
+                      "    throw new Error('access_token is not set. Please run Auth folder first.');",
+                      "}"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
                 {
                   "listen": "test",
                   "script": {
@@ -3909,7 +4271,12 @@
               ],
               "request": {
                 "method": "PUT",
-                "header": [],
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "accessToken={{access_token}}"
+                  }
+                ],
                 "body": {
                   "mode": "raw",
                   "raw": "{}"
@@ -3925,6 +4292,19 @@
             {
               "name": "Update Row - Not Found",
               "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      "if (!pm.environment.get('access_token')) {",
+                      "    throw new Error('access_token is not set. Please run Auth folder first.');",
+                      "}"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
                 {
                   "listen": "test",
                   "script": {
@@ -3946,7 +4326,12 @@
               ],
               "request": {
                 "method": "PUT",
-                "header": [],
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "accessToken={{access_token}}"
+                  }
+                ],
                 "body": {
                   "mode": "raw",
                   "raw": "{}"
@@ -3967,6 +4352,19 @@
             {
               "name": "Delete Row - Success",
               "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      "if (!pm.environment.get('access_token')) {",
+                      "    throw new Error('access_token is not set. Please run Auth folder first.');",
+                      "}"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
                 {
                   "listen": "test",
                   "script": {
@@ -3997,7 +4395,12 @@
               ],
               "request": {
                 "method": "DELETE",
-                "header": [],
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "accessToken={{access_token}}"
+                  }
+                ],
                 "url": {
                   "raw": "{{base_url}}/v1/cms-rows/{{row_id_for_delete}}",
                   "host": ["{{base_url}}"],
@@ -4009,6 +4412,19 @@
             {
               "name": "Delete Row - Not Found",
               "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      "if (!pm.environment.get('access_token')) {",
+                      "    throw new Error('access_token is not set. Please run Auth folder first.');",
+                      "}"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
                 {
                   "listen": "test",
                   "script": {
@@ -4030,7 +4446,12 @@
               ],
               "request": {
                 "method": "DELETE",
-                "header": [],
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "accessToken={{access_token}}"
+                  }
+                ],
                 "url": {
                   "raw": "{{base_url}}/v1/cms-rows/invalid-row-id",
                   "host": ["{{base_url}}"],
@@ -4052,6 +4473,19 @@
             {
               "name": "Upsert Cell - Success with Value",
               "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      "if (!pm.environment.get('access_token')) {",
+                      "    throw new Error('access_token is not set. Please run Auth folder first.');",
+                      "}"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
                 {
                   "listen": "test",
                   "script": {
@@ -4098,6 +4532,10 @@
                   {
                     "key": "Content-Type",
                     "value": "application/json"
+                  },
+                  {
+                    "key": "Cookie",
+                    "value": "accessToken={{access_token}}"
                   }
                 ],
                 "body": {
@@ -4115,6 +4553,19 @@
             {
               "name": "Upsert Cell - Missing Column ID",
               "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      "if (!pm.environment.get('access_token')) {",
+                      "    throw new Error('access_token is not set. Please run Auth folder first.');",
+                      "}"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
                 {
                   "listen": "test",
                   "script": {
@@ -4145,6 +4596,10 @@
                   {
                     "key": "Content-Type",
                     "value": "application/json"
+                  },
+                  {
+                    "key": "Cookie",
+                    "value": "accessToken={{access_token}}"
                   }
                 ],
                 "body": {
@@ -4162,6 +4617,17 @@
             {
               "name": "Upsert Cell - Row Not Found",
               "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      "if (!pm.environment.get('access_token')) {",
+                      "    throw new Error('access_token is not set. Please run Auth folder first.');",
+                      "}"
+                    ],
+                    "type": "text/javascript"
+                  }
+                },
                 {
                   "listen": "test",
                   "script": {
@@ -4187,6 +4653,10 @@
                   {
                     "key": "Content-Type",
                     "value": "application/json"
+                  },
+                  {
+                    "key": "Cookie",
+                    "value": "accessToken={{access_token}}"
                   }
                 ],
                 "body": {
@@ -4209,6 +4679,17 @@
             {
               "name": "Get Cells by Row - Success",
               "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      "if (!pm.environment.get('access_token')) {",
+                      "    throw new Error('access_token is not set. Please run Auth folder first.');",
+                      "}"
+                    ],
+                    "type": "text/javascript"
+                  }
+                },
                 {
                   "listen": "test",
                   "script": {
@@ -4251,7 +4732,12 @@
               ],
               "request": {
                 "method": "GET",
-                "header": [],
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "accessToken={{access_token}}"
+                  }
+                ],
                 "url": {
                   "raw": "{{base_url}}/v1/cms-cells/row/{{row_id}}",
                   "host": ["{{base_url}}"],
@@ -4263,6 +4749,17 @@
             {
               "name": "Get Cells by Row - Not Found",
               "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      "if (!pm.environment.get('access_token')) {",
+                      "    throw new Error('access_token is not set. Please run Auth folder first.');",
+                      "}"
+                    ],
+                    "type": "text/javascript"
+                  }
+                },
                 {
                   "listen": "test",
                   "script": {
@@ -4284,7 +4781,12 @@
               ],
               "request": {
                 "method": "GET",
-                "header": [],
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "accessToken={{access_token}}"
+                  }
+                ],
                 "url": {
                   "raw": "{{base_url}}/v1/cms-cells/row/invalid-row-id",
                   "host": ["{{base_url}}"],
