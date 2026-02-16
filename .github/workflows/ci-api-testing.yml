@@ -68,7 +68,7 @@ jobs:
         run: |
           newman run "postman/artifacts/API Testing Collection CMS.postman_collection.json" \
             --environment "newman-reports/ci-env-state.json" \
-            --folder "API Key" \
+            --folder "Apikey" \
             --reporters cli,htmlextra \
             --reporter-htmlextra-export "newman-reports/02-apikey-report.html" \
             --export-environment "newman-reports/ci-env-state.json" \
