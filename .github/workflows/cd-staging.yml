@@ -2,7 +2,7 @@ name: CD - Deploy to EC2 (Staging)
 
 on:
   push:
-    branches: [branch-staging]
+    branches: [staging]
   workflow_dispatch:
 
 jobs:
@@ -37,8 +37,8 @@ jobs:
 
             echo "Pulling latest changes from staging branch..."
             git fetch origin
-            git checkout branch-staging
-            git reset --hard origin/branch-staging
+            git checkout staging
+            git reset --hard origin/staging
 
             echo "Installing all dependencies (including dev)..."
             npm install
