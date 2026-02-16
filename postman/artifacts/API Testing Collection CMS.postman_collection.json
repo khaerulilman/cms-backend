@@ -1,7 +1,7 @@
 {
   "info": {
     "_postman_id": "cf938ee0-fff4-4056-a49d-b1f0d3eed3af",
-    "name": "API Testing Collection CMS Copy 2",
+    "name": "API Testing Collection CMS ",
     "description": "Collection untuk testing API - dimulai dari Auth endpoints",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "_exporter_id": "39206356"
@@ -437,13 +437,13 @@
                   "listen": "prerequest",
                   "script": {
                     "exec": [
-                      "const ts = Date.now();\r",
-                      "const rand = Math.floor(Math.random() * 10000);\r",
-                      "\r",
-                      "const xssEmail = `xss${ts}${rand}@test.com`;\r",
-                      "\r",
-                      "pm.environment.set('xss_email', xssEmail);\r",
-                      "\r",
+                      "const ts = Date.now();",
+                      "const rand = Math.floor(Math.random() * 10000);",
+                      "",
+                      "const xssEmail = `xss${ts}${rand}@test.com`;",
+                      "",
+                      "pm.environment.set('xss_email', xssEmail);",
+                      "",
                       "console.log('XSS Email:', xssEmail);"
                     ],
                     "type": "text/javascript",
@@ -895,203 +895,208 @@
       ]
     },
     {
-      "name": "API Key",
+      "name": "Apikey",
       "item": [
         {
-          "name": "Generate API Key",
-          "event": [
+          "name": "Apikey.json",
+          "item": [
             {
-              "listen": "prerequest",
-              "script": {
-                "exec": [
-                  "// Verify access_token is available",
-                  "const accessToken = pm.environment.get('access_token');",
-                  "",
-                  "if (!accessToken) {",
-                  "    console.error('ERROR: access_token not found in environment!');",
-                  "    console.log('Available environment variables:', Object.keys(pm.environment.toObject()));",
-                  "} else {",
-                  "    console.log('Using access_token:', accessToken.substring(0, 30) + '...');",
-                  "    console.log('Token length:', accessToken.length);",
-                  "}"
+              "name": "Generate API Key",
+              "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      "// Verify access_token is available",
+                      "const accessToken = pm.environment.get('access_token');",
+                      "",
+                      "if (!accessToken) {",
+                      "    console.error('ERROR: access_token not found in environment!');",
+                      "    console.log('Available environment variables:', Object.keys(pm.environment.toObject()));",
+                      "} else {",
+                      "    console.log('Using access_token:', accessToken.substring(0, 30) + '...');",
+                      "    console.log('Token length:', accessToken.length);",
+                      "}"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test('Status code is 201', function () {",
+                      "    pm.expect(pm.response.code).to.equal(201);",
+                      "});",
+                      "",
+                      "pm.test('Response is JSON', function () {",
+                      "    pm.response.to.be.json;",
+                      "});",
+                      "",
+                      "pm.test('Response contains success message', function () {",
+                      "    const jsonData = pm.response.json();",
+                      "    pm.expect(jsonData.success).to.equal(true);",
+                      "    pm.expect(jsonData.message).to.exist;",
+                      "});",
+                      "",
+                      "pm.test('Response contains API Key data', function () {",
+                      "    const jsonData = pm.response.json();",
+                      "    pm.expect(jsonData.data).to.exist;",
+                      "    pm.expect(jsonData.data.id).to.exist;",
+                      "    pm.expect(jsonData.data.apiKey).to.exist;",
+                      "    pm.expect(jsonData.data.createdAt).to.exist;",
+                      "});",
+                      "",
+                      "// Save API Key to environment for other tests",
+                      "if (pm.response.code === 201) {",
+                      "    const jsonData = pm.response.json();",
+                      "    pm.environment.set('api_key', jsonData.data.apiKey);",
+                      "    pm.environment.set('api_key_id', jsonData.data.id);",
+                      "}"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Cookie",
+                    "value": "accessToken={{access_token}}",
+                    "type": "text"
+                  }
                 ],
-                "type": "text/javascript",
-                "packages": {},
-                "requests": {}
-              }
-            },
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "pm.test('Status code is 201', function () {",
-                  "    pm.expect(pm.response.code).to.equal(201);",
-                  "});",
-                  "",
-                  "pm.test('Response is JSON', function () {",
-                  "    pm.response.to.be.json;",
-                  "});",
-                  "",
-                  "pm.test('Response contains success message', function () {",
-                  "    const jsonData = pm.response.json();",
-                  "    pm.expect(jsonData.success).to.equal(true);",
-                  "    pm.expect(jsonData.message).to.exist;",
-                  "});",
-                  "",
-                  "pm.test('Response contains API Key data', function () {",
-                  "    const jsonData = pm.response.json();",
-                  "    pm.expect(jsonData.data).to.exist;",
-                  "    pm.expect(jsonData.data.id).to.exist;",
-                  "    pm.expect(jsonData.data.apiKey).to.exist;",
-                  "    pm.expect(jsonData.data.createdAt).to.exist;",
-                  "});",
-                  "",
-                  "// Save API Key to environment for other tests",
-                  "if (pm.response.code === 201) {",
-                  "    const jsonData = pm.response.json();",
-                  "    pm.environment.set('api_key', jsonData.data.apiKey);",
-                  "    pm.environment.set('api_key_id', jsonData.data.id);",
-                  "}"
-                ],
-                "type": "text/javascript",
-                "packages": {},
-                "requests": {}
-              }
-            }
-          ],
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "{{base_url}}/v1/apikey",
+                  "host": ["{{base_url}}"],
+                  "path": ["v1", "apikey"]
+                }
               },
-              {
-                "key": "Cookie",
-                "value": "accessToken={{access_token}}",
-                "type": "text"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": ""
+              "response": []
             },
-            "url": {
-              "raw": "{{base_url}}/v1/apikey",
-              "host": ["{{base_url}}"],
-              "path": ["v1", "apikey"]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Get All API Keys",
-          "event": [
             {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "pm.test('Status code is 200', function () {",
-                  "    pm.expect(pm.response.code).to.equal(200);",
-                  "});",
-                  "",
-                  "pm.test('Response is JSON', function () {",
-                  "    pm.response.to.be.json;",
-                  "});",
-                  "",
-                  "pm.test('Response contains success message', function () {",
-                  "    const jsonData = pm.response.json();",
-                  "    pm.expect(jsonData.success).to.equal(true);",
-                  "    pm.expect(jsonData.message).to.exist;",
-                  "});",
-                  "",
-                  "pm.test('Response contains API Keys array', function () {",
-                  "    const jsonData = pm.response.json();",
-                  "    pm.expect(jsonData.data).to.exist;",
-                  "    pm.expect(jsonData.data.apiKeys).to.be.an('array');",
-                  "    pm.expect(jsonData.data.total).to.exist;",
-                  "});",
-                  "",
-                  "pm.test('API Keys are properly masked', function () {",
-                  "    const jsonData = pm.response.json();",
-                  "    if (jsonData.data.apiKeys.length > 0) {",
-                  "        const apiKey = jsonData.data.apiKeys[0].apiKey;",
-                  "        pm.expect(apiKey).to.include('*');",
-                  "    }",
-                  "});"
+              "name": "Get All API Keys",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test('Status code is 200', function () {",
+                      "    pm.expect(pm.response.code).to.equal(200);",
+                      "});",
+                      "",
+                      "pm.test('Response is JSON', function () {",
+                      "    pm.response.to.be.json;",
+                      "});",
+                      "",
+                      "pm.test('Response contains success message', function () {",
+                      "    const jsonData = pm.response.json();",
+                      "    pm.expect(jsonData.success).to.equal(true);",
+                      "    pm.expect(jsonData.message).to.exist;",
+                      "});",
+                      "",
+                      "pm.test('Response contains API Keys array', function () {",
+                      "    const jsonData = pm.response.json();",
+                      "    pm.expect(jsonData.data).to.exist;",
+                      "    pm.expect(jsonData.data.apiKeys).to.be.an('array');",
+                      "    pm.expect(jsonData.data.total).to.exist;",
+                      "});",
+                      "",
+                      "pm.test('API Keys are properly masked', function () {",
+                      "    const jsonData = pm.response.json();",
+                      "    if (jsonData.data.apiKeys.length > 0) {",
+                      "        const apiKey = jsonData.data.apiKeys[0].apiKey;",
+                      "        pm.expect(apiKey).to.include('*');",
+                      "    }",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "accessToken={{access_token}}",
+                    "type": "text"
+                  }
                 ],
-                "type": "text/javascript",
-                "packages": {},
-                "requests": {}
-              }
-            }
-          ],
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Cookie",
-                "value": "accessToken={{access_token}}",
-                "type": "text"
-              }
-            ],
-            "url": {
-              "raw": "{{base_url}}/v1/apikey",
-              "host": ["{{base_url}}"],
-              "path": ["v1", "apikey"]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Delete API Key",
-          "event": [
+                "url": {
+                  "raw": "{{base_url}}/v1/apikey",
+                  "host": ["{{base_url}}"],
+                  "path": ["v1", "apikey"]
+                }
+              },
+              "response": []
+            },
             {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "pm.test('Status code is 200', function () {",
-                  "    pm.expect(pm.response.code).to.equal(200);",
-                  "});",
-                  "",
-                  "pm.test('Response is JSON', function () {",
-                  "    pm.response.to.be.json;",
-                  "});",
-                  "",
-                  "pm.test('Response contains success message', function () {",
-                  "    const jsonData = pm.response.json();",
-                  "    pm.expect(jsonData.success).to.equal(true);",
-                  "    pm.expect(jsonData.message).to.exist;",
-                  "});",
-                  "",
-                  "pm.test('Response contains deleted API Key ID', function () {",
-                  "    const jsonData = pm.response.json();",
-                  "    pm.expect(jsonData.data).to.exist;",
-                  "    pm.expect(jsonData.data.deletedId).to.exist;",
-                  "});"
+              "name": "Delete API Key",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test('Status code is 200', function () {",
+                      "    pm.expect(pm.response.code).to.equal(200);",
+                      "});",
+                      "",
+                      "pm.test('Response is JSON', function () {",
+                      "    pm.response.to.be.json;",
+                      "});",
+                      "",
+                      "pm.test('Response contains success message', function () {",
+                      "    const jsonData = pm.response.json();",
+                      "    pm.expect(jsonData.success).to.equal(true);",
+                      "    pm.expect(jsonData.message).to.exist;",
+                      "});",
+                      "",
+                      "pm.test('Response contains deleted API Key ID', function () {",
+                      "    const jsonData = pm.response.json();",
+                      "    pm.expect(jsonData.data).to.exist;",
+                      "    pm.expect(jsonData.data.deletedId).to.exist;",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "accessToken={{access_token}}",
+                    "type": "text"
+                  }
                 ],
-                "type": "text/javascript",
-                "packages": {},
-                "requests": {}
-              }
+                "url": {
+                  "raw": "{{base_url}}/v1/apikey/{{api_key_id}}",
+                  "host": ["{{base_url}}"],
+                  "path": ["v1", "apikey", "{{api_key_id}}"]
+                }
+              },
+              "response": []
             }
-          ],
-          "request": {
-            "method": "DELETE",
-            "header": [
-              {
-                "key": "Cookie",
-                "value": "accessToken={{access_token}}",
-                "type": "text"
-              }
-            ],
-            "url": {
-              "raw": "{{base_url}}/v1/apikey/{{api_key_id}}",
-              "host": ["{{base_url}}"],
-              "path": ["v1", "apikey", "{{api_key_id}}"]
-            }
-          },
-          "response": []
+          ]
         }
       ]
     },
@@ -1099,7 +1104,7 @@
       "name": "Projects",
       "item": [
         {
-          "name": "Create Project",
+          "name": "Projects.json",
           "item": [
             {
               "name": "Create Project - Success",
@@ -1423,12 +1428,7 @@
                 }
               },
               "response": []
-            }
-          ]
-        },
-        {
-          "name": "Get All Projects",
-          "item": [
+            },
             {
               "name": "Get All User Projects - Success",
               "event": [
@@ -1480,12 +1480,7 @@
                 }
               },
               "response": []
-            }
-          ]
-        },
-        {
-          "name": "Get Single Project",
-          "item": [
+            },
             {
               "name": "Get Project - Success",
               "event": [
@@ -1617,12 +1612,7 @@
                 }
               },
               "response": []
-            }
-          ]
-        },
-        {
-          "name": "Update Project",
-          "item": [
+            },
             {
               "name": "Update Project - Success",
               "event": [
@@ -1931,12 +1921,7 @@
                 }
               },
               "response": []
-            }
-          ]
-        },
-        {
-          "name": "Delete Project",
-          "item": [
+            },
             {
               "name": "Delete Project - Success",
               "event": [
@@ -2096,7 +2081,7 @@
       "name": "Tables",
       "item": [
         {
-          "name": "Create Table",
+          "name": "Tables.json",
           "item": [
             {
               "name": "Create Table - Success",
@@ -2328,12 +2313,7 @@
                 }
               },
               "response": []
-            }
-          ]
-        },
-        {
-          "name": "Get All Tables by Project",
-          "item": [
+            },
             {
               "name": "Get Tables - Success",
               "event": [
@@ -2446,12 +2426,7 @@
                 }
               },
               "response": []
-            }
-          ]
-        },
-        {
-          "name": "Get Single Table",
-          "item": [
+            },
             {
               "name": "Get Table - Success",
               "event": [
@@ -2562,12 +2537,7 @@
                 }
               },
               "response": []
-            }
-          ]
-        },
-        {
-          "name": "Update Table",
-          "item": [
+            },
             {
               "name": "Update Table - Success",
               "event": [
@@ -2751,12 +2721,7 @@
                 }
               },
               "response": []
-            }
-          ]
-        },
-        {
-          "name": "Delete Table",
-          "item": [
+            },
             {
               "name": "Delete Table - Success",
               "event": [
@@ -2874,7 +2839,7 @@
       "name": "Columns",
       "item": [
         {
-          "name": "Create Columns",
+          "name": "Columns.json",
           "item": [
             {
               "name": "Create Column - Success",
@@ -3194,12 +3159,7 @@
                 }
               },
               "response": []
-            }
-          ]
-        },
-        {
-          "name": "Get Columns by Table",
-          "item": [
+            },
             {
               "name": "Get Columns by Table - Success",
               "event": [
@@ -3310,12 +3270,7 @@
                 }
               },
               "response": []
-            }
-          ]
-        },
-        {
-          "name": "Get Column by ID",
-          "item": [
+            },
             {
               "name": "Get Column by ID - Success",
               "event": [
@@ -3428,12 +3383,7 @@
                 }
               },
               "response": []
-            }
-          ]
-        },
-        {
-          "name": "Update Column",
-          "item": [
+            },
             {
               "name": "Update Column - Success",
               "event": [
@@ -3619,12 +3569,7 @@
                 }
               },
               "response": []
-            }
-          ]
-        },
-        {
-          "name": "Delete Column",
-          "item": [
+            },
             {
               "name": "Delete Column - Success",
               "event": [
@@ -3739,7 +3684,7 @@
       "name": "Rows",
       "item": [
         {
-          "name": "Create Row",
+          "name": "Rows.json",
           "item": [
             {
               "name": "Create Row - Success",
@@ -3966,12 +3911,7 @@
                 }
               },
               "response": []
-            }
-          ]
-        },
-        {
-          "name": "Get Rows by Table",
-          "item": [
+            },
             {
               "name": "Get All Rows by Table - Success",
               "event": [
@@ -4087,12 +4027,7 @@
                 }
               },
               "response": []
-            }
-          ]
-        },
-        {
-          "name": "Get Single Row",
-          "item": [
+            },
             {
               "name": "Get Row by ID - Success",
               "event": [
@@ -4214,12 +4149,7 @@
                 }
               },
               "response": []
-            }
-          ]
-        },
-        {
-          "name": "Update Row",
-          "item": [
+            },
             {
               "name": "Update Row - Success",
               "event": [
@@ -4343,12 +4273,7 @@
                 }
               },
               "response": []
-            }
-          ]
-        },
-        {
-          "name": "Delete Row",
-          "item": [
+            },
             {
               "name": "Delete Row - Success",
               "event": [
@@ -4468,7 +4393,7 @@
       "name": "Cells",
       "item": [
         {
-          "name": "Upsert Cell",
+          "name": "Cells.json",
           "item": [
             {
               "name": "Upsert Cell - Success with Value",
@@ -4670,12 +4595,7 @@
                 }
               },
               "response": []
-            }
-          ]
-        },
-        {
-          "name": "Get Cells by Row",
-          "item": [
+            },
             {
               "name": "Get Cells by Row - Success",
               "event": [
