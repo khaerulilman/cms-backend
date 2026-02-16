@@ -17,7 +17,8 @@
     "db:migrate": "prisma migrate dev",
     "db:migrate:test": "dotenv -e .env -e .env.test -o -- cross-env NODE_ENV=test prisma migrate deploy",
     "db:reset:test": "dotenv -e .env -e .env.test -o -- cross-env NODE_ENV=test prisma migrate reset --force --skip-seed",
-    "db:push:test": "dotenv -e .env -e .env.test -o -- cross-env NODE_ENV=test prisma db push"
+    "db:push:test": "dotenv -e .env -e .env.test -o -- cross-env NODE_ENV=test prisma db push",
+    "postman:merge": "node postman/tools/merge-collection.js"
   },
   "dependencies": {
     "@prisma/client": "^5.22.0",
