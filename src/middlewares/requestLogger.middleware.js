@@ -1,9 +1,9 @@
-import logger from '../utils/logger.js';
+import logger from "../utils/logger.js";
 
 export default function requestLogger(req, res, next) {
   const start = Date.now();
 
-  res.on('finish', () => {
+  res.on("finish", () => {
     logger.info(
       {
         method: req.method,
@@ -11,7 +11,7 @@ export default function requestLogger(req, res, next) {
         status: res.statusCode,
         duration: `${Date.now() - start}ms`,
       },
-      'HTTP request',
+      "HTTP request",
     );
   });
 
