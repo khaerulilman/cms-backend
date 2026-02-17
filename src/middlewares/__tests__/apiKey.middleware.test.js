@@ -1,10 +1,20 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from "vitest";
 
-import prisma from '../../prisma/client.js';
-import { apiKeyMiddleware } from '../apiKey.middleware.js';
+import prisma from "../../prisma/client.js";
+import { apiKeyMiddleware } from "../apiKey.middleware.js";
+
+// Mock logger to prevent noise in test output
+vi.mock("../../utils/logger.js", () => ({
+  default: {
+    error: vi.fn(),
+    warn: vi.fn(),
+    info: vi.fn(),
+    debug: vi.fn(),
+  },
+}));
 
 // Mock prisma client
-vi.mock('../../prisma/client.js', () => ({
+vi.mock("../../prisma/client.js", () => ({
   default: {
     apiKey: {
       findUnique: vi.fn(),
@@ -12,7 +22,7 @@ vi.mock('../../prisma/client.js', () => ({
   },
 }));
 
-describe('API Key Middleware', () => {
+describe("API Key Middleware", () => {
   let mockReq;
   let mockRes;
   let mockNext;
@@ -32,34 +42,34 @@ describe('API Key Middleware', () => {
     vi.clearAllMocks();
   });
 
-  describe('Valid API Key', () => {
-    it('should allow request with valid API key', async () => {
+  describe("Valid API Key", () => {
+    it("should allow request with valid API key", async () => {
       const mockApiKeyRecord = {
-        id: 'apikey-123',
-        apiKey: 'sk_valid_api_key_12345',
-        userId: 'user-123',
+        id: "apikey-123",
+        apiKey: "sk_valid_api_key_12345",
+        userId: "user-123",
         user: {
-          id: 'user-123',
-          email: 'test@example.com',
-          name: 'Test User',
+          id: "user-123",
+          email: "test@example.com",
+          name: "Test User",
         },
       };
 
-      mockReq.headers['x-api-key'] = 'sk_valid_api_key_12345';
+      mockReq.headers["x-api-key"] = "sk_valid_api_key_12345";
       prisma.apiKey.findUnique.mockResolvedValue(mockApiKeyRecord);
 
       await apiKeyMiddleware(mockReq, mockRes, mockNext);
 
       expect(prisma.apiKey.findUnique).toHaveBeenCalledWith({
-        where: { apiKey: 'sk_valid_api_key_12345' },
+        where: { apiKey: "sk_valid_api_key_12345" },
         include: {
           user: true,
         },
       });
       expect(prisma.apiKey.findUnique).toHaveBeenCalledTimes(1);
       expect(mockReq.user).toEqual({
-        id: 'user-123',
-        email: 'test@example.com',
+        id: "user-123",
+        email: "test@example.com",
       });
       expect(mockNext).toHaveBeenCalledTimes(1);
       expect(mockNext).toHaveBeenCalledWith();
@@ -67,32 +77,32 @@ describe('API Key Middleware', () => {
       expect(mockRes.json).not.toHaveBeenCalled();
     });
 
-    it('should attach user info to request object', async () => {
+    it("should attach user info to request object", async () => {
       const mockApiKeyRecord = {
-        id: 'apikey-456',
-        apiKey: 'sk_another_key',
-        userId: 'user-456',
+        id: "apikey-456",
+        apiKey: "sk_another_key",
+        userId: "user-456",
         user: {
-          id: 'user-456',
-          email: 'another@example.com',
-          name: 'Another User',
+          id: "user-456",
+          email: "another@example.com",
+          name: "Another User",
         },
       };
 
-      mockReq.headers['x-api-key'] = 'sk_another_key';
+      mockReq.headers["x-api-key"] = "sk_another_key";
       prisma.apiKey.findUnique.mockResolvedValue(mockApiKeyRecord);
 
       await apiKeyMiddleware(mockReq, mockRes, mockNext);
 
       expect(mockReq.user).toBeDefined();
-      expect(mockReq.user.id).toBe('user-456');
-      expect(mockReq.user.email).toBe('another@example.com');
+      expect(mockReq.user.id).toBe("user-456");
+      expect(mockReq.user.email).toBe("another@example.com");
       expect(mockNext).toHaveBeenCalledTimes(1);
     });
   });
 
-  describe('Missing API Key', () => {
-    it('should return 401 when API key header is missing', async () => {
+  describe("Missing API Key", () => {
+    it("should return 401 when API key header is missing", async () => {
       mockReq.headers = {}; // No x-api-key header
 
       await apiKeyMiddleware(mockReq, mockRes, mockNext);
@@ -101,62 +111,62 @@ describe('API Key Middleware', () => {
       expect(mockRes.status).toHaveBeenCalledTimes(1);
       expect(mockRes.json).toHaveBeenCalledWith({
         success: false,
-        message: 'API key is required',
+        message: "API key is required",
       });
       expect(mockRes.json).toHaveBeenCalledTimes(1);
       expect(mockNext).not.toHaveBeenCalled();
       expect(prisma.apiKey.findUnique).not.toHaveBeenCalled();
     });
 
-    it('should return 401 when API key header is empty', async () => {
-      mockReq.headers['x-api-key'] = '';
+    it("should return 401 when API key header is empty", async () => {
+      mockReq.headers["x-api-key"] = "";
 
       await apiKeyMiddleware(mockReq, mockRes, mockNext);
 
       expect(mockRes.status).toHaveBeenCalledWith(401);
       expect(mockRes.json).toHaveBeenCalledWith({
         success: false,
-        message: 'API key is required',
+        message: "API key is required",
       });
       expect(mockNext).not.toHaveBeenCalled();
     });
 
-    it('should return 401 when API key header is null', async () => {
-      mockReq.headers['x-api-key'] = null;
+    it("should return 401 when API key header is null", async () => {
+      mockReq.headers["x-api-key"] = null;
 
       await apiKeyMiddleware(mockReq, mockRes, mockNext);
 
       expect(mockRes.status).toHaveBeenCalledWith(401);
       expect(mockRes.json).toHaveBeenCalledWith({
         success: false,
-        message: 'API key is required',
+        message: "API key is required",
       });
       expect(mockNext).not.toHaveBeenCalled();
     });
 
-    it('should return 401 when API key header is undefined', async () => {
-      mockReq.headers['x-api-key'] = undefined;
+    it("should return 401 when API key header is undefined", async () => {
+      mockReq.headers["x-api-key"] = undefined;
 
       await apiKeyMiddleware(mockReq, mockRes, mockNext);
 
       expect(mockRes.status).toHaveBeenCalledWith(401);
       expect(mockRes.json).toHaveBeenCalledWith({
         success: false,
-        message: 'API key is required',
+        message: "API key is required",
       });
       expect(mockNext).not.toHaveBeenCalled();
     });
   });
 
-  describe('Invalid API Key', () => {
-    it('should return 401 when API key is not found in database', async () => {
-      mockReq.headers['x-api-key'] = 'sk_invalid_key';
+  describe("Invalid API Key", () => {
+    it("should return 401 when API key is not found in database", async () => {
+      mockReq.headers["x-api-key"] = "sk_invalid_key";
       prisma.apiKey.findUnique.mockResolvedValue(null);
 
       await apiKeyMiddleware(mockReq, mockRes, mockNext);
 
       expect(prisma.apiKey.findUnique).toHaveBeenCalledWith({
-        where: { apiKey: 'sk_invalid_key' },
+        where: { apiKey: "sk_invalid_key" },
         include: {
           user: true,
         },
@@ -164,20 +174,20 @@ describe('API Key Middleware', () => {
       expect(mockRes.status).toHaveBeenCalledWith(401);
       expect(mockRes.json).toHaveBeenCalledWith({
         success: false,
-        message: 'Invalid API key',
+        message: "Invalid API key",
       });
       expect(mockNext).not.toHaveBeenCalled();
     });
 
-    it('should return 401 when API key record has no user', async () => {
+    it("should return 401 when API key record has no user", async () => {
       const mockApiKeyRecord = {
-        id: 'apikey-789',
-        apiKey: 'sk_orphaned_key',
-        userId: 'user-999',
+        id: "apikey-789",
+        apiKey: "sk_orphaned_key",
+        userId: "user-999",
         user: null, // User not found
       };
 
-      mockReq.headers['x-api-key'] = 'sk_orphaned_key';
+      mockReq.headers["x-api-key"] = "sk_orphaned_key";
       prisma.apiKey.findUnique.mockResolvedValue(mockApiKeyRecord);
 
       await apiKeyMiddleware(mockReq, mockRes, mockNext);
@@ -185,20 +195,20 @@ describe('API Key Middleware', () => {
       expect(mockRes.status).toHaveBeenCalledWith(401);
       expect(mockRes.json).toHaveBeenCalledWith({
         success: false,
-        message: 'Invalid API key',
+        message: "Invalid API key",
       });
       expect(mockNext).not.toHaveBeenCalled();
     });
 
-    it('should return 401 when API key record has undefined user', async () => {
+    it("should return 401 when API key record has undefined user", async () => {
       const mockApiKeyRecord = {
-        id: 'apikey-789',
-        apiKey: 'sk_orphaned_key',
-        userId: 'user-999',
+        id: "apikey-789",
+        apiKey: "sk_orphaned_key",
+        userId: "user-999",
         user: undefined,
       };
 
-      mockReq.headers['x-api-key'] = 'sk_orphaned_key';
+      mockReq.headers["x-api-key"] = "sk_orphaned_key";
       prisma.apiKey.findUnique.mockResolvedValue(mockApiKeyRecord);
 
       await apiKeyMiddleware(mockReq, mockRes, mockNext);
@@ -206,23 +216,23 @@ describe('API Key Middleware', () => {
       expect(mockRes.status).toHaveBeenCalledWith(401);
       expect(mockRes.json).toHaveBeenCalledWith({
         success: false,
-        message: 'Invalid API key',
+        message: "Invalid API key",
       });
       expect(mockNext).not.toHaveBeenCalled();
     });
   });
 
-  describe('Database Errors', () => {
-    it('should return 500 when database query fails', async () => {
-      mockReq.headers['x-api-key'] = 'sk_valid_key';
+  describe("Database Errors", () => {
+    it("should return 500 when database query fails", async () => {
+      mockReq.headers["x-api-key"] = "sk_valid_key";
       prisma.apiKey.findUnique.mockRejectedValue(
-        new Error('Database connection error'),
+        new Error("Database connection error"),
       );
 
       await apiKeyMiddleware(mockReq, mockRes, mockNext);
 
       expect(prisma.apiKey.findUnique).toHaveBeenCalledWith({
-        where: { apiKey: 'sk_valid_key' },
+        where: { apiKey: "sk_valid_key" },
         include: {
           user: true,
         },
@@ -231,30 +241,30 @@ describe('API Key Middleware', () => {
       expect(mockRes.status).toHaveBeenCalledTimes(1);
       expect(mockRes.json).toHaveBeenCalledWith({
         success: false,
-        message: 'API key validation failed',
+        message: "API key validation failed",
       });
       expect(mockRes.json).toHaveBeenCalledTimes(1);
       expect(mockNext).not.toHaveBeenCalled();
     });
 
-    it('should handle unexpected errors gracefully', async () => {
-      mockReq.headers['x-api-key'] = 'sk_valid_key';
-      prisma.apiKey.findUnique.mockRejectedValue(new Error('Unexpected error'));
+    it("should handle unexpected errors gracefully", async () => {
+      mockReq.headers["x-api-key"] = "sk_valid_key";
+      prisma.apiKey.findUnique.mockRejectedValue(new Error("Unexpected error"));
 
       await apiKeyMiddleware(mockReq, mockRes, mockNext);
 
       expect(mockRes.status).toHaveBeenCalledWith(500);
       expect(mockRes.json).toHaveBeenCalledWith({
         success: false,
-        message: 'API key validation failed',
+        message: "API key validation failed",
       });
       expect(mockNext).not.toHaveBeenCalled();
     });
 
-    it('should handle timeout errors', async () => {
-      mockReq.headers['x-api-key'] = 'sk_valid_key';
-      const timeoutError = new Error('Query timeout');
-      timeoutError.code = 'ETIMEDOUT';
+    it("should handle timeout errors", async () => {
+      mockReq.headers["x-api-key"] = "sk_valid_key";
+      const timeoutError = new Error("Query timeout");
+      timeoutError.code = "ETIMEDOUT";
       prisma.apiKey.findUnique.mockRejectedValue(timeoutError);
 
       await apiKeyMiddleware(mockReq, mockRes, mockNext);
@@ -262,31 +272,31 @@ describe('API Key Middleware', () => {
       expect(mockRes.status).toHaveBeenCalledWith(500);
       expect(mockRes.json).toHaveBeenCalledWith({
         success: false,
-        message: 'API key validation failed',
+        message: "API key validation failed",
       });
       expect(mockNext).not.toHaveBeenCalled();
     });
   });
 
-  describe('Edge Cases', () => {
-    it('should handle API key with special characters', async () => {
+  describe("Edge Cases", () => {
+    it("should handle API key with special characters", async () => {
       const mockApiKeyRecord = {
-        id: 'apikey-special',
-        apiKey: 'sk_key-with_special.chars@123',
-        userId: 'user-123',
+        id: "apikey-special",
+        apiKey: "sk_key-with_special.chars@123",
+        userId: "user-123",
         user: {
-          id: 'user-123',
-          email: 'test@example.com',
+          id: "user-123",
+          email: "test@example.com",
         },
       };
 
-      mockReq.headers['x-api-key'] = 'sk_key-with_special.chars@123';
+      mockReq.headers["x-api-key"] = "sk_key-with_special.chars@123";
       prisma.apiKey.findUnique.mockResolvedValue(mockApiKeyRecord);
 
       await apiKeyMiddleware(mockReq, mockRes, mockNext);
 
       expect(prisma.apiKey.findUnique).toHaveBeenCalledWith({
-        where: { apiKey: 'sk_key-with_special.chars@123' },
+        where: { apiKey: "sk_key-with_special.chars@123" },
         include: {
           user: true,
         },
@@ -294,19 +304,19 @@ describe('API Key Middleware', () => {
       expect(mockNext).toHaveBeenCalledTimes(1);
     });
 
-    it('should handle very long API keys', async () => {
-      const longApiKey = 'sk_' + 'a'.repeat(100);
+    it("should handle very long API keys", async () => {
+      const longApiKey = "sk_" + "a".repeat(100);
       const mockApiKeyRecord = {
-        id: 'apikey-long',
+        id: "apikey-long",
         apiKey: longApiKey,
-        userId: 'user-123',
+        userId: "user-123",
         user: {
-          id: 'user-123',
-          email: 'test@example.com',
+          id: "user-123",
+          email: "test@example.com",
         },
       };
 
-      mockReq.headers['x-api-key'] = longApiKey;
+      mockReq.headers["x-api-key"] = longApiKey;
       prisma.apiKey.findUnique.mockResolvedValue(mockApiKeyRecord);
 
       await apiKeyMiddleware(mockReq, mockRes, mockNext);
@@ -314,48 +324,48 @@ describe('API Key Middleware', () => {
       expect(mockNext).toHaveBeenCalledTimes(1);
     });
 
-    it('should only attach id and email to req.user, not full user object', async () => {
+    it("should only attach id and email to req.user, not full user object", async () => {
       const mockApiKeyRecord = {
-        id: 'apikey-123',
-        apiKey: 'sk_valid_key',
-        userId: 'user-123',
+        id: "apikey-123",
+        apiKey: "sk_valid_key",
+        userId: "user-123",
         user: {
-          id: 'user-123',
-          email: 'test@example.com',
-          name: 'Test User',
-          password: 'hashed_password',
+          id: "user-123",
+          email: "test@example.com",
+          name: "Test User",
+          password: "hashed_password",
           createdAt: new Date(),
           updatedAt: new Date(),
         },
       };
 
-      mockReq.headers['x-api-key'] = 'sk_valid_key';
+      mockReq.headers["x-api-key"] = "sk_valid_key";
       prisma.apiKey.findUnique.mockResolvedValue(mockApiKeyRecord);
 
       await apiKeyMiddleware(mockReq, mockRes, mockNext);
 
       expect(mockReq.user).toEqual({
-        id: 'user-123',
-        email: 'test@example.com',
+        id: "user-123",
+        email: "test@example.com",
       });
       expect(mockReq.user.name).toBeUndefined();
       expect(mockReq.user.password).toBeUndefined();
       expect(mockNext).toHaveBeenCalledTimes(1);
     });
 
-    it('should handle case-sensitive header names', async () => {
+    it("should handle case-sensitive header names", async () => {
       const mockApiKeyRecord = {
-        id: 'apikey-123',
-        apiKey: 'sk_valid_key',
-        userId: 'user-123',
+        id: "apikey-123",
+        apiKey: "sk_valid_key",
+        userId: "user-123",
         user: {
-          id: 'user-123',
-          email: 'test@example.com',
+          id: "user-123",
+          email: "test@example.com",
         },
       };
 
       // Headers are case-insensitive in HTTP, but we're testing the exact key
-      mockReq.headers['X-API-KEY'] = 'sk_valid_key';
+      mockReq.headers["X-API-KEY"] = "sk_valid_key";
       prisma.apiKey.findUnique.mockResolvedValue(mockApiKeyRecord);
 
       // This should fail because Express normalizes to lowercase
@@ -364,25 +374,25 @@ describe('API Key Middleware', () => {
       expect(mockRes.status).toHaveBeenCalledWith(401);
       expect(mockRes.json).toHaveBeenCalledWith({
         success: false,
-        message: 'API key is required',
+        message: "API key is required",
       });
     });
   });
 
-  describe('Response Format', () => {
-    it('should always return JSON response with success field', async () => {
-      mockReq.headers['x-api-key'] = 'sk_invalid_key';
+  describe("Response Format", () => {
+    it("should always return JSON response with success field", async () => {
+      mockReq.headers["x-api-key"] = "sk_invalid_key";
       prisma.apiKey.findUnique.mockResolvedValue(null);
 
       await apiKeyMiddleware(mockReq, mockRes, mockNext);
 
       const call = mockRes.json.mock.calls[0][0];
-      expect(call).toHaveProperty('success');
-      expect(call).toHaveProperty('message');
+      expect(call).toHaveProperty("success");
+      expect(call).toHaveProperty("message");
       expect(call.success).toBe(false);
     });
 
-    it('should use consistent error response format', async () => {
+    it("should use consistent error response format", async () => {
       mockReq.headers = {};
 
       await apiKeyMiddleware(mockReq, mockRes, mockNext);
