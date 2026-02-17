@@ -9,6 +9,7 @@ import projectRoutes from "./modules/project/project.routes.js";
 import rowRoutes from "./modules/rows/row.routes.js";
 import TableController from "./modules/table/table.controller.js";
 import tableRoutes from "./modules/table/table.routes.js";
+import testRoutes from "./tests/sentryTest/test.routes.js";
 
 const router = Router();
 const tableController = new TableController();
@@ -35,6 +36,9 @@ router.use(`${v1}/cms-rows`, rowRoutes);
 
 // cell routes
 router.use(`${v1}/cms-cells`, cellRoutes);
+
+// Test routes (for monitoring and error tracking testing)
+router.use(`${v1}/test`, testRoutes);
 
 // API Key protected routes
 // Get table by ID with API Key

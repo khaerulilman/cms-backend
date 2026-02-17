@@ -10,11 +10,11 @@ export default [
       "coverage/**",
       "dist/**",
       "build/**",
-      "uploads/**",
       "prisma/migrations/**",
       "*.config.js",
       "vitest.config.js",
       "prisma.config.ts",
+      "postman/**",
     ],
   },
 
