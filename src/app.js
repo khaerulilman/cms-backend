@@ -5,6 +5,8 @@ import session from "express-session";
 
 import { config } from "./config/env.js";
 import passport from "./config/google-oauth.js";
+import { initSentry } from "./config/sentry.js";
+import { setupSwagger } from "./docs/swagger.js";
 import errorMiddleware from "./middlewares/error.middleware.js";
 import requestLogger from "./middlewares/requestLogger.middleware.js";
 import routes from "./routes.js";
@@ -65,6 +67,9 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
+// Swagger API Documentation
+setupSwagger(app);
+
 // Root endpoint - Welcome message
 app.get("/", (req, res) => {
   res.json({
@@ -75,6 +80,7 @@ app.get("/", (req, res) => {
     endpoints: {
       health: "/health",
       api: "/api",
+      docs: "/api-docs",
     },
   });
 });
@@ -91,6 +97,9 @@ app.get("/health", (req, res) => {
 
 // Routes
 app.use(routes);
+
+// Sentry error tracking — must be after all routes/controllers
+initSentry(app);
 
 // 404 handler
 app.use((req, res) => {

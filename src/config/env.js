@@ -28,6 +28,7 @@ export const config = {
   CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY,
   CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET,
   COOKIE_CROSS_SITE: process.env.COOKIE_CROSS_SITE,
+  SENTRY_DSN: process.env.SENTRY_DSN || "",
 };
 
 // Debug: log CORS origins on startup
