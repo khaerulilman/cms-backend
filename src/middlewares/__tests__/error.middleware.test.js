@@ -1,10 +1,25 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from "vitest";
 
-import { HTTP_STATUS, ERROR_MESSAGES } from '../../constants/http.js';
-import * as ErrorClasses from '../../utils/errors.js';
-import { errorMiddleware } from '../error.middleware.js';
+import { HTTP_STATUS, ERROR_MESSAGES } from "../../constants/http.js";
+import * as ErrorClasses from "../../utils/errors.js";
+import { errorMiddleware } from "../error.middleware.js";
 
-describe('Error Middleware', () => {
+// Mock logger to prevent noise in test output
+vi.mock("../../utils/logger.js", () => ({
+  default: {
+    error: vi.fn(),
+    warn: vi.fn(),
+    info: vi.fn(),
+    debug: vi.fn(),
+  },
+}));
+
+// Mock Sentry to prevent external calls during tests
+vi.mock("../../config/sentry.js", () => ({
+  captureError: vi.fn(),
+}));
+
+describe("Error Middleware", () => {
   let mockReq;
   let mockRes;
   let mockNext;
@@ -23,10 +38,10 @@ describe('Error Middleware', () => {
     vi.clearAllMocks();
   });
 
-  describe('Custom Error Classes', () => {
-    it('should handle AppError with custom status and message', () => {
+  describe("Custom Error Classes", () => {
+    it("should handle AppError with custom status and message", () => {
       const error = new ErrorClasses.AppError(
-        'Custom error message',
+        "Custom error message",
         HTTP_STATUS.CONFLICT,
       );
 
@@ -36,67 +51,67 @@ describe('Error Middleware', () => {
       expect(mockRes.status).toHaveBeenCalledTimes(1);
       expect(mockRes.json).toHaveBeenCalledWith({
         success: false,
-        message: 'Custom error message',
+        message: "Custom error message",
       });
       expect(mockRes.json).toHaveBeenCalledTimes(1);
       expect(mockNext).not.toHaveBeenCalled();
     });
 
-    it('should handle NotFoundError', () => {
-      const error = new ErrorClasses.NotFoundError('Resource not found');
+    it("should handle NotFoundError", () => {
+      const error = new ErrorClasses.NotFoundError("Resource not found");
 
       errorMiddleware(error, mockReq, mockRes, mockNext);
 
       expect(mockRes.status).toHaveBeenCalledWith(HTTP_STATUS.NOT_FOUND);
       expect(mockRes.json).toHaveBeenCalledWith({
         success: false,
-        message: 'Resource not found',
+        message: "Resource not found",
       });
       expect(mockNext).not.toHaveBeenCalled();
     });
 
-    it('should handle ValidationError', () => {
-      const error = new ErrorClasses.ValidationError('Validation failed');
+    it("should handle ValidationError", () => {
+      const error = new ErrorClasses.ValidationError("Validation failed");
 
       errorMiddleware(error, mockReq, mockRes, mockNext);
 
       expect(mockRes.status).toHaveBeenCalledWith(422);
       expect(mockRes.json).toHaveBeenCalledWith({
         success: false,
-        message: 'Validation failed',
+        message: "Validation failed",
       });
       expect(mockNext).not.toHaveBeenCalled();
     });
 
-    it('should handle AuthenticationError', () => {
-      const error = new ErrorClasses.AuthenticationError('Unauthorized access');
+    it("should handle AuthenticationError", () => {
+      const error = new ErrorClasses.AuthenticationError("Unauthorized access");
 
       errorMiddleware(error, mockReq, mockRes, mockNext);
 
       expect(mockRes.status).toHaveBeenCalledWith(HTTP_STATUS.UNAUTHORIZED);
       expect(mockRes.json).toHaveBeenCalledWith({
         success: false,
-        message: 'Unauthorized access',
+        message: "Unauthorized access",
       });
       expect(mockNext).not.toHaveBeenCalled();
     });
 
-    it('should handle ConflictError', () => {
-      const error = new ErrorClasses.ConflictError('Resource already exists');
+    it("should handle ConflictError", () => {
+      const error = new ErrorClasses.ConflictError("Resource already exists");
 
       errorMiddleware(error, mockReq, mockRes, mockNext);
 
       expect(mockRes.status).toHaveBeenCalledWith(HTTP_STATUS.CONFLICT);
       expect(mockRes.json).toHaveBeenCalledWith({
         success: false,
-        message: 'Resource already exists',
+        message: "Resource already exists",
       });
       expect(mockNext).not.toHaveBeenCalled();
     });
 
-    it('should handle AuthenticationError', () => {
+    it("should handle AuthenticationError", () => {
       const error = new ErrorClasses.AuthenticationError(
-        'Authentication failed',
+        "Authentication failed",
       );
 
       errorMiddleware(error, mockReq, mockRes, mockNext);
@@ -104,16 +119,16 @@ describe('Error Middleware', () => {
       expect(mockRes.status).toHaveBeenCalledWith(HTTP_STATUS.UNAUTHORIZED);
       expect(mockRes.json).toHaveBeenCalledWith({
         success: false,
-        message: 'Authentication failed',
+        message: "Authentication failed",
       });
       expect(mockNext).not.toHaveBeenCalled();
     });
   });
 
-  describe('JWT Errors', () => {
-    it('should handle JsonWebTokenError', () => {
-      const error = new Error('Invalid token');
-      error.name = 'JsonWebTokenError';
+  describe("JWT Errors", () => {
+    it("should handle JsonWebTokenError", () => {
+      const error = new Error("Invalid token");
+      error.name = "JsonWebTokenError";
 
       errorMiddleware(error, mockReq, mockRes, mockNext);
 
@@ -125,9 +140,9 @@ describe('Error Middleware', () => {
       expect(mockNext).not.toHaveBeenCalled();
     });
 
-    it('should handle TokenExpiredError', () => {
-      const error = new Error('Token expired');
-      error.name = 'TokenExpiredError';
+    it("should handle TokenExpiredError", () => {
+      const error = new Error("Token expired");
+      error.name = "TokenExpiredError";
 
       errorMiddleware(error, mockReq, mockRes, mockNext);
 
@@ -140,23 +155,23 @@ describe('Error Middleware', () => {
     });
   });
 
-  describe('Generic Errors', () => {
-    it('should handle ValidationError by name', () => {
-      const error = new Error('Validation error occurred');
-      error.name = 'ValidationError';
+  describe("Generic Errors", () => {
+    it("should handle ValidationError by name", () => {
+      const error = new Error("Validation error occurred");
+      error.name = "ValidationError";
 
       errorMiddleware(error, mockReq, mockRes, mockNext);
 
       expect(mockRes.status).toHaveBeenCalledWith(HTTP_STATUS.BAD_REQUEST);
       expect(mockRes.json).toHaveBeenCalledWith({
         success: false,
-        message: 'Validation error occurred',
+        message: "Validation error occurred",
       });
       expect(mockNext).not.toHaveBeenCalled();
     });
 
-    it('should handle generic Error with message', () => {
-      const error = new Error('Something went wrong');
+    it("should handle generic Error with message", () => {
+      const error = new Error("Something went wrong");
 
       errorMiddleware(error, mockReq, mockRes, mockNext);
 
@@ -165,12 +180,12 @@ describe('Error Middleware', () => {
       );
       expect(mockRes.json).toHaveBeenCalledWith({
         success: false,
-        message: 'Something went wrong',
+        message: "Something went wrong",
       });
       expect(mockNext).not.toHaveBeenCalled();
     });
 
-    it('should use default error message for errors without message', () => {
+    it("should use default error message for errors without message", () => {
       const error = {};
 
       errorMiddleware(error, mockReq, mockRes, mockNext);
@@ -186,38 +201,38 @@ describe('Error Middleware', () => {
     });
   });
 
-  describe('Error Details', () => {
-    it('should include details in development mode', () => {
+  describe("Error Details", () => {
+    it("should include details in development mode", () => {
       const originalEnv = process.env.NODE_ENV;
-      process.env.NODE_ENV = 'development';
+      process.env.NODE_ENV = "development";
 
-      const error = new ErrorClasses.ValidationError('Validation failed');
-      error.details = { field: 'email', reason: 'invalid format' };
+      const error = new ErrorClasses.ValidationError("Validation failed");
+      error.details = { field: "email", reason: "invalid format" };
 
       errorMiddleware(error, mockReq, mockRes, mockNext);
 
       expect(mockRes.json).toHaveBeenCalledWith({
         success: false,
-        message: 'Validation failed',
-        details: { field: 'email', reason: 'invalid format' },
+        message: "Validation failed",
+        details: { field: "email", reason: "invalid format" },
       });
 
       process.env.NODE_ENV = originalEnv;
       expect(mockNext).not.toHaveBeenCalled();
     });
 
-    it('should not include details in production mode', () => {
+    it("should not include details in production mode", () => {
       const originalEnv = process.env.NODE_ENV;
-      process.env.NODE_ENV = 'production';
+      process.env.NODE_ENV = "production";
 
-      const error = new ErrorClasses.ValidationError('Validation failed');
-      error.details = { field: 'email', reason: 'invalid format' };
+      const error = new ErrorClasses.ValidationError("Validation failed");
+      error.details = { field: "email", reason: "invalid format" };
 
       errorMiddleware(error, mockReq, mockRes, mockNext);
 
       expect(mockRes.json).toHaveBeenCalledWith({
         success: false,
-        message: 'Validation failed',
+        message: "Validation failed",
       });
 
       const call = mockRes.json.mock.calls[0][0];
@@ -227,17 +242,17 @@ describe('Error Middleware', () => {
       expect(mockNext).not.toHaveBeenCalled();
     });
 
-    it('should not include details when not provided', () => {
+    it("should not include details when not provided", () => {
       const originalEnv = process.env.NODE_ENV;
-      process.env.NODE_ENV = 'development';
+      process.env.NODE_ENV = "development";
 
-      const error = new ErrorClasses.ValidationError('Validation failed');
+      const error = new ErrorClasses.ValidationError("Validation failed");
 
       errorMiddleware(error, mockReq, mockRes, mockNext);
 
       expect(mockRes.json).toHaveBeenCalledWith({
         success: false,
-        message: 'Validation failed',
+        message: "Validation failed",
       });
 
       const call = mockRes.json.mock.calls[0][0];
@@ -248,10 +263,10 @@ describe('Error Middleware', () => {
     });
   });
 
-  describe('Response Already Sent', () => {
-    it('should call next if headers already sent', () => {
+  describe("Response Already Sent", () => {
+    it("should call next if headers already sent", () => {
       mockRes.headersSent = true;
-      const error = new Error('Test error');
+      const error = new Error("Test error");
 
       errorMiddleware(error, mockReq, mockRes, mockNext);
 
@@ -261,9 +276,9 @@ describe('Error Middleware', () => {
       expect(mockRes.json).not.toHaveBeenCalled();
     });
 
-    it('should not call next if headers not sent', () => {
+    it("should not call next if headers not sent", () => {
       mockRes.headersSent = false;
-      const error = new Error('Test error');
+      const error = new Error("Test error");
 
       errorMiddleware(error, mockReq, mockRes, mockNext);
 
@@ -273,9 +288,9 @@ describe('Error Middleware', () => {
     });
   });
 
-  describe('Response Format', () => {
-    it('should always return success: false', () => {
-      const error = new Error('Test error');
+  describe("Response Format", () => {
+    it("should always return success: false", () => {
+      const error = new Error("Test error");
 
       errorMiddleware(error, mockReq, mockRes, mockNext);
 
@@ -283,18 +298,18 @@ describe('Error Middleware', () => {
       expect(call.success).toBe(false);
     });
 
-    it('should always include message in response', () => {
-      const error = new ErrorClasses.NotFoundError('Resource not found');
+    it("should always include message in response", () => {
+      const error = new ErrorClasses.NotFoundError("Resource not found");
 
       errorMiddleware(error, mockReq, mockRes, mockNext);
 
       const call = mockRes.json.mock.calls[0][0];
-      expect(call).toHaveProperty('message');
-      expect(call.message).toBe('Resource not found');
+      expect(call).toHaveProperty("message");
+      expect(call.message).toBe("Resource not found");
     });
 
-    it('should return JSON response', () => {
-      const error = new Error('Test error');
+    it("should return JSON response", () => {
+      const error = new Error("Test error");
 
       errorMiddleware(error, mockReq, mockRes, mockNext);
 
@@ -303,17 +318,17 @@ describe('Error Middleware', () => {
     });
   });
 
-  describe('Status Code Priority', () => {
-    it('should prioritize custom error status codes', () => {
-      const error = new ErrorClasses.AppError('Custom', 418); // I'm a teapot
+  describe("Status Code Priority", () => {
+    it("should prioritize custom error status codes", () => {
+      const error = new ErrorClasses.AppError("Custom", 418); // I'm a teapot
 
       errorMiddleware(error, mockReq, mockRes, mockNext);
 
       expect(mockRes.status).toHaveBeenCalledWith(418);
     });
 
-    it('should use 500 for unknown errors', () => {
-      const error = new Error('Unknown error');
+    it("should use 500 for unknown errors", () => {
+      const error = new Error("Unknown error");
 
       errorMiddleware(error, mockReq, mockRes, mockNext);
 
@@ -323,9 +338,9 @@ describe('Error Middleware', () => {
     });
   });
 
-  describe('Edge Cases', () => {
-    it('should handle error with empty message', () => {
-      const error = new Error('');
+  describe("Edge Cases", () => {
+    it("should handle error with empty message", () => {
+      const error = new Error("");
 
       errorMiddleware(error, mockReq, mockRes, mockNext);
 
@@ -335,8 +350,8 @@ describe('Error Middleware', () => {
       });
     });
 
-    it('should handle error without message property', () => {
-      const error = { name: 'CustomError' };
+    it("should handle error without message property", () => {
+      const error = { name: "CustomError" };
 
       errorMiddleware(error, mockReq, mockRes, mockNext);
 
