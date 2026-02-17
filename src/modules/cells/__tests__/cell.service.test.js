@@ -4,6 +4,16 @@ import CloudinaryService from "../../../utils/cloudinary.js";
 import { NotFoundError } from "../../../utils/errors.js";
 import { CellService } from "../cell.service.js";
 
+// Mock logger to prevent noise in test output
+vi.mock("../../../utils/logger.js", () => ({
+  default: {
+    error: vi.fn(),
+    warn: vi.fn(),
+    info: vi.fn(),
+    debug: vi.fn(),
+  },
+}));
+
 // Mock dependencies
 vi.mock("../../../utils/cloudinary.js", () => ({
   default: {
