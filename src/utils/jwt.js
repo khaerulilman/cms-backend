@@ -1,3 +1,5 @@
+import { randomUUID } from 'crypto';
+
 import JwtConfig from '../config/jwt.js';
 
 import logger from './logger.js';
@@ -22,6 +24,7 @@ export class JwtUtil {
         id: userId,
         email,
         type: 'refresh',
+        jti: randomUUID(),
       },
       '30d',
     );

@@ -54,6 +54,13 @@ export class AuthRepository {
     });
   }
 
+  async deleteRefreshToken(token) {
+    logger.debug({}, 'Deleting refresh token');
+    return prisma.refreshToken.delete({
+      where: { token },
+    });
+  }
+
   async revokeAllUserTokens(userId) {
     logger.debug({ userId }, 'Revoking all user tokens');
     return prisma.refreshToken.updateMany({
