@@ -69,11 +69,12 @@ describe('JwtUtil', () => {
       );
 
       expect(JwtConfig.generateToken).toHaveBeenCalledWith(
-        {
+        expect.objectContaining({
           id: 'user-456',
           email: 'user@example.com',
           type: 'refresh',
-        },
+          jti: expect.any(String),
+        }),
         '30d',
       );
       expect(token).toBe(mockToken);

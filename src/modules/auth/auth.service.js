@@ -180,6 +180,15 @@ export class AuthService {
       { userId, hasMetadata: !!metadata.userAgent },
       'Storing refresh token',
     );
+
+    // Delete any existing token with the same value (e.g. revoked but not deleted)
+    // to prevent unique constraint violation
+    try {
+      await this.repository.deleteRefreshToken(token);
+    } catch {
+      // Token doesn't exist, safe to ignore
+    }
+
     return this.repository.createRefreshToken({
       id: uuidv4(),
       userId,
