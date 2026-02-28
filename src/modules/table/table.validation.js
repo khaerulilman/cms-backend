@@ -28,6 +28,15 @@ export const tableValidationSchemas = {
       "any.required": "Table name is required",
     }),
   }),
+
+  // Duplicate table - validate tableId parameter
+  duplicateTable: Joi.object({
+    tableId: Joi.string().uuid().required().messages({
+      "string.empty": "Table ID is required",
+      "string.guid": "Table ID must be a valid UUID",
+      "any.required": "Table ID is required",
+    }),
+  }),
 };
 
 export default tableValidationSchemas;

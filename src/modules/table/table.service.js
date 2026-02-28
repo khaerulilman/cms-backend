@@ -347,6 +347,78 @@ export class TableService {
       cells: cellsByRow,
     };
   }
+
+  async duplicateTable(tableId, userId) {
+    logger.debug({ tableId, userId }, "Duplicate table service called");
+
+    // Check ownership before duplicating
+    const isOwner = await this.repository.checkTableOwnership(tableId, userId);
+    if (!isOwner) {
+      logger.warn({ tableId, userId }, "Table ownership check failed");
+      throw new TableNotFoundError("Table not found");
+    }
+
+    // Get the source table to check if it exists
+    const sourceTable = await this.repository.findTableById(tableId);
+    if (!sourceTable) {
+      logger.warn({ tableId }, "Source table not found");
+      throw new TableNotFoundError("Table not found");
+    }
+
+    logger.info(
+      {
+        sourceTableId: tableId,
+        sourceTableName: sourceTable.name,
+        userId,
+        columnCount: sourceTable.columns?.length || 0,
+        rowCount: sourceTable.rows?.length || 0,
+      },
+      "Starting table duplication",
+    );
+
+    // Perform the duplication
+    let duplicatedTable;
+    try {
+      duplicatedTable = await this.repository.duplicateTable(tableId);
+    } catch (error) {
+      logger.error(
+        {
+          tableId,
+          error: error.message,
+          stack: error.stack,
+          errorName: error.name,
+          errorCode: error.code,
+        },
+        "Error during table duplication in service",
+      );
+      // Throw with more context
+      throw new ValidationError(
+        `Failed to duplicate table: ${error.message}`,
+      );
+    }
+
+    if (!duplicatedTable) {
+      logger.error(
+        { tableId },
+        "Table duplication returned null (unexpected)",
+      );
+      throw new ValidationError("Failed to duplicate table - no result returned");
+    }
+
+    logger.info(
+      {
+        sourceTableId: tableId,
+        newTableId: duplicatedTable.id,
+        newTableName: duplicatedTable.name,
+        userId,
+        newColumnCount: duplicatedTable.columns?.length || 0,
+        newRowCount: duplicatedTable.rows?.length || 0,
+      },
+      "Table duplicated successfully",
+    );
+
+    return this._formatTableWithFullData(duplicatedTable);
+  }
 }
 
 export default TableService;

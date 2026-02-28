@@ -203,6 +203,60 @@ export class TableController {
       next(error);
     }
   }
+
+  async duplicateTable(req, res, next) {
+    try {
+      const userId = req.user.id;
+      const { tableId } = req.params;
+
+      logger.debug(
+        { tableId, userId },
+        'Duplicate table request received',
+      );
+
+      // Validate tableId parameter
+      const { error, value } = tableValidationSchemas.duplicateTable.validate(
+        { tableId },
+        { abortEarly: false },
+      );
+
+      if (error) {
+        logger.warn(
+          { tableId, errorCount: error.details?.length },
+          'Table validation failed for duplicate',
+        );
+        return res.status(400).json({
+          success: false,
+          message: 'Validation error',
+          errors: error.details.map((err) => ({
+            field: err.path[0],
+            message: err.message,
+          })),
+        });
+      }
+
+      const duplicatedTable = await this.service.duplicateTable(value.tableId, userId);
+
+      logger.info(
+        {
+          sourceTableId: value.tableId,
+          newTableId: duplicatedTable.id,
+          newTableName: duplicatedTable.name,
+          columnCount: duplicatedTable.columns.length,
+          rowCount: duplicatedTable.rows.length,
+          userId,
+        },
+        'Table duplicated successfully',
+      );
+      return res.status(201).json({
+        success: true,
+        message: 'Table duplicated successfully',
+        data: duplicatedTable,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 export default TableController;
