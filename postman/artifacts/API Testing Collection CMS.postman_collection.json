@@ -1,7 +1,7 @@
 {
   "info": {
-    "_postman_id": "cf938ee0-fff4-4056-a49d-b1f0d3eed3af",
-    "name": "API Testing Collection CMS ",
+    "_postman_id": "8c3d3c7b-b02a-4c66-a54e-73ff8f4e7c01",
+    "name": "API Testing Collection CMS  Copy 5",
     "description": "Collection untuk testing API - dimulai dari Auth endpoints",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "_exporter_id": "39206356"
@@ -2776,6 +2776,213 @@
                   "raw": "{{base_url}}/v1/tables/{{table_id_for_delete}}",
                   "host": ["{{base_url}}"],
                   "path": ["v1", "tables", "{{table_id_for_delete}}"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Duplicate Table - Success",
+              "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      "if (!pm.environment.get('access_token')) {",
+                      "    throw new Error('access_token is not set. Please run Auth folder first.');",
+                      "}",
+                      "",
+                      "if (!pm.environment.get('table_id')) {",
+                      "    throw new Error('table_id is not set. Please run Create Table - Success first.');",
+                      "}"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "// NOTE: Make sure you have run 'Create Table - Success' first to get a valid table_id",
+                      "",
+                      "pm.test('Status code is 201', function () {",
+                      "    pm.expect(pm.response.code).to.equal(201);",
+                      "});",
+                      "",
+                      "pm.test('Response is JSON', function () {",
+                      "    pm.response.to.be.json;",
+                      "});",
+                      "",
+                      "pm.test('Response has success flag set to true', function () {",
+                      "    const jsonData = pm.response.json();",
+                      "    pm.expect(jsonData.success).to.equal(true);",
+                      "});",
+                      "",
+                      "pm.test('Response contains duplicated table data', function () {",
+                      "    const jsonData = pm.response.json();",
+                      "    pm.expect(jsonData.data).to.exist;",
+                      "    pm.expect(jsonData.data.id).to.exist;",
+                      "    pm.expect(jsonData.data.id).to.not.equal(pm.environment.get('table_id'));",
+                      "    pm.expect(jsonData.data.name).to.include('(Copy)');",
+                      "    pm.expect(jsonData.data.columns).to.be.an('array');",
+                      "    pm.expect(jsonData.data.rows).to.be.an('array');",
+                      "});",
+                      "",
+                      "pm.test('Response message indicates duplication success', function () {",
+                      "    const jsonData = pm.response.json();",
+                      "    pm.expect(jsonData.message).to.include('duplicated');",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Cookie",
+                    "value": "accessToken={{access_token}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/v1/tables/{{table_id}}/duplicate",
+                  "host": ["{{base_url}}"],
+                  "path": ["v1", "tables", "{{table_id}}", "duplicate"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Duplicate Table - Not Found",
+              "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      "if (!pm.environment.get('access_token')) {",
+                      "    throw new Error('access_token is not set. Please run Auth folder first.');",
+                      "}"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test('Status code is 500', function () {",
+                      "    pm.expect(pm.response.code).to.equal(400);",
+                      "});",
+                      "",
+                      "pm.test('Response has success flag set to false', function () {",
+                      "    const jsonData = pm.response.json();",
+                      "    pm.expect(jsonData.success).to.equal(false);",
+                      "});",
+                      "",
+                      "pm.test('Response indicates table not found', function () {",
+                      "    const jsonData = pm.response.json();",
+                      "    pm.expect(jsonData.message).to.include('Validation error');",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Cookie",
+                    "value": "accessToken={{access_token}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/v1/tables/invalid-table-id/duplicate",
+                  "host": ["{{base_url}}"],
+                  "path": ["v1", "tables", "invalid-table-id", "duplicate"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Duplicate Table - Invalid UUID",
+              "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      "if (!pm.environment.get('access_token')) {",
+                      "    throw new Error('access_token is not set. Please run Auth folder first.');",
+                      "}"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test('Status code is 500', function () {",
+                      "    pm.expect(pm.response.code).to.equal(400);",
+                      "});",
+                      "",
+                      "pm.test('Response has success flag set to false', function () {",
+                      "    const jsonData = pm.response.json();",
+                      "    pm.expect(jsonData.success).to.equal(false);",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Cookie",
+                    "value": "accessToken={{access_token}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/v1/tables/not-a-uuid/duplicate",
+                  "host": ["{{base_url}}"],
+                  "path": ["v1", "tables", "not-a-uuid", "duplicate"]
                 }
               },
               "response": []

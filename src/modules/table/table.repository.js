@@ -129,6 +129,122 @@ export class TableRepository {
 
     return isOwner;
   }
+
+  // Helper method to find table by ID within transaction
+  async _findTableByIdInTransaction(tableId, tx) {
+    return tx.cmsTable.findUnique({
+      where: { id: tableId },
+      include: {
+        project: true,
+        columns: true,
+        rows: {
+          include: {
+            cells: true,
+          },
+        },
+      },
+    });
+  }
+
+  // Duplicate table with all related data (columns, rows, cells)
+  async duplicateTable(sourceTableId) {
+    logger.debug({ sourceTableId }, 'Starting table duplication in repository');
+
+    // Get the source table with all related data
+    const sourceTable = await this.findTableById(sourceTableId);
+
+    if (!sourceTable) {
+      logger.warn({ sourceTableId }, 'Source table not found');
+      return null;
+    }
+
+    // Perform the duplication within a transaction
+    return prisma.$transaction(async (tx) => {
+      try {
+        logger.debug(
+          { sourceTableId, sourceTableName: sourceTable.name },
+          'Creating duplicate table in transaction',
+        );
+
+        // Create the new table (let DB generate UUID)
+        const duplicatedTable = await tx.cmsTable.create({
+          data: {
+            projectId: sourceTable.projectId,
+            name: `${sourceTable.name} (Copy)`,
+            isSubTable: sourceTable.isSubTable,
+          },
+        });
+
+        logger.debug(
+          { newTableId: duplicatedTable.id },
+          'Duplicated table created, now duplicating columns',
+        );
+
+        // Duplicate columns and store mapping
+        const columnMapping = {};
+        for (const column of sourceTable.columns) {
+          const newColumn = await tx.cmsColumn.create({
+            data: {
+              tableId: duplicatedTable.id,
+              name: column.name,
+            },
+          });
+          columnMapping[column.id] = newColumn.id;
+        }
+
+        logger.debug(
+          {
+            newTableId: duplicatedTable.id,
+            columnCount: Object.keys(columnMapping).length,
+          },
+          'Columns duplicated, now duplicating rows',
+        );
+
+        // Duplicate rows with cells
+        for (const row of sourceTable.rows) {
+          const newRow = await tx.cmsRow.create({
+            data: {
+              tableId: duplicatedTable.id,
+            },
+          });
+
+          // Duplicate cells for this row
+          for (const cell of row.cells) {
+            const newColumnId = columnMapping[cell.columnId];
+            if (newColumnId) {
+              await tx.cmsCell.create({
+                data: {
+                  rowId: newRow.id,
+                  columnId: newColumnId,
+                  value: cell.value,
+                  imageUrl: cell.imageUrl,
+                  cloudinaryPublicId: cell.cloudinaryPublicId,
+                },
+              });
+            }
+          }
+        }
+
+        logger.info(
+          {
+            sourceTableId,
+            newTableId: duplicatedTable.id,
+            tableName: duplicatedTable.name,
+          },
+          'Table duplicated successfully',
+        );
+
+        // Return the new table with all data using tx (transaction client)
+        return await this._findTableByIdInTransaction(duplicatedTable.id, tx);
+      } catch (error) {
+        logger.error(
+          { sourceTableId, error: error.message, stack: error.stack },
+          'Error during table duplication transaction',
+        );
+        throw error; // Re-throw to trigger transaction rollback
+      }
+    });
+  }
 }
 
 export default TableRepository;
