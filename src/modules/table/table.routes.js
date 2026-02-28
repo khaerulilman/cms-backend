@@ -33,4 +33,14 @@ router.delete('/:tableId', (req, res, next) =>
   controller.deleteTable(req, res, next),
 );
 
+// Duplicate table (deep copy with columns, rows, and cells)
+router.post('/:tableId/duplicate', (req, res, next) =>
+  controller.duplicateTable(req, res, next),
+);
+
+// Get table simplified (with resolved table references)
+router.get('/:tableId/simplified', (req, res, next) =>
+  controller.getTableSimplified(req, res, next),
+);
+
 export default router;
