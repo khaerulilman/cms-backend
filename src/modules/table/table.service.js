@@ -1,5 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
 
+import CloudinaryService from "../../utils/cloudinary.js";
 import { ValidationError, TableNotFoundError } from "../../utils/errors.js";
 import ImageCleanupService from "../../utils/imageCleanupService.js";
 import logger from "../../utils/logger.js";
@@ -115,6 +116,7 @@ export class TableService {
 
     const updateData = {};
     if (data.name) updateData.name = data.name.trim();
+    if (data.isSubTable !== undefined) updateData.isSubTable = data.isSubTable;
 
     const table = await this.repository.updateTable(tableId, updateData);
 
@@ -348,8 +350,12 @@ export class TableService {
     };
   }
 
-  async duplicateTable(tableId, userId) {
-    logger.debug({ tableId, userId }, "Duplicate table service called");
+  async duplicateTable(tableId, userId, options = {}) {
+    const { isSubTable } = options;
+    logger.debug(
+      { tableId, userId, isSubTable },
+      "Duplicate table service called",
+    );
 
     // Check ownership before duplicating
     const isOwner = await this.repository.checkTableOwnership(tableId, userId);
@@ -376,10 +382,62 @@ export class TableService {
       "Starting table duplication",
     );
 
+    // Duplicate images in Cloudinary so the new table has independent copies
+    const imageMapping = {};
+    const duplicatedImagePublicIds = []; // Track for cleanup on failure
+    try {
+      for (const row of sourceTable.rows || []) {
+        for (const cell of row.cells || []) {
+          if (cell.imageUrl && cell.cloudinaryPublicId) {
+            logger.debug(
+              { cellId: cell.id, originalPublicId: cell.cloudinaryPublicId },
+              "Duplicating image for cell",
+            );
+            const newImage = await CloudinaryService.duplicateImage(
+              cell.imageUrl,
+            );
+            imageMapping[cell.id] = {
+              imageUrl: newImage.imageUrl,
+              cloudinaryPublicId: newImage.publicId,
+            };
+            duplicatedImagePublicIds.push(newImage.publicId);
+          }
+        }
+      }
+
+      logger.info(
+        { imageCount: Object.keys(imageMapping).length },
+        "Images duplicated for table duplication",
+      );
+    } catch (imageError) {
+      // Cleanup any already-uploaded images on failure
+      logger.error(
+        { error: imageError.message },
+        "Failed to duplicate images, cleaning up",
+      );
+      if (duplicatedImagePublicIds.length > 0) {
+        try {
+          await CloudinaryService.deleteImages(duplicatedImagePublicIds);
+        } catch (cleanupError) {
+          logger.error(
+            { error: cleanupError.message },
+            "Failed to cleanup duplicated images",
+          );
+        }
+      }
+      throw new ValidationError(
+        `Failed to duplicate table images: ${imageError.message}`,
+      );
+    }
+
     // Perform the duplication
     let duplicatedTable;
     try {
-      duplicatedTable = await this.repository.duplicateTable(tableId);
+      duplicatedTable = await this.repository.duplicateTable(
+        tableId,
+        imageMapping,
+        { isSubTable },
+      );
     } catch (error) {
       logger.error(
         {
@@ -391,18 +449,30 @@ export class TableService {
         },
         "Error during table duplication in service",
       );
+      // Cleanup duplicated images since DB transaction failed
+      if (duplicatedImagePublicIds.length > 0) {
+        try {
+          await CloudinaryService.deleteImages(duplicatedImagePublicIds);
+          logger.info(
+            { count: duplicatedImagePublicIds.length },
+            "Cleaned up duplicated images after DB failure",
+          );
+        } catch (cleanupError) {
+          logger.error(
+            { error: cleanupError.message },
+            "Failed to cleanup duplicated images after DB failure",
+          );
+        }
+      }
       // Throw with more context
-      throw new ValidationError(
-        `Failed to duplicate table: ${error.message}`,
-      );
+      throw new ValidationError(`Failed to duplicate table: ${error.message}`);
     }
 
     if (!duplicatedTable) {
-      logger.error(
-        { tableId },
-        "Table duplication returned null (unexpected)",
+      logger.error({ tableId }, "Table duplication returned null (unexpected)");
+      throw new ValidationError(
+        "Failed to duplicate table - no result returned",
       );
-      throw new ValidationError("Failed to duplicate table - no result returned");
     }
 
     logger.info(
