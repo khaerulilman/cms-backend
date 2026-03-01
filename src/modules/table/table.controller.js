@@ -1,7 +1,7 @@
-import logger from '../../utils/logger.js';
+import logger from "../../utils/logger.js";
 
-import TableService from './table.service.js';
-import tableValidationSchemas from './table.validation.js';
+import TableService from "./table.service.js";
+import tableValidationSchemas from "./table.validation.js";
 
 export class TableController {
   constructor() {
@@ -15,7 +15,7 @@ export class TableController {
 
       logger.debug(
         { projectId, tableName: name, userId },
-        'Create table request received',
+        "Create table request received",
       );
       // Validate input
       const { error, value } = tableValidationSchemas.createTable.validate(
@@ -26,11 +26,11 @@ export class TableController {
       if (error) {
         logger.warn(
           { projectId, errorCount: error.details?.length },
-          'Table validation failed',
+          "Table validation failed",
         );
         return res.status(400).json({
           success: false,
-          message: 'Validation error',
+          message: "Validation error",
           errors: error.details.map((err) => ({
             field: err.path[0],
             message: err.message,
@@ -45,11 +45,11 @@ export class TableController {
 
       logger.info(
         { tableId: table.id, projectId, userId, tableName: table.name },
-        'Table created successfully',
+        "Table created successfully",
       );
       return res.status(201).json({
         success: true,
-        message: 'Table created successfully',
+        message: "Table created successfully",
         data: table,
       });
     } catch (error) {
@@ -64,7 +64,7 @@ export class TableController {
 
       logger.debug(
         { projectId, userId },
-        'Get tables by project request received',
+        "Get tables by project request received",
       );
       const tables = await this.service.getUserTablesByProject(
         projectId,
@@ -73,11 +73,11 @@ export class TableController {
 
       logger.info(
         { projectId, userId, tableCount: tables.length },
-        'Tables retrieved from project',
+        "Tables retrieved from project",
       );
       return res.status(200).json({
         success: true,
-        message: 'Tables retrieved successfully',
+        message: "Tables retrieved successfully",
         data: tables,
       });
     } catch (error) {
@@ -90,7 +90,7 @@ export class TableController {
       const userId = req.user.id;
       const { tableId } = req.params;
 
-      logger.debug({ tableId, userId }, 'Get table by ID request received');
+      logger.debug({ tableId, userId }, "Get table by ID request received");
       const table = await this.service.getTableById(tableId, userId);
 
       logger.info(
@@ -100,11 +100,11 @@ export class TableController {
           tableName: table.name,
           columnCount: table.columns.length,
         },
-        'Table retrieved successfully',
+        "Table retrieved successfully",
       );
       return res.status(200).json({
         success: true,
-        message: 'Table retrieved successfully',
+        message: "Table retrieved successfully",
         data: table,
       });
     } catch (error) {
@@ -116,26 +116,26 @@ export class TableController {
     try {
       const userId = req.user.id;
       const { tableId } = req.params;
-      const { name } = req.body;
+      const { name, isSubTable } = req.body;
 
       logger.debug(
-        { tableId, userId, newName: name },
-        'Update table request received',
+        { tableId, userId, newName: name, isSubTable },
+        "Update table request received",
       );
       // Validate input
       const { error, value } = tableValidationSchemas.updateTable.validate(
-        { name },
+        { name, isSubTable },
         { abortEarly: false },
       );
 
       if (error) {
         logger.warn(
           { tableId, errorCount: error.details?.length },
-          'Table validation failed',
+          "Table validation failed",
         );
         return res.status(400).json({
           success: false,
-          message: 'Validation error',
+          message: "Validation error",
           errors: error.details.map((err) => ({
             field: err.path[0],
             message: err.message,
@@ -145,15 +145,16 @@ export class TableController {
 
       const table = await this.service.updateTable(tableId, userId, {
         name: value.name,
+        isSubTable: value.isSubTable,
       });
 
       logger.info(
         { tableId, userId, newName: table.name },
-        'Table updated successfully',
+        "Table updated successfully",
       );
       return res.status(200).json({
         success: true,
-        message: 'Table updated successfully',
+        message: "Table updated successfully",
         data: table,
       });
     } catch (error) {
@@ -166,13 +167,13 @@ export class TableController {
       const userId = req.user.id;
       const { tableId } = req.params;
 
-      logger.debug({ tableId, userId }, 'Delete table request received');
+      logger.debug({ tableId, userId }, "Delete table request received");
       await this.service.deleteTable(tableId, userId);
 
-      logger.info({ tableId, userId }, 'Table deleted successfully');
+      logger.info({ tableId, userId }, "Table deleted successfully");
       return res.status(200).json({
         success: true,
-        message: 'Table deleted successfully',
+        message: "Table deleted successfully",
       });
     } catch (error) {
       next(error);
@@ -186,17 +187,17 @@ export class TableController {
 
       logger.debug(
         { tableId, userId },
-        'Get table simplified request received',
+        "Get table simplified request received",
       );
       const table = await this.service.getTableSimplified(tableId, userId);
 
       logger.info(
         { tableId, userId, rowCount: table.cells.length },
-        'Table simplified retrieved successfully',
+        "Table simplified retrieved successfully",
       );
       return res.status(200).json({
         success: true,
-        message: 'Table retrieved successfully',
+        message: "Table retrieved successfully",
         data: table,
       });
     } catch (error) {
@@ -208,10 +209,11 @@ export class TableController {
     try {
       const userId = req.user.id;
       const { tableId } = req.params;
+      const { isSubTable } = req.body;
 
       logger.debug(
-        { tableId, userId },
-        'Duplicate table request received',
+        { tableId, userId, isSubTable },
+        "Duplicate table request received",
       );
 
       // Validate tableId parameter
@@ -223,11 +225,11 @@ export class TableController {
       if (error) {
         logger.warn(
           { tableId, errorCount: error.details?.length },
-          'Table validation failed for duplicate',
+          "Table validation failed for duplicate",
         );
         return res.status(400).json({
           success: false,
-          message: 'Validation error',
+          message: "Validation error",
           errors: error.details.map((err) => ({
             field: err.path[0],
             message: err.message,
@@ -235,7 +237,11 @@ export class TableController {
         });
       }
 
-      const duplicatedTable = await this.service.duplicateTable(value.tableId, userId);
+      const duplicatedTable = await this.service.duplicateTable(
+        value.tableId,
+        userId,
+        { isSubTable },
+      );
 
       logger.info(
         {
@@ -246,11 +252,11 @@ export class TableController {
           rowCount: duplicatedTable.rows.length,
           userId,
         },
-        'Table duplicated successfully',
+        "Table duplicated successfully",
       );
       return res.status(201).json({
         success: true,
-        message: 'Table duplicated successfully',
+        message: "Table duplicated successfully",
         data: duplicatedTable,
       });
     } catch (error) {

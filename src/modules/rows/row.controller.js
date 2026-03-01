@@ -1,7 +1,7 @@
-import { SUCCESS_MESSAGES, ERROR_MESSAGES } from '../../constants/http.js';
-import logger from '../../utils/logger.js';
+import { SUCCESS_MESSAGES, ERROR_MESSAGES } from "../../constants/http.js";
+import logger from "../../utils/logger.js";
 
-import RowService from './row.service.js';
+import RowService from "./row.service.js";
 
 export class RowController {
   constructor() {
@@ -13,9 +13,9 @@ export class RowController {
       const userId = req.user.id;
       const { tableId } = req.body;
 
-      logger.debug({ tableId, userId }, 'Create row request received');
+      logger.debug({ tableId, userId }, "Create row request received");
       if (!tableId) {
-        logger.warn({ userId }, 'Create row called without tableId');
+        logger.warn({ userId }, "Create row called without tableId");
         return res.status(400).json({
           success: false,
           message: ERROR_MESSAGES.TABLE_ID_REQUIRED,
@@ -26,7 +26,7 @@ export class RowController {
 
       logger.info(
         { rowId: row.id, tableId, userId },
-        'Row created successfully',
+        "Row created successfully",
       );
       return res.status(201).json({
         success: true,
@@ -43,12 +43,12 @@ export class RowController {
       const userId = req.user.id;
       const { tableId } = req.params;
 
-      logger.debug({ tableId, userId }, 'Get rows by table request received');
+      logger.debug({ tableId, userId }, "Get rows by table request received");
       const rows = await this.service.getRowsByTable(tableId, userId);
 
       logger.info(
         { tableId, userId, rowCount: rows.length },
-        'Rows retrieved from table',
+        "Rows retrieved from table",
       );
       return res.status(200).json({
         success: true,
@@ -65,12 +65,12 @@ export class RowController {
       const userId = req.user.id;
       const { rowId } = req.params;
 
-      logger.debug({ rowId, userId }, 'Get row by ID request received');
+      logger.debug({ rowId, userId }, "Get row by ID request received");
       const row = await this.service.getRowById(rowId, userId);
 
       logger.info(
         { rowId, userId, cellCount: row.cells.length },
-        'Row retrieved successfully',
+        "Row retrieved successfully",
       );
       return res.status(200).json({
         success: true,
@@ -88,10 +88,10 @@ export class RowController {
       const { rowId } = req.params;
       const data = req.body;
 
-      logger.debug({ rowId, userId }, 'Update row request received');
+      logger.debug({ rowId, userId }, "Update row request received");
       const updatedRow = await this.service.updateRow(rowId, userId, data);
 
-      logger.info({ rowId, userId }, 'Row updated successfully');
+      logger.info({ rowId, userId }, "Row updated successfully");
       return res.status(200).json({
         success: true,
         message: SUCCESS_MESSAGES.ROW_UPDATED,
@@ -107,14 +107,36 @@ export class RowController {
       const userId = req.user.id;
       const { rowId } = req.params;
 
-      logger.debug({ rowId, userId }, 'Delete row request received');
+      logger.debug({ rowId, userId }, "Delete row request received");
       const deletedRow = await this.service.deleteRow(rowId, userId);
 
-      logger.info({ rowId, userId }, 'Row deleted successfully');
+      logger.info({ rowId, userId }, "Row deleted successfully");
       return res.status(200).json({
         success: true,
         message: SUCCESS_MESSAGES.ROW_DELETED,
         data: deletedRow,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async bulkDeleteRows(req, res, next) {
+    try {
+      const userId = req.user.id;
+      const { rowIds } = req.body;
+
+      logger.debug({ rowIds, userId }, "Bulk delete rows request received");
+      const result = await this.service.deleteRows(rowIds, userId);
+
+      logger.info(
+        { rowIds, userId, deletedCount: result.deletedCount },
+        "Rows bulk deleted successfully",
+      );
+      return res.status(200).json({
+        success: true,
+        message: SUCCESS_MESSAGES.ROWS_DELETED,
+        data: result,
       });
     } catch (error) {
       next(error);
