@@ -27,6 +27,9 @@ export const tableValidationSchemas = {
       "string.max": "Table name cannot exceed 255 characters",
       "any.required": "Table name is required",
     }),
+    isSubTable: Joi.boolean().optional().messages({
+      "boolean.base": "isSubTable must be a boolean",
+    }),
   }),
 
   // Duplicate table - validate tableId parameter

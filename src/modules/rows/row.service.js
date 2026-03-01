@@ -120,6 +120,30 @@ export class RowService {
     return this._formatRow(row);
   }
 
+  async deleteRows(rowIds, userId) {
+    logger.debug({ rowIds, userId }, "Bulk delete rows service called");
+    // Check ownership for all rows
+    const isOwner = await this.repository.checkRowsOwnership(rowIds, userId);
+    if (!isOwner) {
+      logger.warn({ rowIds, userId }, "Bulk rows ownership check failed");
+      throw new NotFoundError(ERROR_MESSAGES.ROW_NOT_FOUND);
+    }
+
+    // Cleanup images from Cloudinary for all rows
+    logger.debug({ rowIds }, "Cleaning up images from rows");
+    for (const rowId of rowIds) {
+      await ImageCleanupService.deleteImagesByRowId(rowId);
+    }
+
+    const result = await this.repository.deleteRows(rowIds);
+
+    logger.info(
+      { rowIds, userId, deletedCount: result.count },
+      "Rows bulk deleted with image cleanup",
+    );
+    return { deletedCount: result.count };
+  }
+
   _formatRow(row) {
     return {
       id: row.id,

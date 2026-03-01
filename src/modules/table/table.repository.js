@@ -1,11 +1,11 @@
-import prisma from '../../prisma/client.js';
-import logger from '../../utils/logger.js';
+import prisma from "../../prisma/client.js";
+import logger from "../../utils/logger.js";
 
 export class TableRepository {
   async createTable(data) {
     logger.debug(
       { projectId: data.projectId, tableName: data.name },
-      'Creating table in database',
+      "Creating table in database",
     );
     return prisma.cmsTable.create({
       data,
@@ -18,7 +18,7 @@ export class TableRepository {
   }
 
   async findTableById(tableId) {
-    logger.debug({ tableId }, 'Finding table by ID in database');
+    logger.debug({ tableId }, "Finding table by ID in database");
     return prisma.cmsTable.findUnique({
       where: { id: tableId },
       include: {
@@ -34,7 +34,7 @@ export class TableRepository {
   }
 
   async findTablesByProjectId(projectId) {
-    logger.debug({ projectId }, 'Finding tables by project ID in database');
+    logger.debug({ projectId }, "Finding tables by project ID in database");
     return prisma.cmsTable.findMany({
       where: { projectId },
       include: {
@@ -47,7 +47,7 @@ export class TableRepository {
   }
 
   async updateTable(tableId, data) {
-    logger.debug({ tableId, updatingData: data }, 'Updating table in database');
+    logger.debug({ tableId, updatingData: data }, "Updating table in database");
     return prisma.cmsTable.update({
       where: { id: tableId },
       data,
@@ -60,7 +60,7 @@ export class TableRepository {
   }
 
   async deleteTable(tableId) {
-    logger.debug({ tableId }, 'Deleting table from database');
+    logger.debug({ tableId }, "Deleting table from database");
     return prisma.cmsTable.delete({
       where: { id: tableId },
     });
@@ -68,7 +68,7 @@ export class TableRepository {
 
   // Find all cells for a specific table (for cleanup purposes)
   async findCellsByTableId(tableId) {
-    logger.debug({ tableId }, 'Finding cells by table ID in database');
+    logger.debug({ tableId }, "Finding cells by table ID in database");
     return prisma.cmsCell.findMany({
       where: {
         row: {
@@ -84,7 +84,7 @@ export class TableRepository {
   }
 
   async checkTableOwnership(tableId, userId) {
-    logger.debug({ tableId, userId }, 'Checking table ownership');
+    logger.debug({ tableId, userId }, "Checking table ownership");
     const table = await prisma.cmsTable.findUnique({
       where: { id: tableId },
       include: {
@@ -93,7 +93,7 @@ export class TableRepository {
     });
 
     if (!table) {
-      logger.warn({ tableId }, 'Table not found for ownership check');
+      logger.warn({ tableId }, "Table not found for ownership check");
       return false;
     }
 
@@ -101,7 +101,7 @@ export class TableRepository {
     if (!isOwner) {
       logger.warn(
         { tableId, userId, ownerId: table.project.userId },
-        'User does not own table',
+        "User does not own table",
       );
     }
 
@@ -109,13 +109,13 @@ export class TableRepository {
   }
 
   async checkProjectOwnership(projectId, userId) {
-    logger.debug({ projectId, userId }, 'Checking project ownership');
+    logger.debug({ projectId, userId }, "Checking project ownership");
     const project = await prisma.project.findUnique({
       where: { id: projectId },
     });
 
     if (!project) {
-      logger.warn({ projectId }, 'Project not found for ownership check');
+      logger.warn({ projectId }, "Project not found for ownership check");
       return false;
     }
 
@@ -123,7 +123,7 @@ export class TableRepository {
     if (!isOwner) {
       logger.warn(
         { projectId, userId, ownerId: project.userId },
-        'User does not own project',
+        "User does not own project",
       );
     }
 
@@ -147,14 +147,16 @@ export class TableRepository {
   }
 
   // Duplicate table with all related data (columns, rows, cells)
-  async duplicateTable(sourceTableId) {
-    logger.debug({ sourceTableId }, 'Starting table duplication in repository');
+  // imageMapping: { [originalCellId]: { imageUrl, cloudinaryPublicId } }
+  // options: { isSubTable } - override isSubTable value
+  async duplicateTable(sourceTableId, imageMapping = {}, options = {}) {
+    logger.debug({ sourceTableId }, "Starting table duplication in repository");
 
     // Get the source table with all related data
     const sourceTable = await this.findTableById(sourceTableId);
 
     if (!sourceTable) {
-      logger.warn({ sourceTableId }, 'Source table not found');
+      logger.warn({ sourceTableId }, "Source table not found");
       return null;
     }
 
@@ -163,7 +165,7 @@ export class TableRepository {
       try {
         logger.debug(
           { sourceTableId, sourceTableName: sourceTable.name },
-          'Creating duplicate table in transaction',
+          "Creating duplicate table in transaction",
         );
 
         // Create the new table (let DB generate UUID)
@@ -171,13 +173,16 @@ export class TableRepository {
           data: {
             projectId: sourceTable.projectId,
             name: `${sourceTable.name} (Copy)`,
-            isSubTable: sourceTable.isSubTable,
+            isSubTable:
+              options.isSubTable !== undefined
+                ? options.isSubTable
+                : sourceTable.isSubTable,
           },
         });
 
         logger.debug(
           { newTableId: duplicatedTable.id },
-          'Duplicated table created, now duplicating columns',
+          "Duplicated table created, now duplicating columns",
         );
 
         // Duplicate columns and store mapping
@@ -197,7 +202,7 @@ export class TableRepository {
             newTableId: duplicatedTable.id,
             columnCount: Object.keys(columnMapping).length,
           },
-          'Columns duplicated, now duplicating rows',
+          "Columns duplicated, now duplicating rows",
         );
 
         // Duplicate rows with cells
@@ -212,13 +217,19 @@ export class TableRepository {
           for (const cell of row.cells) {
             const newColumnId = columnMapping[cell.columnId];
             if (newColumnId) {
+              // Use duplicated image data if available, otherwise copy original
+              const cellImageData = imageMapping[cell.id] || {
+                imageUrl: cell.imageUrl,
+                cloudinaryPublicId: cell.cloudinaryPublicId,
+              };
+
               await tx.cmsCell.create({
                 data: {
                   rowId: newRow.id,
                   columnId: newColumnId,
                   value: cell.value,
-                  imageUrl: cell.imageUrl,
-                  cloudinaryPublicId: cell.cloudinaryPublicId,
+                  imageUrl: cellImageData.imageUrl,
+                  cloudinaryPublicId: cellImageData.cloudinaryPublicId,
                 },
               });
             }
@@ -231,7 +242,7 @@ export class TableRepository {
             newTableId: duplicatedTable.id,
             tableName: duplicatedTable.name,
           },
-          'Table duplicated successfully',
+          "Table duplicated successfully",
         );
 
         // Return the new table with all data using tx (transaction client)
@@ -239,7 +250,7 @@ export class TableRepository {
       } catch (error) {
         logger.error(
           { sourceTableId, error: error.message, stack: error.stack },
-          'Error during table duplication transaction',
+          "Error during table duplication transaction",
         );
         throw error; // Re-throw to trigger transaction rollback
       }
